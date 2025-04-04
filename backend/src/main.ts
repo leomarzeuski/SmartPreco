@@ -1,10 +1,10 @@
+import { ValidationPipe } from "@nestjs/common";
 import { HttpAdapterHost, NestFactory } from "@nestjs/core";
 import { NestExpressApplication } from "@nestjs/platform-express";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 import * as cookieParser from "cookie-parser";
 import * as dotenv from "dotenv";
 
-import { setupRedoc } from "../redoc.middleware";
 import { AllExceptionsFilter } from "./all-exception.filter";
 import { AppModule } from "./app.module";
 
@@ -17,18 +17,22 @@ async function bootstrap() {
 
   app.use(cookieParser());
 
+  app.useGlobalPipes(new ValidationPipe({
+    whitelist: true,
+    forbidNonWhitelisted: true,
+    transform: true,
+    transformOptions: { enableImplicitConversion: true },
+  }));
+
   const options = new DocumentBuilder()
-    .setTitle("MindSnap API")
-    .setDescription("The MindSnap API description")
+    .setTitle("SmartPreço API")
+    .setDescription("SmartPreço API é uma API RESTful que fornece informações sobre mercados, produtos e seus preços.")
     .setVersion("1.0")
     .addBearerAuth()
     .build();
 
   const document = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup("api", app, document);
-
-  setupRedoc(app);
-
   const { httpAdapter } = app.get(HttpAdapterHost);
   app.useGlobalFilters(new AllExceptionsFilter(httpAdapter));
 
