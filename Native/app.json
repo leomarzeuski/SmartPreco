@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Native",
-    "slug": "Native",
+    "slug": "smartpreco",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -36,6 +36,16 @@
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "extra": {
+      "EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY": "pk_test_Y29tbXVuYWwtcXVhZ2dhLTc5LmNsZXJrLmFjY291bnRzLmRldiQ",
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "300b6d51-269a-466b-9c68-875e81dc850e"
+      }
+    },
+    "owner": "leomarzeuski"
   }
 }
