@@ -1,34 +1,60 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { ProductService } from './product.service';
-import { CreateProductDto } from './dto/create-product.dto';
-import { UpdateProductDto } from './dto/update-product.dto';
+import { Body, Controller, Get, Param, Patch, Post, Query } from '@nestjs/common';
+import { ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 
-@Controller('product')
+import { ProductCreateDto, ProductDto, ProductIdDto, ProductReadDto, ProductsDto, ProductUpdateDto } from './product.dto';
+import { ProductService } from './product.service';
+
+@Controller('products')
+@ApiTags('Product')
 export class ProductController {
-  constructor(private readonly productService: ProductService) {}
+
+  public constructor(private readonly productService: ProductService) { }
 
   @Post()
-  create(@Body() createProductDto: CreateProductDto) {
-    return this.productService.create(createProductDto);
+  @ApiCreatedResponse({ description: 'Product created successfully', type: ProductDto })
+  @ApiOperation({
+    operationId: "Create Product",
+    summary: "Creates a new product."
+  })
+  public createProduct(@Body() body: ProductCreateDto): ProductDto {
+    return this.productService.createProduct(body);
   }
 
   @Get()
-  findAll() {
-    return this.productService.findAll();
+  @ApiOkResponse({ description: 'Products retrieved successfully', type: ProductsDto })
+  @ApiOperation({
+    operationId: "Read Products",
+    summary: "Retrieves a list of products."
+  })
+  public readProducts(@Query() query: ProductReadDto): ProductsDto {
+    return this.productService.readProducts(query);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.productService.findOne(+id);
+  @Get(':productId')
+  @ApiOkResponse({ description: 'Product retrieved successfully', type: ProductDto })
+  @ApiOperation({
+    operationId: "Read Product",
+    summary: "Retrieves a product by its ID."
+  })
+  public readProductById(@Param() param: ProductIdDto) {
+    const { productId } = param;
+
+    return this.productService.readProductById(productId);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateProductDto: UpdateProductDto) {
-    return this.productService.update(+id, updateProductDto);
+  @Patch(':productId')
+  @ApiOkResponse({ description: 'Product updated successfully', type: ProductDto })
+  @ApiOperation({
+    operationId: "Update Product",
+    summary: "Updates a product by its ID."
+  })
+  public updateProductById(@Param() param: ProductIdDto, @Body() body: ProductUpdateDto): ProductDto {
+    const { productId } = param;
+
+    return this.productService.updateProductById(productId, body);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.productService.remove(+id);
-  }
+
+  // TODO: Adicionar rota para listar preços do produto quando criar domínio de preços
+
 }

@@ -1,26 +1,24 @@
 import { Injectable } from '@nestjs/common';
-import { CreateProductDto } from './dto/create-product.dto';
-import { UpdateProductDto } from './dto/update-product.dto';
+
+import { ProductCreateDto, ProductDto, ProductReadDto, ProductsDto, ProductUpdateDto } from './product.dto';
 
 @Injectable()
 export class ProductService {
-  create(createProductDto: CreateProductDto) {
-    return 'This action adds a new product';
+
+  public createProduct(params: ProductCreateDto): ProductDto {
+    return null;
   }
 
-  findAll() {
-    return `This action returns all product`;
+  public readProducts(params: ProductReadDto): ProductsDto {
+    return null;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} product`;
+  public readProductById(productId: string): ProductDto {
+    return null;
   }
 
-  update(id: number, updateProductDto: UpdateProductDto) {
-    return `This action updates a #${id} product`;
+  public updateProductById(productId: string, updateProductDto: ProductUpdateDto): ProductDto {
+    return null;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} product`;
-  }
 }
