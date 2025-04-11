@@ -1,5 +1,5 @@
-import { Body, Controller, Get, Param, Patch, Post, Query } from '@nestjs/common';
-import { ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post, Query } from '@nestjs/common';
+import { ApiCreatedResponse, ApiNoContentResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 
 import { UseUser } from '../../shared/guards/use-user.decorator';
 import { ProductCreateDto, ProductDto, ProductIdDto, ProductReadDto, ProductsDto, ProductUpdateDto } from './product.dto';
@@ -12,54 +12,31 @@ export class ProductController {
 
   public constructor(private readonly productService: ProductService) { }
 
-  public constructor(private readonly productService: ProductService) { }
-
   @Post()
   @ApiCreatedResponse({ description: 'Product created successfully', type: ProductDto })
+  @HttpCode(HttpStatus.CREATED)
   @ApiOperation({
     operationId: "Create Product",
     summary: "Creates a new product."
   })
-  public createProduct(@Body() body: ProductCreateDto): ProductDto {
-    return this.productService.createProduct(body);
-  @ApiCreatedResponse({ description: 'Product created successfully', type: ProductDto })
-  @ApiOperation({
-    operationId: "Create Product",
-    summary: "Creates a new product."
-  })
-  public createProduct(@Body() body: ProductCreateDto): ProductDto {
+  public createProduct(@Body() body: ProductCreateDto): Promise<ProductDto> {
     return this.productService.createProduct(body);
   }
 
   @Get()
   @ApiOkResponse({ description: 'Products retrieved successfully', type: ProductsDto })
+  @HttpCode(HttpStatus.OK)
   @ApiOperation({
     operationId: "Read Products",
     summary: "Retrieves a list of products."
   })
-  public readProducts(@Query() query: ProductReadDto): ProductsDto {
-    return this.productService.readProducts(query);
-  @ApiOkResponse({ description: 'Products retrieved successfully', type: ProductsDto })
-  @ApiOperation({
-    operationId: "Read Products",
-    summary: "Retrieves a list of products."
-  })
-  public readProducts(@Query() query: ProductReadDto): ProductsDto {
+  public readProducts(@Query() query: ProductReadDto): Promise<ProductsDto> {
     return this.productService.readProducts(query);
   }
 
   @Get(':productId')
   @ApiOkResponse({ description: 'Product retrieved successfully', type: ProductDto })
-  @ApiOperation({
-    operationId: "Read Product",
-    summary: "Retrieves a product by its ID."
-  })
-  public readProductById(@Param() param: ProductIdDto) {
-    const { productId } = param;
-
-    return this.productService.readProductById(productId);
-  @Get(':productId')
-  @ApiOkResponse({ description: 'Product retrieved successfully', type: ProductDto })
+  @HttpCode(HttpStatus.OK)
   @ApiOperation({
     operationId: "Read Product",
     summary: "Retrieves a product by its ID."
@@ -72,29 +49,29 @@ export class ProductController {
 
   @Patch(':productId')
   @ApiOkResponse({ description: 'Product updated successfully', type: ProductDto })
+  @HttpCode(HttpStatus.OK)
   @ApiOperation({
     operationId: "Update Product",
     summary: "Updates a product by its ID."
   })
-  public updateProductById(@Param() param: ProductIdDto, @Body() body: ProductUpdateDto): ProductDto {
-    const { productId } = param;
-
-    return this.productService.updateProductById(productId, body);
-  @Patch(':productId')
-  @ApiOkResponse({ description: 'Product updated successfully', type: ProductDto })
-  @ApiOperation({
-    operationId: "Update Product",
-    summary: "Updates a product by its ID."
-  })
-  public updateProductById(@Param() param: ProductIdDto, @Body() body: ProductUpdateDto): ProductDto {
+  public updateProductById(@Param() param: ProductIdDto, @Body() body: ProductUpdateDto): Promise<ProductDto> {
     const { productId } = param;
 
     return this.productService.updateProductById(productId, body);
   }
 
+  @Delete(':productId')
+  @ApiNoContentResponse({ description: 'Product deleted successfully' })
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiOperation({
+    operationId: "Delete Product",
+    summary: "Deletes a product by its ID."
+  })
+  public deleteProductById(@Param() param: ProductIdDto): Promise<void> {
+    const { productId } = param;
 
-  // TODO: Adicionar rota para listar preços do produto quando criar domínio de preços
-
+    return this.productService.deleteProductById(productId);
+  }
 
   // TODO: Adicionar rota para listar preços do produto quando criar domínio de preços
 
