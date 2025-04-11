@@ -2,6 +2,7 @@ import { IsNotEmpty, IsString } from "@nestjs/class-validator";
 import { ApiProperty, IntersectionType, OmitType, PartialType, PickType } from "@nestjs/swagger";
 import { IsObject, IsUUID } from "class-validator";
 
+import { TimestampDto } from "../..//shared/utils/timestamp.dto";
 import { ReadDto } from "../../shared/utils/read.dto";
 
 export class MarketIdDto {
@@ -15,7 +16,14 @@ export class MarketIdDto {
 
 }
 
-export class MarketDto extends MarketIdDto {
+export class MarketDto  {
+
+  @IsUUID()
+  @ApiProperty({
+    description: "Market's unique identifier",
+    example: "3d5d1d6d-3d5d-1d6d-3d5d-1d6d3d5d1d6d",
+  })
+  public id: string;
 
   @IsString()
   @IsNotEmpty()
@@ -51,12 +59,17 @@ export class MarketDto extends MarketIdDto {
 
 }
 
+export class MarketTimestampDto extends IntersectionType(
+  MarketDto,
+  TimestampDto,
+) {}
+
 export class MarketReadDto extends IntersectionType(
   ReadDto,
   PartialType(PickType(MarketDto, [ "city" ] as const)),
 ) {}
 
-export class MarketCreateDto extends OmitType(MarketDto, [ "marketId" ] as const) {}
+export class MarketCreateDto extends OmitType(MarketDto, [ "id" ] as const) {}
 
 export class MarketUpdateDto extends PartialType(MarketCreateDto) {}
 

@@ -1,4 +1,4 @@
-import { ValidationPipe } from "@nestjs/common";
+import { Logger, ValidationPipe } from "@nestjs/common";
 import { HttpAdapterHost, NestFactory } from "@nestjs/core";
 import { NestExpressApplication } from "@nestjs/platform-express";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
@@ -11,8 +11,11 @@ import { AppModule } from "./app.module";
 dotenv.config();
 
 async function bootstrap() {
+  const logger = new Logger();
+
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
     rawBody: true,
+    logger: [ "error", "warn", "debug" ],
   });
 
   app.use(cookieParser());
@@ -36,6 +39,7 @@ async function bootstrap() {
   const { httpAdapter } = app.get(HttpAdapterHost);
   app.useGlobalFilters(new AllExceptionsFilter(httpAdapter));
 
+  logger.debug("Starting application! 🚀");
   await app.listen(process.env.PORT || 3000);
 }
 
