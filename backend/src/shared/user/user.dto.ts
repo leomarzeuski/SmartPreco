@@ -1,4 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
+import { IsUUID } from "class-validator";
 
 export class UserDto {
 
@@ -25,5 +26,27 @@ export class AuthorDto {
     example: 'felipe@example.com'
   })
   public imageUrl: string;
+
+}
+
+export class UserIdDto {
+
+  @IsUUID()
+  @ApiProperty({
+    description: 'User unique identifier',
+    example: '3d5d1d6d-3d5d-1d6d-3d5d-1d6d3d5d1d6d'
+  })
+  public userId: string;
+
+}
+
+export class UserIdRepositoryDto {
+
+  @IsUUID()
+  @ApiProperty({
+    description: 'User unique identifier',
+    example: '3d5d1d6d-3d5d-1d6d-3d5d-1d6d3d5d1d6d'
+  })
+  public user_id: string;
 
 }

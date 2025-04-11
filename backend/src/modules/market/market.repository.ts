@@ -27,6 +27,10 @@ export class MarketRepository {
       query = query.eq('city', params.city);
     }
 
+    if (params.search) {
+      query = query.or(`name.ilike.%${params.search}%,address.ilike.%${params.search}%`);
+    }
+
     const { data, error } = await query;
 
     if (error) throw new BadRequestException(error.message);

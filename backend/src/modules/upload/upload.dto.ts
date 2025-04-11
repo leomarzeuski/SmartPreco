@@ -18,3 +18,16 @@ export class UploadImageDto {
   public imageUrl: string;
 
 }
+
+export class UploadImageRepositoryDto {
+
+  @IsUrl()
+  @ApiProperty({
+    description: "Product's image URL",
+    example: "https://example.com/image.jpg",
+  })
+  // eslint-disable-next-line camelcase
+  public image_url: string;
+
+}
+

@@ -16,6 +16,18 @@ export class MarketIdDto {
 
 }
 
+export class MarketRepositoryIdDto {
+
+  @IsUUID()
+  @ApiProperty({
+    description: "Market's repository unique identifier",
+    example: "3d5d1d6d-3d5d-1d6d-3d5d-1d6d3d5d1d6d",
+  })
+  // eslint-disable-next-line camelcase
+  public market_id: string;
+
+}
+
 export class MarketDto  {
 
   @IsUUID()

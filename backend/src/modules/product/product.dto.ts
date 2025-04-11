@@ -15,6 +15,18 @@ export class ProductIdDto {
 
 }
 
+export class ProductRepositoryIdDto {
+
+  @IsUUID()
+  @ApiProperty({
+    description: "Product's repository unique identifier",
+    example: "3d5d1d6d-3d5d-1d6d-3d5d-1d6d3d5d1d6d"
+  })
+  // eslint-disable-next-line camelcase
+  public product_id: string;
+
+}
+
 
 export class ProductDto {
 

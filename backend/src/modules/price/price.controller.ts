@@ -1,4 +1,4 @@
-import { Body, Controller, Get, NotImplementedException, Post, Query } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, HttpStatus, Post, Query } from '@nestjs/common';
 import { ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 
 import { UseUser } from '../../shared/guards/use-user.decorator';
@@ -14,22 +14,24 @@ export class PriceController {
 
   @Post()
   @ApiCreatedResponse({ description: 'Price created successfully', type: PriceDto })
+  @HttpCode(HttpStatus.CREATED)
   @ApiOperation({
     operationId: "Create Price",
     summary: "Create a new price",
   })
-  public createPrice(@Body() body: PriceCreateDto): PriceDto {
-    throw new NotImplementedException("Not implemented yet.");
+  public createPrice(@Body() body: PriceCreateDto): Promise<PriceDto> {
+    return this.priceService.createPrice(body);
   }
 
   @Get()
   @ApiOkResponse({ description: 'Prices retrieved successfully', type: PricesDto })
+  @HttpCode(HttpStatus.OK)
   @ApiOperation({
     operationId: "Read Prices",
     summary: "Read all prices",
   })
-  public readPrices(@Query() query: PriceReadDto): PricesDto {
-    throw new NotImplementedException("Not implemented yet.");
+  public readPrices(@Query() query: PriceReadDto): Promise<PricesDto> {
+    return this.priceService.readPrices(query);
   }
 
 
