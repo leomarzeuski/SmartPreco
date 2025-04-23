@@ -38,6 +38,8 @@ export default function RootLayout() {
     return null;
   }
 
+  //test hte new automation
+
   return (
     <ClerkProvider
       publishableKey={EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY ?? ""}
