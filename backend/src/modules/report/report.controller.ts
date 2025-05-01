@@ -1,8 +1,9 @@
-import { Body, Controller, Get, NotImplementedException, Patch, Post, Query } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
 import { ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 
+import { UseAdmin } from '../../shared/guards/use-admin.decorator';
 import { UseUser } from '../../shared/guards/use-user.decorator';
-import { ReportCreateDto, ReportDto, ReportReadDto, ReportsDto, ReportUpdateDto } from './report.dto';
+import { ReportCreateDto, ReportDto, ReportIdDto, ReportsDto, ReportUpdateDto } from './report.dto';
 import { ReportService } from './report.service';
 
 @Controller('reports')
@@ -10,38 +11,33 @@ import { ReportService } from './report.service';
 @UseUser()
 export class ReportController {
 
-  public constructor(private readonly reportService: ReportService) { }
+  public constructor(private readonly reportService: ReportService) {}
 
   @Post()
   @ApiCreatedResponse({ description: 'Report created successfully', type: ReportDto })
-  @ApiOperation({
-    operationId: "Create Report",
-    summary: "Creates a new report."
-  })
-  public createReport(@Body() body: ReportCreateDto): ReportDto {
-    throw new NotImplementedException("Not implemented yet.");
+  @ApiOperation({ operationId: 'Create Report', summary: 'Create a price report' })
+  public createReport(@Body() body: ReportCreateDto): Promise<ReportDto> {
+    return this.reportService.createReport(body);
   }
 
   @Get()
   @ApiOkResponse({ description: 'Reports retrieved successfully', type: ReportsDto })
-  @ApiOperation({
-    operationId: "Read Reports",
-    summary: "Retrieves a list of reports."
-  })
-  public readReports(@Query() query: ReportReadDto): ReportsDto {
-    // TODO: Está rota deve ser protegida para que apenas o admin consiga acessar
-    throw new NotImplementedException("Not implemented yet.");
+  @ApiOperation({ operationId: 'Read Reports', summary: 'Admin list of reports' })
+  @UseAdmin()
+  public async readReports(): Promise<ReportsDto> {
+    const reports = await this.reportService.readReports();
+    return { reports };
   }
 
   @Patch(':reportId')
   @ApiOkResponse({ description: 'Report updated successfully', type: ReportDto })
-  @ApiOperation({
-    operationId: "Update Report",
-    summary: "Updates a report by its ID."
-  })
-  public updateReportById(@Body() body: ReportUpdateDto): ReportDto {
-    // TODO: Está rota deve ser protegida para que apenas o admin consiga acessar
-    throw new NotImplementedException("Not implemented yet.");
+  @ApiOperation({ operationId: 'Update Report', summary: 'Resolve a report' })
+  @UseAdmin()
+  public updateReportById(
+    @Param() param: ReportIdDto,
+    @Body() body: ReportUpdateDto
+  ): Promise<ReportDto> {
+    return this.reportService.updateReportById(param.reportId, body);
   }
 
 }
