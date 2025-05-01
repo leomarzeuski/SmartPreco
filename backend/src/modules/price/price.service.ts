@@ -24,13 +24,14 @@ export class PriceService {
       market_id: marketId,
       image_url: imageUrl,
       price,
+      moderated: true
     });
 
     return this.toPriceDto(createdPrice);
   }
 
   public async readPrices(params: PriceReadDto): Promise<PricesDto> {
-    const prices = await this.priceRepository.readPrices(params);
+    const prices = await this.priceRepository.readPrices({ ...params, moderated: true });
 
     return {
       prices: prices.map(this.toPriceDto),
@@ -38,7 +39,12 @@ export class PriceService {
   }
 
   private toPriceDto(params: PriceTimestampDto): PriceDto {
-    const { id, market, product, price, imageUrl, userId } = params;
-    return { id, market, product, price, imageUrl, userId };
+    const { id, market, product, price, imageUrl, userId, moderated } = params;
+    return { id, market, product, price, imageUrl, userId, moderated };
   }
+
+  public async updateModeratedFlag(priceId: string, moderated: boolean): Promise<void> {
+    await this.priceRepository.updatePriceById(priceId, { moderated });
+  }
+
 }

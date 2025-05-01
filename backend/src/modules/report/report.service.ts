@@ -1,15 +1,26 @@
 import { Injectable } from '@nestjs/common';
 
+import { PriceService } from '../price/price.service';
 import { ReportCreateDto, ReportDto, ReportsDto, ReportUpdateDto } from './report.dto';
+import { ReportStatusEnum } from './report.enum';
 import { ReportRepository } from './report.repository';
 
 @Injectable()
 export class ReportService {
 
-  public constructor(private readonly reportRepository: ReportRepository) {}
+  public constructor(
+    private readonly reportRepository: ReportRepository,
+    private readonly priceService: PriceService
+  ) {}
 
-  public createReport(params: ReportCreateDto): Promise<ReportDto> {
-    return this.reportRepository.createReport(params);
+  public async createReport(params: ReportCreateDto): Promise<ReportDto> {
+    const { priceId } = params;
+
+    const report = await this.reportRepository.createReport(params);
+
+    await this.priceService.updateModeratedFlag(priceId, false);
+
+    return report;
   }
 
   public async readReports(): Promise<ReportsDto> {
@@ -18,8 +29,18 @@ export class ReportService {
     return { reports };
   }
 
-  public updateReportById(reportId: string, params: ReportUpdateDto): Promise<ReportDto> {
-    return this.reportRepository.updateReportById(reportId, params);
+  public async updateReportById(reportId: string, params: ReportUpdateDto): Promise<ReportDto> {
+    const { status } = params;
+
+    const updatedReport = await this.reportRepository.updateReportById(reportId, params);
+
+    if (status === ReportStatusEnum.APPROVED) {
+      const { priceId } = await this.reportRepository.readReportById(reportId);
+
+      await this.priceService.updateModeratedFlag(priceId, true);
+    }
+
+    return updatedReport;
   }
 
 }
