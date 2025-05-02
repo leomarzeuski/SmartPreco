@@ -8,6 +8,7 @@ import {
   NavigationProp,
 } from "@react-navigation/native";
 import { styles } from "@/styles/product-details";
+import ReportModal from "@/components/ReportModal";
 
 type ProductDetailParams = {
   id: number;
@@ -27,11 +28,20 @@ type RootStackParamList = {
   };
 };
 
+type ReportReason =
+  | "Preço incorreto"
+  | "Imagem inadequada"
+  | "Descrição enganosa"
+  | "Produto inexistente"
+  | "Conteúdo abusivo"
+  | "Outro";
+
 export default function ProductDetailScreen() {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const route = useRoute();
   const params = route.params as ProductDetailParams;
   const [isFavorite, setIsFavorite] = useState(false);
+  const [reportModalVisible, setReportModalVisible] = useState(false);
 
   const associatedMarket = {
     id: params.marketId || 1,
@@ -57,6 +67,23 @@ export default function ProductDetailScreen() {
       rating: associatedMarket.rating,
       distance: associatedMarket.distance,
     });
+  };
+
+  const handleReport = (reason: ReportReason, details: string) => {
+    // Aqui você implementaria a lógica para enviar o relatório ao backend
+    console.log("Denúncia:", {
+      productId: params.id,
+      productName: params.name,
+      reason,
+      details,
+    });
+    // Exemplo de API call:
+    // api.reports.create({
+    //   productId: params.id,
+    //   reason,
+    //   details,
+    //   reportedAt: new Date()
+    // });
   };
 
   return (
@@ -125,7 +152,23 @@ export default function ProductDetailScreen() {
             <Text style={styles.compareButtonText}>Comparar Preços</Text>
           </TouchableOpacity>
         </View>
+
+        <View style={styles.reportSection}>
+          <TouchableOpacity
+            style={styles.reportButton}
+            onPress={() => setReportModalVisible(true)}
+          >
+            <Text style={styles.reportButtonText}>Denunciar Produto</Text>
+          </TouchableOpacity>
+        </View>
       </ScrollView>
+
+      <ReportModal
+        visible={reportModalVisible}
+        onDismiss={() => setReportModalVisible(false)}
+        onSubmit={handleReport}
+        productName={params.name}
+      />
     </SafeAreaView>
   );
 }

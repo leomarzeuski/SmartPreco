@@ -118,4 +118,23 @@ export const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
   },
+  reportSection: {
+    marginTop: 20,
+    marginBottom: 30,
+    paddingHorizontal: 15,
+  },
+  reportButton: {
+    paddingVertical: 12,
+    paddingHorizontal: 30,
+    borderRadius: 25,
+    borderWidth: 1,
+    borderColor: "#ff5252",
+    padding: 10,
+    alignItems: "center",
+  },
+  reportButtonText: {
+    color: "#ff5252",
+    fontSize: 14,
+    fontWeight: "500",
+  }
 });
