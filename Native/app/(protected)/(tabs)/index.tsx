@@ -11,6 +11,7 @@ import { Searchbar, Card, IconButton } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Header } from "@/components/Header";
 import { styles } from "@/styles/home";
+import { router } from "expo-router";
 
 type ItemType = {
   id: number;
@@ -87,7 +88,17 @@ export default function HomeScreen() {
 
           <TouchableOpacity
             style={styles.detailsButton}
-            onPress={() => console.log(`Ver detalhes do produto ${item.id}`)}
+            onPress={() =>
+              router.push({
+                pathname: "/product-details",
+                params: {
+                  id: item.id,
+                  name: item.name,
+                  price: item.price,
+                  image: item.image,
+                },
+              })
+            }
           >
             <Text style={styles.detailsButtonText}>Ver detalhes</Text>
           </TouchableOpacity>

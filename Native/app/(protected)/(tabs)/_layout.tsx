@@ -1,4 +1,4 @@
-import { Tabs } from "expo-router";
+import { Stack, Tabs } from "expo-router";
 import React from "react";
 import { Platform } from "react-native";
 
@@ -42,6 +42,33 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => (
             <IconSymbol size={28} name="add.circle" color={color} />
           ),
+        }}
+      />
+      <Tabs.Screen
+        name="suport"
+        options={{
+          title: "Suporte",
+          tabBarIcon: ({ color }) => (
+            <IconSymbol size={28} name="doubt" color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="product-details"
+        options={{
+          href: null,
+        }}
+      />
+      <Tabs.Screen
+        name="market-details"
+        options={{
+          href: null,
+        }}
+      />
+      <Tabs.Screen
+        name="barcode-scanner"
+        options={{
+          href: null,
         }}
       />
     </Tabs>

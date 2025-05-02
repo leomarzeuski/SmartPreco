@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -12,6 +12,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { IconButton } from "react-native-paper";
 import * as ImagePicker from "expo-image-picker";
 import { z } from "zod";
+import { useRouter, useLocalSearchParams } from "expo-router";
 import { Header } from "@/components/Header";
 import { styles } from "@/styles/add-product";
 
@@ -30,22 +31,66 @@ const productSchema = z.object({
     ),
   market: z.string().min(1, "Nome do mercado é obrigatório"),
   imageUri: z.string().nullable().optional(),
+  barcode: z.string().optional(),
 });
 
 type ProductData = z.infer<typeof productSchema>;
 
 export default function AddProductScreen() {
+  const router = useRouter();
+  const params = useLocalSearchParams();
+
   const [productName, setProductName] = useState("");
   const [price, setPrice] = useState("");
   const [market, setMarket] = useState("");
   const [image, setImage] = useState<string | null>(null);
+  const [barcode, setBarcode] = useState((params.barcode as string) || "");
 
   const [errors, setErrors] = useState<{
     name?: string;
     price?: string;
     market?: string;
     imageUri?: string;
+    barcode?: string;
   }>({});
+
+  useEffect(() => {
+    if (!barcode) return;
+
+    async function fetchProduct() {
+      try {
+        const res = await fetch(
+          `https://world.openfoodfacts.org/api/v0/product/${barcode}.json`
+        );
+        const json = await res.json();
+        if (json.status === 1) {
+          const p = json.product;
+          setProductName(p.product_name || "");
+          setImage(p.image_small_url || null);
+        } else {
+          Alert.alert("Produto não encontrado na base pública");
+        }
+      } catch (err) {
+        console.error(err);
+        Alert.alert("Erro ao buscar dados do produto");
+      }
+    }
+
+    fetchProduct();
+  }, [barcode]);
+
+  useEffect(() => {
+    if (params.barcode) {
+      setBarcode(params.barcode as string);
+
+      if (params.barcodeType) {
+        Alert.alert(
+          "Código Escaneado",
+          `Código de barras ${params.barcode} do tipo ${params.barcodeType} detectado.`
+        );
+      }
+    }
+  }, [params]);
 
   const validateForm = (): boolean => {
     try {
@@ -54,6 +99,7 @@ export default function AddProductScreen() {
         price,
         market,
         imageUri: image,
+        barcode,
       });
 
       setErrors({});
@@ -87,6 +133,7 @@ export default function AddProductScreen() {
       price,
       market,
       imageUri: image,
+      barcode,
     };
 
     console.log("Dados validados:", productData);
@@ -96,6 +143,7 @@ export default function AddProductScreen() {
     setPrice("");
     setMarket("");
     setImage(null);
+    setBarcode("");
   };
 
   const handleSelectImage = async () => {
@@ -112,13 +160,11 @@ export default function AddProductScreen() {
 
     try {
       let result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ["images", "videos"],
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
         allowsEditing: true,
         aspect: [4, 3],
         quality: 1,
       });
-
-      console.log(result);
 
       if (!result.canceled) {
         setImage(result.assets[0].uri);
@@ -178,6 +224,10 @@ export default function AddProductScreen() {
       ],
       { cancelable: true }
     );
+  };
+
+  const openBarcodeScanner = () => {
+    router.push("/barcode-scanner");
   };
 
   return (
@@ -260,6 +310,36 @@ export default function AddProductScreen() {
             {errors.market && (
               <Text style={styles.errorText}>{errors.market}</Text>
             )}
+
+            <View style={styles.barcodeSection}>
+              <Text style={styles.inputLabel}>Código de Barras</Text>
+              <View style={styles.barcodeContainer}>
+                <TextInput
+                  style={[
+                    styles.barcodeInput,
+                    errors.barcode && styles.inputError,
+                  ]}
+                  value={barcode}
+                  onChangeText={(text) => {
+                    setBarcode(text);
+                    if (errors.barcode) {
+                      setErrors((prev) => ({ ...prev, barcode: undefined }));
+                    }
+                  }}
+                  placeholder="Escaneie ou digite o código de barras"
+                  keyboardType="number-pad"
+                />
+                <TouchableOpacity
+                  style={styles.scanButton}
+                  onPress={openBarcodeScanner}
+                >
+                  <IconButton icon="barcode-scan" size={24} />
+                </TouchableOpacity>
+              </View>
+              {errors.barcode && (
+                <Text style={styles.errorText}>{errors.barcode}</Text>
+              )}
+            </View>
           </View>
 
           <TouchableOpacity style={styles.saveButton} onPress={handleSave}>

@@ -14,6 +14,9 @@ const MAPPING = {
   "chevron.left.forwardslash.chevron.right": "code",
   "chevron.right": "chevron-right",
   "add.circle": "add-circle",
+  "star.fill": "star",
+  "star.slash": "star-border",
+  doubt: "help-outline",
 };
 
 export type IconSymbolName = keyof typeof MAPPING;
