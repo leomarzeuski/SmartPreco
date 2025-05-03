@@ -45,20 +45,20 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="doubts-ia"
-        options={{
-          title: "Smart IA",
-          tabBarIcon: ({ color }) => (
-            <IconSymbol name="robot-outline" size={24} color={color} />
-          ),
-        }}
-      />
-      <Tabs.Screen
         name="suport"
         options={{
           title: "Suporte",
           tabBarIcon: ({ color }) => (
             <IconSymbol size={28} name="doubt" color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="doubts-ia"
+        options={{
+          title: "Smart IA",
+          tabBarIcon: ({ color }) => (
+            <IconSymbol name="ai" size={24} color={color} />
           ),
         }}
       />
