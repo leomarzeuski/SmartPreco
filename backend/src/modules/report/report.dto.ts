@@ -2,7 +2,8 @@ import { IsBoolean } from "@nestjs/class-validator";
 import { ApiProperty, IntersectionType, PickType } from "@nestjs/swagger";
 import { IsEnum, IsObject, IsString, IsUUID } from "class-validator";
 
-import { PriceIdDto } from "../price/price.dto";
+import { UserIdRepositoryDto } from "../../shared/user/user.dto";
+import { PriceIdDto, PriceRepositoryIdDto } from "../price/price.dto";
 import { ReportStatusEnum } from "./report.enum";
 
 export class ReportIdDto {
@@ -34,6 +35,11 @@ export class ReportDto extends IntersectionType(ReportIdDto, PriceIdDto) {
 
 }
 
+export class ReportRepositoryDto extends IntersectionType(
+  PickType(ReportDto, [ "reportId", "reason", "resolved" ] as const),
+  PriceRepositoryIdDto
+) {}
+
 export class ReportReadDto extends PickType(ReportDto, [ "resolved" ] as const) { }
 
 export class ReportCreateDto extends IntersectionType(
@@ -54,3 +60,9 @@ export class ReportsDto {
   public reports: ReportDto[];
 
 }
+
+export class ReportCreateRepositoryDto extends IntersectionType(
+  UserIdRepositoryDto,
+  PriceRepositoryIdDto,
+  PickType(ReportCreateDto, [ "reason" ] as const)
+) { }

@@ -16,6 +16,18 @@ export class PriceIdDto {
   public priceId: string;
 }
 
+export class PriceRepositoryIdDto {
+
+  @IsUUID()
+  @ApiProperty({
+    description: "Price's repository unique identifier",
+    example: "3d5d1d6d-3d5d-1d6d-3d5d-1d6d3d5d1d6d"
+  })
+  // eslint-disable-next-line camelcase
+  public price_id: string;
+
+}
+
 export class PriceDto extends IntersectionType(UploadImageDto, UserIdDto) {
   @IsUUID()
   @ApiProperty({
