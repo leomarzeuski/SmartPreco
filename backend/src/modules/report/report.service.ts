@@ -30,13 +30,13 @@ export class ReportService {
 
     await this.priceService.updateModeratedFlag(priceId, false);
 
-    return report;
+    return this.toReportDto(report);
   }
 
   public async readReports(): Promise<ReportsDto> {
     const reports = await this.reportRepository.readReports();
 
-    return { reports };
+    return { reports: reports.map(this.toReportDto) };
   }
 
   public async updateReportById(reportId: string, params: ReportUpdateDto): Promise<ReportDto> {
@@ -51,7 +51,17 @@ export class ReportService {
       await this.priceService.updateModeratedFlag(price_id, true);
     }
 
-    return updatedReport;
+    return this.toReportDto(updatedReport);
+  }
+
+  private toReportDto(report: any): ReportDto {
+    return {
+      id: report.id,
+      priceId: report.price_id,
+      reason: report.reason,
+      resolved: report.resolved,
+      userId: report.user_id,
+    };
   }
 
 }

@@ -1,13 +1,13 @@
   import { BadRequestException, Injectable } from "@nestjs/common";
 import { SupabaseClient } from "@supabase/supabase-js";
 
-  import { ReportCreateRepositoryDto, ReportDto, ReportRepositoryDto, ReportUpdateDto } from "./report.dto";
+  import { ReportCreateRepositoryDto, ReportRepositoryDto, ReportUpdateDto } from "./report.dto";
 
   @Injectable()
   export class ReportRepository {
     public constructor(private readonly supabase: SupabaseClient) {}
 
-    public async createReport(params: ReportCreateRepositoryDto): Promise<ReportDto> {
+    public async createReport(params: ReportCreateRepositoryDto): Promise<ReportRepositoryDto> {
       const { data: report, error: reportError } = await this.supabase
         .from('reports')
         .insert({ ...params, resolved: false })
@@ -19,7 +19,7 @@ import { SupabaseClient } from "@supabase/supabase-js";
       return report;
     }
 
-    public async readReports(): Promise<ReportDto[]> {
+    public async readReports(): Promise<ReportRepositoryDto[]> {
       const { data, error } = await this.supabase.from('reports').select('*');
       if (error) throw new BadRequestException(error.message);
       return data;
@@ -39,7 +39,7 @@ import { SupabaseClient } from "@supabase/supabase-js";
       return data;
     }
 
-    public async updateReportById(reportId: string, dto: ReportUpdateDto): Promise<ReportDto> {
+    public async updateReportById(reportId: string, dto: ReportUpdateDto): Promise<ReportRepositoryDto> {
       const { data, error } = await this.supabase
         .from('reports')
         .update(dto)
