@@ -73,6 +73,4 @@ export class ProductController {
     return this.productService.deleteProductById(productId);
   }
 
-  // TODO: Adicionar rota para listar preços do produto quando criar domínio de preços
-
 }
