@@ -2,7 +2,7 @@ import { IsBoolean } from "@nestjs/class-validator";
 import { ApiProperty, IntersectionType, PickType } from "@nestjs/swagger";
 import { IsEnum, IsObject, IsString, IsUUID } from "class-validator";
 
-import { UserIdRepositoryDto } from "../../shared/user/user.dto";
+import { UserIdDto, UserIdRepositoryDto } from "../../shared/user/user.dto";
 import { PriceIdDto, PriceRepositoryIdDto } from "../price/price.dto";
 import { ReportStatusEnum } from "./report.enum";
 
@@ -17,7 +17,28 @@ export class ReportIdDto {
 
  }
 
-export class ReportDto extends IntersectionType(ReportIdDto, PriceIdDto) {
+ export class ReportRepositoryIdDto {
+
+  @IsUUID()
+  @ApiProperty({
+    description: "Report's unique identifier",
+    example: "3d5d1d6d-3d5d-1d6d-3d5d-1d6d3d5d1d6d",
+  })
+  public report_id: string;
+
+ }
+
+export class ReportDto extends IntersectionType(
+  PriceIdDto,
+  UserIdDto
+) {
+
+  @IsUUID()
+  @ApiProperty({
+    description: "Report's unique identifier",
+    example: "3d5d1d6d-3d5d-1d6d-3d5d-1d6d3d5d1d6d"
+  })
+  public id: string;
 
   @IsString()
   @ApiProperty({
@@ -36,8 +57,9 @@ export class ReportDto extends IntersectionType(ReportIdDto, PriceIdDto) {
 }
 
 export class ReportRepositoryDto extends IntersectionType(
-  PickType(ReportDto, [ "reportId", "reason", "resolved" ] as const),
-  PriceRepositoryIdDto
+  PriceRepositoryIdDto,
+  UserIdRepositoryDto,
+  PickType(ReportDto, [ "id", "reason", "resolved" ] as const),
 ) {}
 
 export class ReportReadDto extends PickType(ReportDto, [ "resolved" ] as const) { }
