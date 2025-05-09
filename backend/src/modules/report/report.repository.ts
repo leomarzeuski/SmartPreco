@@ -61,13 +61,6 @@ import { SupabaseClient } from "@supabase/supabase-js";
 
       if (error) throw new BadRequestException(error.message);
 
-      if (dto.resolved) {
-        await this.supabase
-          .from('prices')
-          .update({ moderated: true })
-          .eq('id', data.price_id);
-      }
-
       return data;
     }
   }
