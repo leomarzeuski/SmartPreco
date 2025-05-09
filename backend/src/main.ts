@@ -7,12 +7,13 @@ import * as dotenv from "dotenv";
 
 import { AllExceptionsFilter } from "./all-exception.filter";
 import { AppModule } from "./app.module";
+import { MainTag } from "./main.enum";
 
 dotenv.config();
 
 async function bootstrap() {
-  const logger = new Logger();
 
+  const logger = new Logger(MainTag.MAIN);
 
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
     rawBody: true,
@@ -43,6 +44,7 @@ async function bootstrap() {
   const port = process.env.PORT || 3000;
   await app.listen(port);
   logger.debug(`Application is running on port ${port}! 🚀`);
+
 }
 
 bootstrap();

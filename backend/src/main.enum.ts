@@ -1,0 +1,6 @@
+export enum MainTag {
+  MAIN = 'MAIN',
+  CLERK_AUTH_GUARD = 'CLERK_AUTH_GUARD',
+  UPLOAD = 'UPLOAD',
+  SUPABASE = 'SUPABASE',
+}
