@@ -40,8 +40,9 @@ async function bootstrap() {
   const { httpAdapter } = app.get(HttpAdapterHost);
   app.useGlobalFilters(new AllExceptionsFilter(httpAdapter));
 
-  logger.debug("Starting application! 🚀");
-  await app.listen(process.env.PORT || 3000);
+  const port = process.env.PORT || 3000;
+  await app.listen(port);
+  logger.debug(`Application is running on port ${port}! 🚀`);
 }
 
 bootstrap();
