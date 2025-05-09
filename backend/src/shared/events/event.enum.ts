@@ -1,0 +1,4 @@
+export enum EventEnum {
+  REPORT_CREATED = 'REPORT_CREATED',
+  REPORT_RESOLVED = 'REPORT_RESOLVED',
+}

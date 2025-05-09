@@ -1,5 +1,6 @@
 import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
+import { EventEmitterModule } from "@nestjs/event-emitter";
 
 import { FavoriteModule } from './modules/favorite/favorite.module';
 import { MarketModule } from './modules/market/market.module';
@@ -14,6 +15,7 @@ import { SupabaseModule } from "./shared/supabase/supabase.module";
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     SupabaseModule.forRoot(),
+    EventEmitterModule.forRoot(),
     SharedModule,
     ProductModule,
     MarketModule,

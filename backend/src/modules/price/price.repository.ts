@@ -66,19 +66,15 @@ export class PriceRepository {
     }));
   }
 
-  public async updatePriceById(priceId: string, params: PriceUpdateDto): Promise<PriceTimestampDto> {
-    const { data, error } = await this.supabase
+  public async updatePriceById(priceId: string, params: PriceUpdateDto): Promise<void> {
+    const { error } = await this.supabase
       .from('prices')
       .update(params)
-      .eq('id', priceId)
-      .select()
-      .single();
+      .eq('id', priceId);
 
     if (error) {
       throw new BadRequestException(error.message);
     }
-
-    return data;
   }
 
 }
