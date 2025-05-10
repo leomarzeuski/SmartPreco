@@ -61,7 +61,15 @@ export class ProductCreateDto extends OmitType(ProductDto, [ 'id' ] as const) {}
 
 export class ProductUpdateDto extends PartialType(ProductCreateDto) {}
 
-export class ProductsDto extends PaginationResponseDto<ProductDto> {}
+export class ProductsDto extends PaginationResponseDto<ProductDto> {
+
+   @ApiProperty({
+      description: 'List of Market records',
+      type: [ ProductDto ],
+    })
+    public records: ProductDto[];
+
+ }
 
 export class ProductsTimestampDto extends PickType(PaginationResponseDto, [ 'total' ] as const) {
 

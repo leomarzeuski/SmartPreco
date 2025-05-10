@@ -75,7 +75,15 @@ export class ReportCreateDto extends IntersectionType(
 
 export class ReportUpdateDto extends PickType(ReportDto, [ "status", "resolved" ] as const) {}
 
-export class ReportsDto extends PaginationResponseDto<ReportDto> {}
+export class ReportsDto extends PaginationResponseDto<ReportDto> {
+
+   @ApiProperty({
+      description: 'List of Market records',
+      type: [ ReportDto ],
+    })
+    public records: ReportDto[];
+
+ }
 
 export class ReportsTimestampDto extends PickType(PaginationResponseDto, [ 'total' ] as const) {
 

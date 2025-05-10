@@ -86,7 +86,15 @@ export class PriceUpdateDto extends PartialType(IntersectionType(
   PickType(PriceDto, [ 'moderated' ] as const)
 )) {}
 
-export class PricesDto extends PaginationResponseDto<PriceDto> {}
+export class PricesDto extends PaginationResponseDto<PriceDto> {
+
+   @ApiProperty({
+      description: 'List of Market records',
+      type: [ PriceDto ],
+    })
+    public records: PriceDto[];
+
+ }
 
 export class PricesTimestampDto extends PickType(PaginationResponseDto, [ 'total' ] as const) {
 
