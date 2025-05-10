@@ -1,9 +1,12 @@
-import { BadRequestException } from '@nestjs/common';
 import { SupabaseClient } from '@supabase/supabase-js';
+
+import { AppException } from '../../shared/errors/app.exception';
+import { EntityEnum } from '../../shared/errors/entity.enum';
+import { ErrorEnum } from '../../shared/errors/error.enum';
 
 export abstract class FavoriteBaseRepository {
 
-  protected abstract tableName: string;
+  protected abstract tableName: EntityEnum;
   protected abstract columnName: string;
 
   public constructor(protected readonly supabase: SupabaseClient) {}
@@ -15,7 +18,7 @@ export abstract class FavoriteBaseRepository {
       .select(this.columnName)
       .eq('user_id', userId);
 
-    if (error) throw new BadRequestException(error.message);
+    if (error) throw new AppException(ErrorEnum.NOT_FOUND, error.message, this.tableName);
 
     return data.map((item) => item[this.columnName]);
   }
@@ -36,7 +39,7 @@ export abstract class FavoriteBaseRepository {
       .from(this.tableName)
       .insert({ user_id: userId, [this.columnName]: id });
 
-    if (error) throw new BadRequestException(error.message);
+    if (error) throw new AppException(ErrorEnum.INSERT, error.message, this.tableName);
   }
 
   public async delete(userId: string, id: string): Promise<void> {
@@ -46,7 +49,7 @@ export abstract class FavoriteBaseRepository {
       .eq('user_id', userId)
       .eq(this.columnName, id);
 
-    if (error) throw new BadRequestException(error.message);
+    if (error) throw new AppException(ErrorEnum.DELETE, error.message, this.tableName);
   }
 
 }

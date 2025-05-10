@@ -1,22 +1,27 @@
-import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
+import { HttpStatus, Injectable } from "@nestjs/common";
 import { SupabaseClient } from "@supabase/supabase-js";
 
+import { AppException } from "../../shared/errors/app.exception";
+import { EntityEnum } from "../../shared/errors/entity.enum";
+import { ErrorEnum } from "../../shared/errors/error.enum";
 import { ProductCreateDto, ProductReadDto, ProductsTimestampDto, ProductTimestampDto, ProductUpdateDto } from "./product.dto";
 
 @Injectable()
 export class ProductRepository {
 
+  private readonly tableName = EntityEnum.PRODUCTS;
+
   public constructor(private readonly supabase: SupabaseClient) {}
 
     public async createProduct(params: ProductCreateDto): Promise<ProductTimestampDto> {
       const { data, error } = await this.supabase
-      .from('products')
+      .from(this.tableName)
       .insert(params)
       .select()
       .single();
 
       if (error) {
-        throw new BadRequestException(error.message);
+        throw new AppException(ErrorEnum.INSERT, error.message, this.tableName);
       }
 
       return data;
@@ -26,7 +31,7 @@ export class ProductRepository {
       const { search, limit = 20, offset = 0, orderBy } = params;
 
       let query = this.supabase
-        .from('products')
+        .from(this.tableName)
         .select('*', { count: 'exact' });
 
       if (search) {
@@ -41,7 +46,7 @@ export class ProductRepository {
 
       const { data, error, count: total } = await query;
 
-      if (error) throw new BadRequestException(error.message);
+      if (error) throw new AppException(ErrorEnum.NOT_FOUND, error.message, this.tableName);
 
       return {
         records: data,
@@ -52,13 +57,13 @@ export class ProductRepository {
 
     public async readProductById(productId: string): Promise<ProductTimestampDto> {
       const { data, error } = await this.supabase
-        .from('products')
+        .from(this.tableName)
         .select('*')
         .eq('id', productId)
         .single();
 
       if (error) {
-        throw new NotFoundException(`Product with ID ${productId} not found`);
+        throw new AppException(ErrorEnum.NOT_FOUND, error.message, this.tableName, HttpStatus.NOT_FOUND);
       }
 
       return data;
@@ -69,14 +74,14 @@ export class ProductRepository {
       updateProductDto: ProductUpdateDto,
     ): Promise<ProductTimestampDto> {
       const { data, error } = await this.supabase
-        .from('products')
+        .from(this.tableName)
         .update(updateProductDto)
         .eq('id', productId)
         .select()
         .single();
 
       if (error) {
-        throw new BadRequestException(error.message);
+        throw new AppException(ErrorEnum.UPDATE, error.message, this.tableName);
       }
 
       return data;
@@ -84,12 +89,12 @@ export class ProductRepository {
 
     public async deleteProductById(productId: string): Promise<void> {
       const { error } = await this.supabase
-        .from('products')
+        .from(this.tableName)
         .delete()
         .eq('id', productId);
 
       if (error) {
-        throw new BadRequestException(error.message);
+        throw new AppException(ErrorEnum.DELETE, error.message, this.tableName);
       }
     }
 

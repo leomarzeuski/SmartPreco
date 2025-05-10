@@ -1,15 +1,15 @@
 import { Logger } from "@nestjs/common";
-import { HttpAdapterHost, NestFactory } from "@nestjs/core";
+import { NestFactory } from "@nestjs/core";
 import { NestExpressApplication } from "@nestjs/platform-express";
 import { SwaggerModule } from "@nestjs/swagger";
 import * as cookieParser from "cookie-parser";
 import * as dotenv from "dotenv";
 
-import { AllExceptionsFilter } from "./all-exception.filter";
 import { AppModule } from "./app.module";
 import { MainTag } from "./main.enum";
 import { createSwaggerConfig } from "./shared/config/swagger.config";
 import { createGlobalValidationPipe } from "./shared/config/validation.config";
+import { AllExceptionFilter } from "./shared/filters/all-exception.filter";
 
 dotenv.config();
 
@@ -28,8 +28,7 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, createSwaggerConfig());
   SwaggerModule.setup("api", app, document);
 
-  const { httpAdapter } = app.get(HttpAdapterHost);
-  app.useGlobalFilters(new AllExceptionsFilter(httpAdapter));
+  app.useGlobalFilters(new AllExceptionFilter());
 
   const port = process.env.PORT || 3000;
   await app.listen(port);

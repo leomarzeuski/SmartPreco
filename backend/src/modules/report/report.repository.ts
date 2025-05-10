@@ -1,10 +1,16 @@
-  import { BadRequestException, Injectable } from "@nestjs/common";
+  import { Injectable } from "@nestjs/common";
 import { SupabaseClient } from "@supabase/supabase-js";
 
+import { AppException } from "../../shared/errors/app.exception";
+import { EntityEnum } from "../../shared/errors/entity.enum";
+import { ErrorEnum } from "../../shared/errors/error.enum";
 import { ReportCreateRepositoryDto, ReportReadDto, ReportRepositoryDto, ReportsTimestampDto, ReportUpdateDto } from "./report.dto";
 
   @Injectable()
   export class ReportRepository {
+
+    private readonly tableName = EntityEnum.REPORTS;
+
     private readonly selectFields = `
       *,
       prices (
@@ -17,22 +23,22 @@ import { ReportCreateRepositoryDto, ReportReadDto, ReportRepositoryDto, ReportsT
     public constructor(private readonly supabase: SupabaseClient) {}
 
     public async createReport(params: ReportCreateRepositoryDto): Promise<ReportRepositoryDto> {
-      const { data: report, error: reportError } = await this.supabase
-        .from('reports')
+      const { data, error } = await this.supabase
+        .from(this.tableName)
         .insert({ ...params, resolved: false })
         .select(this.selectFields)
         .single();
 
-      if (reportError) throw new BadRequestException(reportError.message);
+      if (reportError) throw new AppException(ErrorEnum.INSERT, error.message, this.tableName);
 
-      return report;
+      return data;
     }
 
     public async readReports(params: ReportReadDto): Promise<ReportsTimestampDto> {
       const { search, limit = 20, offset = 0, orderBy, resolved } = params;
 
       let query = this.supabase
-        .from('reports')
+        .from(this.tableName)
         .select(this.selectFields, { count: 'exact' });
 
       if (resolved !== undefined) {
@@ -52,7 +58,7 @@ import { ReportCreateRepositoryDto, ReportReadDto, ReportRepositoryDto, ReportsT
       const { data, error, count: total } = await query;
 
       if (error) {
-        throw new BadRequestException(error.message);
+        throw new AppException(ErrorEnum.NOT_FOUND, error.message, this.tableName);
       }
 
       return {
@@ -63,13 +69,13 @@ import { ReportCreateRepositoryDto, ReportReadDto, ReportRepositoryDto, ReportsT
 
     public async updateReportById(reportId: string, dto: ReportUpdateDto): Promise<ReportRepositoryDto> {
       const { data, error } = await this.supabase
-        .from('reports')
+        .from(this.tableName)
         .update(dto)
         .eq('id', reportId)
         .select(this.selectFields)
         .single();
 
-      if (error) throw new BadRequestException(error.message);
+      if (error) throw new AppException(ErrorEnum.UPDATE, error.message, this.tableName);
 
       return data;
     }
