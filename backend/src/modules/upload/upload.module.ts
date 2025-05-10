@@ -1,11 +1,10 @@
-import { Logger, Module } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
+import { Module } from '@nestjs/common';
 
-import { MainTag } from '../../main.enum';
 import { S3UploadStrategy } from './upload-s3.strategy';
 import { SupabaseUploadStrategy } from './upload-supabase.strategy';
 import { UploadController } from './upload.controller';
 import { UploadService } from './upload.service';
+import { UploadStrategyFactory } from './upload.strategy.factory';
 
 @Module({
   controllers: [ UploadController ],
@@ -13,19 +12,13 @@ import { UploadService } from './upload.service';
     UploadService,
     SupabaseUploadStrategy,
     S3UploadStrategy,
+    UploadStrategyFactory,
     {
       provide: 'UploadStrategy',
-      useFactory: (config: ConfigService) => {
-        const driver = config.get<string>('UPLOAD_DRIVER');
-        const logger = new Logger(MainTag.UPLOAD);
-
-        logger.debug(`Upload configured with ${driver.toUpperCase()}! 🚀`);
-
-        return driver === 's3'
-          ? new S3UploadStrategy(config)
-          : new SupabaseUploadStrategy(config);
+      useFactory: (uploadStrategyFactory: UploadStrategyFactory) => {
+        return uploadStrategyFactory.create();
       },
-      inject: [ ConfigService ],
+      inject: [ UploadStrategyFactory ],
     },
   ],
 })
