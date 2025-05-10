@@ -4,4 +4,5 @@ export enum MainTag {
   UPLOAD = 'UPLOAD',
   SUPABASE = 'SUPABASE',
   EXCEPTION = 'EXCEPTION',
+  HTTP = 'HTTP',
 }

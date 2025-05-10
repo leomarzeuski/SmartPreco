@@ -10,6 +10,7 @@ import { MainTag } from "./main.enum";
 import { createSwaggerConfig } from "./shared/config/swagger.config";
 import { createGlobalValidationPipe } from "./shared/config/validation.config";
 import { AllExceptionFilter } from "./shared/filters/all-exception.filter";
+import { LoggerInterceptor } from "./shared/interceptors/logger.interceptor";
 
 dotenv.config();
 
@@ -19,13 +20,15 @@ async function bootstrap() {
 
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
     rawBody: true,
-    logger: [ "error", "warn", "debug" ],
+    logger: [ "error", "warn", "debug", "verbose" ],
   });
 
   app.enableCors();
 
   app.use(cookieParser());
   app.useGlobalPipes(createGlobalValidationPipe());
+
+  app.useGlobalInterceptors(new LoggerInterceptor());
 
   const document = SwaggerModule.createDocument(app, createSwaggerConfig());
   SwaggerModule.setup("api", app, document);
