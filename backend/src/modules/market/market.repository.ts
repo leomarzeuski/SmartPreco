@@ -1,9 +1,8 @@
 import { HttpStatus, Injectable } from "@nestjs/common";
 import { SupabaseClient } from "@supabase/supabase-js";
 
-import { AppException } from "../../shared/errors/app.exception";
-import { EntityEnum } from "../../shared/errors/entity.enum";
-import { ErrorEnum } from "../../shared/errors/error.enum";
+import { AppException, EntityEnum, ErrorEnum } from "../../shared/errors";
+import { getSafeSearch } from "../../shared/utils/get-safe-search";
 import { MarketCreateDto, MarketReadDto, MarketsTimestampDto, MarketTimestampDto, MarketUpdateDto } from "./market.dto";
 
 @Injectable()
@@ -33,7 +32,9 @@ export class MarketRepository {
       .select('*', { count: 'exact' });
 
     if (search) {
-      query = query.or(`name.ilike.%${search}%,address.ilike.%${search}%`);
+      const safeSearch = getSafeSearch(search);
+
+      query = query.ilike('name', `%${safeSearch}%`).or(`address.ilike.%${safeSearch}%`);
     }
 
     if (orderBy) {

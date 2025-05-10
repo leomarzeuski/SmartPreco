@@ -89,7 +89,7 @@ export class PriceUpdateDto extends PartialType(IntersectionType(
 export class PricesDto extends PaginationResponseDto<PriceDto> {
 
    @ApiProperty({
-      description: 'List of Market records',
+      description: 'List of Price records',
       type: [ PriceDto ],
     })
     public records: PriceDto[];

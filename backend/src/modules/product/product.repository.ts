@@ -1,9 +1,8 @@
 import { HttpStatus, Injectable } from "@nestjs/common";
 import { SupabaseClient } from "@supabase/supabase-js";
 
-import { AppException } from "../../shared/errors/app.exception";
-import { EntityEnum } from "../../shared/errors/entity.enum";
-import { ErrorEnum } from "../../shared/errors/error.enum";
+import { AppException, EntityEnum, ErrorEnum } from "../../shared/errors";
+import { getSafeSearch } from "../../shared/utils/get-safe-search";
 import { ProductCreateDto, ProductReadDto, ProductsTimestampDto, ProductTimestampDto, ProductUpdateDto } from "./product.dto";
 
 @Injectable()
@@ -35,7 +34,9 @@ export class ProductRepository {
         .select('*', { count: 'exact' });
 
       if (search) {
-        query = query.or(`name.ilike.%${search}%,description.ilike.%${search}%`);
+        const safeSearch = getSafeSearch(search);
+
+        query = query.ilike('name', `%${safeSearch}%`).or(`description.ilike.%${safeSearch}%`);
       }
 
       if (orderBy) {

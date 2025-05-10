@@ -1,7 +1,4 @@
-
-import { AppException } from '../../shared/errors/app.exception';
-import { EntityEnum } from '../../shared/errors/entity.enum';
-import { ErrorEnum } from '../../shared/errors/error.enum';
+import { AppException, EntityEnum, ErrorEnum } from '../../shared/errors';
 
 const entity = EntityEnum.IMAGE;
 const allowedMimeTypes = [ 'image/png', 'image/jpeg' ];

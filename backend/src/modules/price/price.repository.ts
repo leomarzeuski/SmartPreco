@@ -1,9 +1,8 @@
 import { Injectable } from "@nestjs/common";
 import { SupabaseClient } from "@supabase/supabase-js";
 
-import { AppException } from "../../shared/errors/app.exception";
-import { EntityEnum } from "../../shared/errors/entity.enum";
-import { ErrorEnum } from "../../shared/errors/error.enum";
+import { AppException, EntityEnum, ErrorEnum } from "../../shared/errors";
+import { getSafeSearch } from "../../shared/utils/get-safe-search";
 import { MarketDto } from "../market/market.dto";
 import { ProductDto } from "../product/product.dto";
 import { PriceCreateRepositoryDto, PriceReadDto, PricesTimestampDto, PriceTimestampDto, PriceUpdateDto } from "./price.dto";
@@ -61,10 +60,13 @@ export class PriceRepository {
       .eq('moderated', true);
 
     if (marketId) query = query.eq('market_id', marketId);
+
     if (productId) query = query.eq('product_id', productId);
 
     if (search) {
-      query = query.or(`product.name.ilike.%${search}%,market.name.ilike.%${search}%`);
+      const safeSearch = getSafeSearch(search);
+
+      query = query.ilike('product.name', `%${safeSearch}%`).or(`market.name.ilike.%${safeSearch}%`);
     }
 
     if (orderBy) {
