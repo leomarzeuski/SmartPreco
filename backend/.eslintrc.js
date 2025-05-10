@@ -20,36 +20,49 @@ module.exports = {
     "@typescript-eslint",
     "import",
     "unused-imports",
-    "simple-import-sort",
+    "simple-import-sort"
   ],
   rules: {
     "no-trailing-spaces": "warn",
-    "@typescript-eslint/explicit-member-accessibility": [
-      "warn",
-      { accessibility: "explicit" },
-    ],
-    "semi-spacing": ["warn", { before: false, after: true }],
-    semi: ["warn", "always"],
-    "space-in-parens": ["warn", "never"],
-    "object-curly-spacing": ["warn", "always"],
-    "array-bracket-spacing": ["warn", "always"],
-    "unused-imports/no-unused-imports": "warn",
-    "simple-import-sort/imports": "warn",
-    "simple-import-sort/exports": "warn",
-    "@typescript-eslint/no-unused-vars": ["warn", { argsIgnorePattern: "^_" }],
-    'max-len': ['warn', {
-      code: 120,
-      ignoreUrls: true,
-      ignoreComments: false,
-      ignorePattern: '^import\\s.+\\sfrom\\s.+;$'
-    }],
+    "semi-spacing": [ "warn", { before: false, after: true } ],
+    "semi": [ "warn", "always" ],
+    "space-in-parens": [ "warn", "never" ],
+    "object-curly-spacing": [ "warn", "always" ],
+    "array-bracket-spacing": [ "warn", "always" ],
+    "brace-style": [ "warn", "1tbs" ],
+    "camelcase": [ "warn", { properties: "always" } ],
+    "eqeqeq": [ "warn", "always" ],
     "no-console": "warn",
     "no-debugger": "warn",
-    eqeqeq: ["warn", "always"],
     "no-var": "warn",
     "prefer-const": "warn",
-    "brace-style": ["warn", "1tbs"],
-    camelcase: ["warn", { properties: "always" }],
+    "max-len": [
+      "warn",
+      {
+        code: 120,
+        ignoreUrls: true,
+        ignoreComments: false,
+        ignorePattern: "^import\\s.+\\sfrom\\s.+;$"
+      }
+    ],
+
+    // TypeScript rules
+    "@typescript-eslint/explicit-member-accessibility": [
+      "warn",
+      { accessibility: "explicit" }
+    ],
+    "@typescript-eslint/no-unused-vars": [ "warn", { argsIgnorePattern: "^_" } ],
     "@typescript-eslint/no-explicit-any": "off",
+
+    // Unused imports rules
+    "unused-imports/no-unused-imports": "warn"
   },
+  settings: {
+    'import/resolver': {
+      typescript: {
+        alwaysTryTypes: true,
+        project: './tsconfig.json'
+      }
+    }
+  }
 };

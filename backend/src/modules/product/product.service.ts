@@ -1,8 +1,7 @@
+import { ProductCreateDto, ProductDto, ProductReadDto, ProductsDto, ProductTimestampDto, ProductUpdateDto } from '@modules/product/product.dto';
+import { ProductRepository } from '@modules/product/product.repository';
 import { Injectable } from '@nestjs/common';
-
-import { DtoMapper } from '../../shared/utils/dto-mapper';
-import { ProductCreateDto, ProductDto, ProductReadDto, ProductsDto, ProductTimestampDto, ProductUpdateDto } from './product.dto';
-import { ProductRepository } from './product.repository';
+import { DtoMapper } from '@shared/utils/dto-mapper';
 
 @Injectable()
 export class ProductService {

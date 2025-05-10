@@ -1,9 +1,8 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post, Query } from '@nestjs/common';
-import { ApiCreatedResponse, ApiNoContentResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
-
-import { UseUser } from '../../shared/guards/use-user.decorator';
-import { MarketCreateDto, MarketDto, MarketIdDto, MarketReadDto, MarketsDto, MarketUpdateDto } from './market.dto';
-import { MarketService } from './market.service';
+import { MarketDto, MarketCreateDto, MarketsDto, MarketReadDto, MarketIdDto, MarketUpdateDto } from "@modules/market/market.dto";
+import { MarketService } from "@modules/market/market.service";
+import { Controller, Post, HttpCode, HttpStatus, Body, Get, Query, Param, Patch, Delete } from "@nestjs/common";
+import { ApiTags, ApiCreatedResponse, ApiOperation, ApiOkResponse, ApiNoContentResponse } from "@nestjs/swagger";
+import { UseUser } from "@shared/guards/use-user.decorator";
 
 @Controller('markets')
 @ApiTags('Market')

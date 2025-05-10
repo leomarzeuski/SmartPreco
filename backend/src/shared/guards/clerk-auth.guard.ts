@@ -1,14 +1,13 @@
 import { clerkClient } from "@clerk/clerk-sdk-node";
 import { CanActivate, ExecutionContext, Injectable, Logger, UnauthorizedException } from "@nestjs/common";
-
-import { MainTag } from "../../main.enum";
-import { ContextEnum } from "../context/context.enum";
-import { ContextService } from "../context/context.service";
+import { ContextEnum } from "@shared/context/context.enum";
+import { ContextService } from "@shared/context/context.service";
+import { MainTag } from "main.enum";
 
 @Injectable()
 export class ClerkAuthGuard implements CanActivate {
 
-  private readonly logger = new Logger(MainTag.CLERK_AUTH_GUARD);
+  private readonly logger = new Logger(MainTag.CLERK);
 
   public constructor(private readonly contextService: ContextService) {}
 

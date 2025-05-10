@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Logger } from '@nestjs/common';
 
-import { MainTag } from '../../main.enum';
+import { MainTag } from 'main.enum';
 import { EntityEnum } from './entity.enum';
 import { ErrorEnum } from './error.enum';
 

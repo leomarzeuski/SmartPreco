@@ -1,23 +1,9 @@
-import {
-  Controller,
-  Delete,
-  Get,
-  HttpCode,
-  HttpStatus,
-  Param,
-  Post,
-} from '@nestjs/common';
-import {
-  ApiNoContentResponse,
-  ApiOkResponse,
-  ApiOperation,
-  ApiTags,
-} from '@nestjs/swagger';
-
-import { UseUser } from '../../../shared/guards/use-user.decorator';
-import { ProductDto } from '../../product/product.dto';
-import { FavoriteProductIdDto } from './favorite-product.dto';
-import { FavoriteProductService } from './favorite-product.service';
+import { FavoriteProductIdDto } from "@modules/favorite/favorite-product/favorite-product.dto";
+import { FavoriteProductService } from "@modules/favorite/favorite-product/favorite-product.service";
+import { ProductDto } from "@modules/product/product.dto";
+import { Controller, Delete, Get, HttpCode, HttpStatus, Param, Post } from "@nestjs/common";
+import { ApiNoContentResponse, ApiOkResponse, ApiOperation, ApiTags } from "@nestjs/swagger";
+import { UseUser } from "@shared/guards/use-user.decorator";
 
 @Controller('favorites/products')
 @ApiTags('Favorite - Product')

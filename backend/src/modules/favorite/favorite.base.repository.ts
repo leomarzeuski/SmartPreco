@@ -1,6 +1,6 @@
+import { AppException, EntityEnum, ErrorEnum } from '@shared/errors';
 import { SupabaseClient } from '@supabase/supabase-js';
 
-import { AppException, EntityEnum, ErrorEnum } from '../../shared/errors';
 
 export abstract class FavoriteBaseRepository {
 

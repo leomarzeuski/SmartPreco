@@ -1,14 +1,27 @@
 {
   "eslint.format.enable": true,
   "eslint.lintTask.enable": true,
+  "editor.formatOnSave": true,
   "editor.codeActionsOnSave": {
+    "source.fixAll": "explicit",
     "source.fixAll.eslint": "explicit",
-    "source.organizeImports": "explicit",
-    "source.fixAll": "explicit"
+    "source.organizeImports": "explicit"
   },
+  "typescript.preferences.importModuleSpecifier": "non-relative",
+  "javascript.preferences.importModuleSpecifier": "non-relative",
   "material-icon-theme.activeIconPack": "nest",
   "material-icon-theme.folders.associations": {
     "entities": "class",
     "dto": "typescript"
   },
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "eslint.workingDirectories": [
+    {
+      "mode": "auto"
+    }
+  ],
+  "eslint.validate": [
+    "javascript",
+    "typescript"
+  ]
 }

@@ -1,9 +1,9 @@
+import { MarketCreateDto, MarketReadDto, MarketsTimestampDto, MarketTimestampDto, MarketUpdateDto } from "@modules/market/market.dto";
 import { HttpStatus, Injectable } from "@nestjs/common";
+import { AppException, EntityEnum, ErrorEnum } from "@shared/errors";
+import { getSafeSearch } from "@shared/utils/get-safe-search";
 import { SupabaseClient } from "@supabase/supabase-js";
 
-import { AppException, EntityEnum, ErrorEnum } from "../../shared/errors";
-import { getSafeSearch } from "../../shared/utils/get-safe-search";
-import { MarketCreateDto, MarketReadDto, MarketsTimestampDto, MarketTimestampDto, MarketUpdateDto } from "./market.dto";
 
 @Injectable()
 export class MarketRepository {

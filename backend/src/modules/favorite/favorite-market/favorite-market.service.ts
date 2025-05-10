@@ -1,10 +1,9 @@
+import { FavoriteMarketRepository } from '@modules/favorite/favorite-market/favorite-market.repository';
+import { FavoriteBaseService } from '@modules/favorite/favorite.base.service';
+import { MarketDto } from '@modules/market/market.dto';
+import { MarketService } from '@modules/market/market.service';
 import { Injectable } from '@nestjs/common';
-
-import { ContextService } from '../../../shared/context/context.service';
-import { MarketDto } from '../../market/market.dto';
-import { MarketService } from '../../market/market.service';
-import { FavoriteBaseService } from '../favorite.base.service';
-import { FavoriteMarketRepository } from './favorite-market.repository';
+import { ContextService } from '@shared/context/context.service';
 
 @Injectable()
 export class FavoriteMarketService extends FavoriteBaseService<MarketDto> {

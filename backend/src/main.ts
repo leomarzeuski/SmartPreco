@@ -2,15 +2,14 @@ import { Logger } from "@nestjs/common";
 import { NestFactory } from "@nestjs/core";
 import { NestExpressApplication } from "@nestjs/platform-express";
 import { SwaggerModule } from "@nestjs/swagger";
+import { createSwaggerConfig } from "@shared/config/swagger.config";
+import { createGlobalValidationPipe } from "@shared/config/validation.config";
+import { AllExceptionFilter } from "@shared/filters/all-exception.filter";
+import { LoggerInterceptor } from "@shared/interceptors/logger.interceptor";
+import { AppModule } from "app.module";
 import * as cookieParser from "cookie-parser";
 import * as dotenv from "dotenv";
-
-import { AppModule } from "./app.module";
-import { MainTag } from "./main.enum";
-import { createSwaggerConfig } from "./shared/config/swagger.config";
-import { createGlobalValidationPipe } from "./shared/config/validation.config";
-import { AllExceptionFilter } from "./shared/filters/all-exception.filter";
-import { LoggerInterceptor } from "./shared/interceptors/logger.interceptor";
+import { MainTag } from "main.enum";
 
 dotenv.config();
 

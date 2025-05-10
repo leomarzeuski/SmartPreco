@@ -1,7 +1,7 @@
 import { CallHandler, ExecutionContext, Injectable, Logger, NestInterceptor } from '@nestjs/common';
 import { Observable } from 'rxjs';
 
-import { MainTag } from '../../main.enum';
+import { MainTag } from 'main.enum';
 
 @Injectable()
 export class LoggerInterceptor implements NestInterceptor {

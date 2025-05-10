@@ -1,9 +1,9 @@
+import { ProductCreateDto, ProductReadDto, ProductsTimestampDto, ProductTimestampDto, ProductUpdateDto } from "@modules/product/product.dto";
 import { HttpStatus, Injectable } from "@nestjs/common";
+import { AppException, EntityEnum, ErrorEnum } from "@shared/errors";
+import { getSafeSearch } from "@shared/utils/get-safe-search";
 import { SupabaseClient } from "@supabase/supabase-js";
 
-import { AppException, EntityEnum, ErrorEnum } from "../../shared/errors";
-import { getSafeSearch } from "../../shared/utils/get-safe-search";
-import { ProductCreateDto, ProductReadDto, ProductsTimestampDto, ProductTimestampDto, ProductUpdateDto } from "./product.dto";
 
 @Injectable()
 export class ProductRepository {

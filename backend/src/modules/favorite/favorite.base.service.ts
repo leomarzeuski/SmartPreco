@@ -1,6 +1,6 @@
-import { ContextEnum } from '../../shared/context/context.enum';
-import { ContextService } from '../../shared/context/context.service';
-import { FavoriteStrategy } from './favorite.strategy';
+import { FavoriteStrategy } from "@modules/favorite/favorite.strategy";
+import { ContextEnum } from "@shared/context/context.enum";
+import { ContextService } from "@shared/context/context.service";
 
 export abstract class FavoriteBaseService<T> implements FavoriteStrategy<T> {
   public constructor(

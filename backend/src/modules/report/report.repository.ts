@@ -1,9 +1,8 @@
-  import { Injectable } from "@nestjs/common";
+import { ReportCreateRepositoryDto, ReportReadDto, ReportRepositoryDto, ReportsTimestampDto, ReportUpdateDto } from "@modules/report/report.dto";
+import { Injectable } from "@nestjs/common";
+import { AppException, EntityEnum, ErrorEnum } from "@shared/errors";
+import { getSafeSearch } from "@shared/utils/get-safe-search";
 import { SupabaseClient } from "@supabase/supabase-js";
-
-import { AppException, EntityEnum, ErrorEnum } from "../../shared/errors";
-import { getSafeSearch } from "../../shared/utils/get-safe-search";
-import { ReportCreateRepositoryDto, ReportReadDto, ReportRepositoryDto, ReportsTimestampDto, ReportUpdateDto } from "./report.dto";
 
   @Injectable()
   export class ReportRepository {
@@ -28,7 +27,7 @@ import { ReportCreateRepositoryDto, ReportReadDto, ReportRepositoryDto, ReportsT
         .select(this.selectFields)
         .single();
 
-      if (reportError) throw new AppException(ErrorEnum.INSERT, error.message, this.tableName);
+      if (error) throw new AppException(ErrorEnum.INSERT, error.message, this.tableName);
 
       return data;
     }

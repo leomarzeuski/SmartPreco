@@ -1,8 +1,7 @@
+import { MarketController } from '@modules/market/market.controller';
+import { MarketRepository } from '@modules/market/market.repository';
+import { MarketService } from '@modules/market/market.service';
 import { Module } from '@nestjs/common';
-
-import { MarketController } from './market.controller';
-import { MarketRepository } from './market.repository';
-import { MarketService } from './market.service';
 
 @Module({
   controllers: [ MarketController ],

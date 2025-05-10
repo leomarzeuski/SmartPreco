@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
-import { MainTag } from '../../main.enum';
+import { MainTag } from 'main.enum';
 import { S3UploadStrategy } from './upload-s3.strategy';
 import { SupabaseUploadStrategy } from './upload-supabase.strategy';
 import { UploadStrategy } from './upload.strategy';

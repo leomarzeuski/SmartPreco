@@ -1,23 +1,10 @@
-import {
-  Controller,
-  Delete,
-  Get,
-  HttpCode,
-  HttpStatus,
-  Param,
-  Post,
-} from '@nestjs/common';
-import {
-  ApiNoContentResponse,
-  ApiOkResponse,
-  ApiOperation,
-  ApiTags,
-} from '@nestjs/swagger';
+import { FavoriteMarketIdDto } from "@modules/favorite/favorite-market/favorite-market.dto";
+import { FavoriteMarketService } from "@modules/favorite/favorite-market/favorite-market.service";
+import { MarketDto } from "@modules/market/market.dto";
+import { Controller, Delete, Get, HttpCode, HttpStatus, Param, Post } from "@nestjs/common";
+import { ApiNoContentResponse, ApiOkResponse, ApiOperation, ApiTags } from "@nestjs/swagger";
+import { UseUser } from "@shared/guards/use-user.decorator";
 
-import { UseUser } from '../../../shared/guards/use-user.decorator';
-import { MarketDto } from '../../market/market.dto';
-import { FavoriteMarketIdDto } from './favorite-market.dto';
-import { FavoriteMarketService } from './favorite-market.service';
 
 @Controller('favorites/markets')
 @ApiTags('Favorite - Market')

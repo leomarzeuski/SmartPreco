@@ -1,10 +1,8 @@
+import { PriceCreateDto, PriceDto, PriceReadDto, PricesDto } from '@modules/price/price.dto';
+import { PriceService } from '@modules/price/price.service';
 import { Body, Controller, Get, HttpCode, HttpStatus, Post, Query } from '@nestjs/common';
 import { ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
-
-import { UseUser } from '../../shared/guards/use-user.decorator';
-import { PriceCreateDto, PriceDto, PriceReadDto, PricesDto } from './price.dto';
-import { PriceService } from './price.service';
-
+import { UseUser } from '@shared/guards/use-user.decorator';
 @Controller('prices')
 @ApiTags('Price')
 @UseUser()

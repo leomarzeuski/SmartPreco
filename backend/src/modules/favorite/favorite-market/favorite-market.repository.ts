@@ -1,8 +1,7 @@
+import { FavoriteBaseRepository } from '@modules/favorite/favorite.base.repository';
 import { Injectable } from '@nestjs/common';
+import { EntityEnum } from '@shared/errors';
 import { SupabaseClient } from '@supabase/supabase-js';
-
-import { EntityEnum } from '../../../shared/errors';
-import { FavoriteBaseRepository } from '../favorite.base.repository';
 
 @Injectable()
 export class FavoriteMarketRepository extends FavoriteBaseRepository {

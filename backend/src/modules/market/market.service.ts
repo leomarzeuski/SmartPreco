@@ -1,8 +1,7 @@
+import { MarketCreateDto, MarketDto, MarketReadDto, MarketsDto, MarketTimestampDto, MarketUpdateDto } from '@modules/market/market.dto';
+import { MarketRepository } from '@modules/market/market.repository';
 import { Injectable } from '@nestjs/common';
-
-import { DtoMapper } from '../../shared/utils/dto-mapper';
-import { MarketCreateDto, MarketDto, MarketReadDto, MarketsDto, MarketTimestampDto, MarketUpdateDto } from './market.dto';
-import { MarketRepository } from './market.repository';
+import { DtoMapper } from '@shared/utils/dto-mapper';
 
 @Injectable()
 export class MarketService {

@@ -1,14 +1,13 @@
 /* eslint-disable camelcase */
+import { ReportCreateDto, ReportDto, ReportReadDto, ReportsDto, ReportUpdateDto } from '@modules/report/report.dto';
+import { ReportStatusEnum } from '@modules/report/report.enum';
+import { ReportRepository } from '@modules/report/report.repository';
 import { Injectable } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
-
-import { ContextEnum } from '../../shared/context/context.enum';
-import { ContextService } from '../../shared/context/context.service';
-import { EventEnum } from '../../shared/events/event.enum';
-import { DtoMapper } from '../../shared/utils/dto-mapper';
-import { ReportCreateDto, ReportDto, ReportReadDto, ReportsDto, ReportUpdateDto } from './report.dto';
-import { ReportStatusEnum } from './report.enum';
-import { ReportRepository } from './report.repository';
+import { ContextEnum } from '@shared/context/context.enum';
+import { ContextService } from '@shared/context/context.service';
+import { EventEnum } from '@shared/events/event.enum';
+import { DtoMapper } from '@shared/utils/dto-mapper';
 
 @Injectable()
 export class ReportService {

@@ -1,8 +1,8 @@
 import { ApiProperty, IntersectionType, OmitType, PartialType, PickType } from '@nestjs/swagger';
+import { PaginationReadDto, PaginationResponseDto } from '@shared/utils/pagination.dto';
+import { TimestampDto } from '@shared/utils/timestamp.dto';
 import { IsArray, IsNotEmpty, IsString, IsUUID } from 'class-validator';
 
-import { PaginationReadDto, PaginationResponseDto } from '../../shared/utils/pagination.dto';
-import { TimestampDto } from '../../shared/utils/timestamp.dto';
 
 export class ProductIdDto {
 

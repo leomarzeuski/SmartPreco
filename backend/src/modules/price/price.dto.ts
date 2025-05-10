@@ -1,12 +1,12 @@
+import { MarketDto, MarketIdDto, MarketRepositoryIdDto } from "@modules/market/market.dto";
+import { ProductDto, ProductIdDto, ProductRepositoryIdDto } from "@modules/product/product.dto";
+import { UploadImageDto, UploadImageRepositoryDto } from "@modules/upload/upload.dto";
 import { ApiProperty, IntersectionType, PartialType, PickType } from "@nestjs/swagger";
+import { UserIdDto, UserIdRepositoryDto } from "@shared/user/user.dto";
+import { PaginationReadDto, PaginationResponseDto } from "@shared/utils/pagination.dto";
+import { TimestampDto } from "@shared/utils/timestamp.dto";
 import { IsArray, IsBoolean, IsNumber, IsObject, IsUUID } from "class-validator";
 
-import { UserIdDto, UserIdRepositoryDto } from "../../shared/user/user.dto";
-import { PaginationReadDto, PaginationResponseDto } from "../../shared/utils/pagination.dto";
-import { TimestampDto } from "../../shared/utils/timestamp.dto";
-import { MarketDto, MarketIdDto, MarketRepositoryIdDto } from "../market/market.dto";
-import { ProductDto, ProductIdDto, ProductRepositoryIdDto } from "../product/product.dto";
-import { UploadImageDto, UploadImageRepositoryDto } from "../upload/upload.dto";
 
 export class PriceIdDto {
   @IsUUID()

@@ -1,14 +1,13 @@
+import { FavoriteMarketController } from '@modules/favorite/favorite-market/favorite-market.controller';
+import { FavoriteMarketRepository } from '@modules/favorite/favorite-market/favorite-market.repository';
+import { FavoriteMarketService } from '@modules/favorite/favorite-market/favorite-market.service';
+import { FavoriteProductController } from '@modules/favorite/favorite-product/favorite-product.controller';
+import { FavoriteProductRepository } from '@modules/favorite/favorite-product/favorite-product.repository';
+import { FavoriteProductService } from '@modules/favorite/favorite-product/favorite-product.service';
+import { FavoriteStrategyToken } from '@modules/favorite/favorite.strategy';
+import { MarketModule } from '@modules/market/market.module';
+import { ProductModule } from '@modules/product/product.module';
 import { Module } from '@nestjs/common';
-
-import { MarketModule } from '../market/market.module';
-import { ProductModule } from '../product/product.module';
-import { FavoriteStrategyToken } from './favorite.strategy';
-import { FavoriteMarketController } from './favorite-market/favorite-market.controller';
-import { FavoriteMarketRepository } from './favorite-market/favorite-market.repository';
-import { FavoriteMarketService } from './favorite-market/favorite-market.service';
-import { FavoriteProductController } from './favorite-product/favorite-product.controller';
-import { FavoriteProductRepository } from './favorite-product/favorite-product.repository';
-import { FavoriteProductService } from './favorite-product/favorite-product.service';
 
 @Module({
   imports: [
@@ -32,6 +31,12 @@ import { FavoriteProductService } from './favorite-product/favorite-product.serv
       provide: FavoriteStrategyToken.MARKET,
       useClass: FavoriteMarketService,
     },
+  ],
+  exports: [
+    FavoriteProductRepository,
+    FavoriteProductService,
+    FavoriteMarketRepository,
+    FavoriteMarketService,
   ],
 })
 export class FavoriteModule {}

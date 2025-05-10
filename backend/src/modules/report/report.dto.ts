@@ -1,12 +1,11 @@
+import { PriceDto, PriceIdDto, PriceRepositoryIdDto } from "@modules/price/price.dto";
+import { ReportStatusEnum } from "@modules/report/report.enum";
 import { IsBoolean } from "@nestjs/class-validator";
 import { ApiProperty, IntersectionType, PartialType, PickType } from "@nestjs/swagger";
+import { UserIdDto, UserIdRepositoryDto } from "@shared/user/user.dto";
+import { PaginationReadDto, PaginationResponseDto } from "@shared/utils/pagination.dto";
+import { TimestampDto } from "@shared/utils/timestamp.dto";
 import { IsArray, IsEnum, IsOptional, IsString, IsUUID } from "class-validator";
-
-import { UserIdDto, UserIdRepositoryDto } from "../../shared/user/user.dto";
-import { PaginationReadDto, PaginationResponseDto } from "../../shared/utils/pagination.dto";
-import { TimestampDto } from "../../shared/utils/timestamp.dto";
-import { PriceDto, PriceIdDto, PriceRepositoryIdDto } from "../price/price.dto";
-import { ReportStatusEnum } from "./report.enum";
 
 export class ReportIdDto {
 

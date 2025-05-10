@@ -1,7 +1,7 @@
 import { DynamicModule, Logger, Module } from '@nestjs/common';
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 
-import { MainTag } from '../../main.enum';
+import { MainTag } from 'main.enum';
 
 @Module({})
 export class SupabaseModule {

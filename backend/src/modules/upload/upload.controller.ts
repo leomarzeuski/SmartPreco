@@ -1,21 +1,8 @@
-import {
-  Controller,
-  HttpCode,
-  HttpStatus,
-  Post,
-  UploadedFile,
-  UseInterceptors,
-} from '@nestjs/common';
-import { FileInterceptor } from '@nestjs/platform-express';
-import {
-  ApiBody,
-  ApiConsumes,
-  ApiOperation,
-  ApiTags,
-} from '@nestjs/swagger';
-
-import { UploadImageDto } from './upload.dto';
-import { UploadService } from './upload.service';
+import { UploadImageDto } from "@modules/upload/upload.dto";
+import { UploadService } from "@modules/upload/upload.service";
+import { Controller, HttpCode, HttpStatus, Post, UploadedFile, UseInterceptors } from "@nestjs/common";
+import { FileInterceptor } from "@nestjs/platform-express";
+import { ApiBody, ApiConsumes, ApiOperation, ApiTags } from "@nestjs/swagger";
 
 @Controller('upload')
 @ApiTags('Upload')

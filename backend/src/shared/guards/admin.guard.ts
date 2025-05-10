@@ -1,7 +1,6 @@
 import { CanActivate, ExecutionContext, ForbiddenException, Injectable } from "@nestjs/common";
-
-import { ContextEnum } from "../context/context.enum";
-import { ContextService } from "../context/context.service";
+import { ContextEnum } from "@shared/context/context.enum";
+import { ContextService } from "@shared/context/context.service";
 
 @Injectable()
 export class AdminGuard implements CanActivate {

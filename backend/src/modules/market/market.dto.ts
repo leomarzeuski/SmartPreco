@@ -1,9 +1,7 @@
-import { IsNotEmpty, IsString } from "@nestjs/class-validator";
 import { ApiProperty, IntersectionType, OmitType, PartialType, PickType } from "@nestjs/swagger";
-import { IsArray, IsUUID } from "class-validator";
-
-import { TimestampDto } from "../..//shared/utils/timestamp.dto";
-import { PaginationReadDto, PaginationResponseDto } from "../../shared/utils/pagination.dto";
+import { PaginationReadDto, PaginationResponseDto } from "@shared/utils/pagination.dto";
+import { TimestampDto } from "@shared/utils/timestamp.dto";
+import { IsArray, IsNotEmpty, IsString, IsUUID } from "class-validator";
 
 export class MarketIdDto {
 

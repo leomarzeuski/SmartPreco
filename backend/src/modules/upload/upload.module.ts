@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
 
-import { S3UploadStrategy } from './upload-s3.strategy';
-import { SupabaseUploadStrategy } from './upload-supabase.strategy';
 import { UploadController } from './upload.controller';
 import { UploadService } from './upload.service';
 import { UploadStrategyFactory } from './upload.strategy.factory';
+import { S3UploadStrategy } from './upload-s3.strategy';
+import { SupabaseUploadStrategy } from './upload-supabase.strategy';
 
 @Module({
   controllers: [ UploadController ],
