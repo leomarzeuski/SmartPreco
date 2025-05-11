@@ -58,6 +58,11 @@ export const styles = StyleSheet.create({
     color: appColors.primary,
     marginBottom: 16,
   },
+  productCategory: {
+    fontSize: 16,
+    color: "#666",
+    marginBottom: 8,
+  },
   section: {
     padding: 16,
     borderTopWidth: 1,
@@ -80,6 +85,7 @@ export const styles = StyleSheet.create({
     padding: 12,
     backgroundColor: "#f8f8f8",
     borderRadius: 8,
+    marginBottom: 8,
   },
   marketInfo: {
     flex: 1,
@@ -134,5 +140,22 @@ export const styles = StyleSheet.create({
   reportButtonText: {
     color: "#FF3B30",
     fontSize: 16,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 20,
+  },
+  loadingText: {
+    fontSize: 16,
+    color: "#666",
+    marginTop: 12,
+  },
+  noDataText: {
+    fontSize: 16,
+    color: "#666",
+    textAlign: "center",
+    padding: 16,
   },
 }); 
