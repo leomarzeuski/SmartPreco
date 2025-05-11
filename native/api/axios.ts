@@ -1,8 +1,7 @@
 import { getClerkInstance } from "@clerk/clerk-expo";
 import axios, { type AxiosRequestConfig } from "axios";
-import Constants from 'expo-constants';
 
-const API_URL = Constants.expoConfig?.extra?.apiUrl;
+const API_URL = process.env.API_URL;
 export const clerkInstance = getClerkInstance();
 
 const axiosClient = axios.create({
