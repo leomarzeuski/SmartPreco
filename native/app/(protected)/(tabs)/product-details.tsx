@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useMemo } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   View,
   Text,
@@ -84,58 +84,48 @@ export default function ProductDetailScreen() {
     }
   );
 
-  const productPrices = useMemo(() => {
-    if (!pricesData?.prices?.length) return [];
-    return [...pricesData.prices].sort((a, b) => a.price - b.price);
+  const [productPrices, setProductPrices] = useState<PriceDto[]>([]);
+  const [marketPrice, setMarketPrice] = useState<PriceDto | null>(null);
+
+  useEffect(() => {
+    if (!pricesData?.prices?.length) return;
+
+    const sortedPrices = [...pricesData.prices].sort(
+      (a, b) => a.price - b.price
+    );
+    setProductPrices(sortedPrices);
   }, [pricesData]);
 
-  const marketPrice = useMemo(() => {
-    if (!productPrices.length) return null;
+  useEffect(() => {
+    if (!productPrices.length) return;
+
+    let selectedPrice = null;
 
     if (params.priceId) {
-      const specificPrice = productPrices.find(
+      selectedPrice = productPrices.find(
         (price) => price.id === params.priceId
       );
-      if (specificPrice) return specificPrice;
     }
 
-    if (params.marketId) {
-      const specificMarketPrice = productPrices.find(
+    if (!selectedPrice && params.marketId) {
+      selectedPrice = productPrices.find(
         (price) => price.market?.id === params.marketId?.toString()
       );
-      if (specificMarketPrice) return specificMarketPrice;
     }
 
-    return productPrices[0];
-  }, [productPrices, params.priceId, params.marketId]);
+    if (!selectedPrice) {
+      selectedPrice = productPrices[0];
+    }
+
+    setMarketPrice(selectedPrice);
+  }, [productPrices, params.marketId, params.priceId]);
 
   const { data: favoriteProducts, refetch: refetchFavorites } =
     useGetFavoriteProducts();
 
-  const isFavorite = useMemo(
-    () =>
-      favoriteProducts?.some(
-        (product) => product.id === params.id.toString()
-      ) ?? false,
-    [favoriteProducts, params.id]
-  );
-
-  const handleApiError = useCallback((action: string) => {
-    return (error: unknown) => {
-      console.error(`Erro ao ${action}:`, error);
-      const errorMessage =
-        error instanceof AxiosError && error.response?.data?.message
-          ? error.response.data.message
-          : `Não foi possível ${action} o produto. Tente novamente.`;
-
-      Alert.alert("Erro", errorMessage);
-    };
-  }, []);
-
-  const invalidateRelatedQueries = useCallback(() => {
-    queryClient.invalidateQueries({ queryKey: ["favoriteProducts"] });
-    queryClient.invalidateQueries({ queryKey: ["products"] });
-  }, [queryClient]);
+  const isFavorite =
+    favoriteProducts?.some((product) => product.id === params.id.toString()) ??
+    false;
 
   const { mutate: favoriteProduct } = useFavoriteProduct({
     mutation: {
@@ -168,6 +158,23 @@ export default function ProductDetailScreen() {
   const formatPrice = useCallback((price: number) => {
     return `R$ ${price.toFixed(2).replace(".", ",")}`;
   }, []);
+
+  function handleApiError(action: string) {
+    return (error: unknown) => {
+      console.error(`Erro ao ${action}:`, error);
+      const errorMessage =
+        error instanceof AxiosError && error.response?.data?.message
+          ? error.response.data.message
+          : `Não foi possível ${action} o produto. Tente novamente.`;
+
+      Alert.alert("Erro", errorMessage);
+    };
+  }
+
+  const invalidateRelatedQueries = useCallback(() => {
+    queryClient.invalidateQueries({ queryKey: ["favoriteProducts"] });
+    queryClient.invalidateQueries({ queryKey: ["products"] });
+  }, [queryClient]);
 
   const handleToggleFavorite = useCallback(() => {
     if (isFavorite) {
@@ -221,7 +228,7 @@ export default function ProductDetailScreen() {
 
       const reportData = {
         priceId: marketPrice.id,
-        reason,
+        reason: reason,
         details: details || undefined,
       };
 
@@ -245,25 +252,19 @@ export default function ProductDetailScreen() {
     }
   }, [reportSubmitted]);
 
-  const description = useMemo(
-    () =>
+  const getDescription = useCallback(() => {
+    return (
       params.description ||
       marketPrice?.product?.description ||
-      "Informações do produto não disponíveis.",
-    [params.description, marketPrice?.product?.description]
-  );
+      "Informações do produto não disponíveis."
+    );
+  }, [params.description, marketPrice?.product?.description]);
 
-  const category = useMemo(
-    () => params.category || marketPrice?.product?.category || "",
-    [params.category, marketPrice?.product?.category]
-  );
+  const getCategory = useCallback(() => {
+    return params.category || marketPrice?.product?.category || "";
+  }, [params.category, marketPrice?.product?.category]);
 
-  const headerSubtitle = useMemo(
-    () => marketPrice?.market?.name || params.marketName || "",
-    [marketPrice?.market?.name, params.marketName]
-  );
-
-  const renderContent = useCallback(() => {
+  const renderContent = () => {
     if (isLoadingPrices) {
       return (
         <View style={styles.loadingContainer}>
@@ -282,13 +283,13 @@ export default function ProductDetailScreen() {
         <ProductInfoSection
           marketPrice={marketPrice}
           params={params}
-          getCategory={() => category}
+          getCategory={getCategory}
           formatPrice={formatPrice}
         />
 
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Descrição</Text>
-          <Text style={styles.description}>{description}</Text>
+          <Text style={styles.description}>{getDescription()}</Text>
         </View>
 
         <View style={styles.section}>
@@ -316,7 +317,7 @@ export default function ProductDetailScreen() {
 
         <View style={styles.reportSection}>
           <TouchableOpacity
-            style={[styles.reportButton]}
+            style={styles.reportButton}
             onPress={() => setReportModalVisible(true)}
             disabled={reportSubmitted}
           >
@@ -327,18 +328,7 @@ export default function ProductDetailScreen() {
         </View>
       </ScrollView>
     );
-  }, [
-    isLoadingPrices,
-    params,
-    marketPrice,
-    category,
-    description,
-    productPrices,
-    formatPrice,
-    navigateToMarketDetail,
-    navigateToPriceComparison,
-    reportSubmitted,
-  ]);
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -350,7 +340,9 @@ export default function ProductDetailScreen() {
         />
         <View style={styles.headerTitleContainer}>
           <Text style={styles.headerTitle}>Detalhes do Produto</Text>
-          <Text style={styles.headerSubtitle}>{headerSubtitle}</Text>
+          <Text style={styles.headerSubtitle}>
+            {marketPrice?.market?.name || params.marketName || ""}
+          </Text>
         </View>
         <IconButton
           icon={isFavorite ? "star" : "star-outline"}
