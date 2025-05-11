@@ -1,12 +1,11 @@
 import { useUser } from "@clerk/clerk-expo";
-import { useEffect, useRef, useState } from "react";
-import * as Notifications from "expo-notifications";
-import { Platform } from "react-native";
 import * as Device from "expo-device";
+import * as Notifications from "expo-notifications";
+import { useEffect, useRef, useState } from "react";
+import { Platform } from "react-native";
 
 async function registerForPushNotificationsAsync() {
   let token;
-  console.log(token);
   if (Platform.OS === "android") {
     await Notifications.setNotificationChannelAsync("default", {
       name: "default",
@@ -27,7 +26,6 @@ async function registerForPushNotificationsAsync() {
     }
 
     if (finalStatus !== "granted") {
-      console.log("Falha ao obter permissão para notificações!");
       return;
     }
 
@@ -39,15 +37,9 @@ async function registerForPushNotificationsAsync() {
         });
         token = pushToken.data;
       } else {
-        console.log("EXPO_PUBLIC_PROJECT_ID não configurado");
       }
-    } catch (error) {
-      console.log("Erro ao obter token de push:", error);
-    }
-  } else {
-    console.log("As notificações push requerem um dispositivo físico.");
+    } catch (error) {}
   }
-
   return token;
 }
 
@@ -65,7 +57,6 @@ export function NotificationsManager() {
         const currentMetadata = user.unsafeMetadata || {};
 
         if (currentMetadata.pushToken === token) {
-          console.log("Token já está atualizado no Clerk");
           return;
         }
 
@@ -77,8 +68,6 @@ export function NotificationsManager() {
             lastTokenUpdate: new Date().toISOString(),
           },
         });
-
-        console.log("Token salvo no Clerk com sucesso");
       }
     } catch (error) {
       console.error("Erro ao salvar token no Clerk:", error);
@@ -98,8 +87,6 @@ export function NotificationsManager() {
       const token = await registerForPushNotificationsAsync();
       if (token) {
         setExpoPushToken(token);
-        console.log("Expo Push Token:", token);
-
         if (isSignedIn && user) {
           await saveTokenToClerk(token);
         }
@@ -109,9 +96,7 @@ export function NotificationsManager() {
     getNotificationToken();
 
     notificationListener.current =
-      Notifications.addNotificationReceivedListener((notification) => {
-        console.log("Notificação recebida:", notification);
-      });
+      Notifications.addNotificationReceivedListener((notification) => {});
 
     return () => {
       if (notificationListener.current) {

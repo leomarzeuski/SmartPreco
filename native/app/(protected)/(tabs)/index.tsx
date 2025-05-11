@@ -68,7 +68,6 @@ export default function HomeScreen() {
 
   useFocusEffect(
     useCallback(() => {
-      console.log("Tela recebeu foco, buscando dados atualizados...");
       refetchProducts();
       refetchMarkets();
       refetchFavoriteProducts();

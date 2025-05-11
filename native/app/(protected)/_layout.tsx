@@ -1,3 +1,4 @@
+import React from "react";
 import { Slot, Redirect } from "expo-router";
 import { useAuth } from "@clerk/clerk-expo";
 

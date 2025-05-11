@@ -1,10 +1,9 @@
-import { Redirect, Slot, Stack } from "expo-router";
+import React from "react";
+import { Redirect, Slot } from "expo-router";
 import { useAuth } from "@clerk/clerk-expo";
 
 export default function PublicLayout() {
   const { isSignedIn } = useAuth();
-
-  console.log({ isSignedIn });
 
   if (isSignedIn) {
     return <Redirect href="/" />;
