@@ -1,42 +1,48 @@
-import React, { useState, useEffect } from "react";
-import {
-  View,
-  Text,
-  Image,
-  FlatList,
-  TouchableOpacity,
-  ScrollView,
-  ToastAndroid,
-} from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { IconButton, Chip } from "react-native-paper";
-import {
-  useRoute,
-  useNavigation,
-  NavigationProp,
-} from "@react-navigation/native";
-import { styles } from "@/styles/market-details";
 import {
   useFavoriteMarket,
   useGetFavoriteMarkets,
   useUnfavoriteMarket,
 } from "@/api/favorite-market/favorite-market";
+import { useReadMarket } from "@/api/market/market";
+import { PriceDto } from "@/api/model";
+import { useReadPrices } from "@/api/price/price";
+import { styles } from "@/styles/market-details";
+import {
+  NavigationProp,
+  useNavigation,
+  useRoute,
+} from "@react-navigation/native";
 import { useQueryClient } from "@tanstack/react-query";
+import React, { useEffect, useState } from "react";
+import {
+  ActivityIndicator,
+  FlatList,
+  Image,
+  ScrollView,
+  Text,
+  ToastAndroid,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { Chip, IconButton } from "react-native-paper";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 type MarketDetailParams = {
   id: number;
   name: string;
-  rating: number;
-  distance: string;
-  city: string;
+  rating?: number;
+  distance?: string;
+  city?: string;
 };
 
 type ProductItem = {
-  id: number;
+  id: string;
   name: string;
-  price: string;
-  image: null | any;
+  price: number;
+  image: string | null;
   category: string;
+  priceId: string;
+  uniqueId: string;
 };
 
 type RootStackParamList = {
@@ -48,6 +54,7 @@ type RootStackParamList = {
     image: any;
     marketId: number;
     marketName: string;
+    priceId?: string;
   };
 };
 
@@ -57,7 +64,64 @@ export default function MarketDetailScreen() {
   const params = route.params as MarketDetailParams;
   const [activeCategory, setActiveCategory] = useState<string>("Todos");
   const [isFavorite, setIsFavorite] = useState(false);
+  const [categories, setCategories] = useState<string[]>(["Todos"]);
+  const [products, setProducts] = useState<ProductItem[]>([]);
   const queryClient = useQueryClient();
+
+  // Fetch market details
+  const { data: marketData, isLoading: isLoadingMarket } = useReadMarket(
+    params.id.toString(),
+    {
+      query: {
+        enabled: !!params.id,
+      },
+    }
+  );
+
+  // Fetch prices for this market
+  const { data: pricesData, isLoading: isLoadingPrices } = useReadPrices(
+    { marketId: params.id.toString() },
+    {
+      query: {
+        enabled: !!params.id,
+      },
+    }
+  );
+
+  // Extract unique categories and product data from prices
+  useEffect(() => {
+    if (pricesData?.prices && pricesData.prices.length > 0) {
+      // Extract unique categories
+      const uniqueCategories = new Set<string>(["Todos"]);
+
+      // Create a map to deduplicate products (multiple prices for same product)
+      const productMap = new Map<string, ProductItem>();
+
+      // Transform prices into product items
+      pricesData.prices.forEach((price: PriceDto) => {
+        if (price.product.category) {
+          uniqueCategories.add(price.product.category);
+        }
+
+        // Create a unique ID by combining product ID and price ID
+        const uniqueId = `${price.product.id}-${price.id}`;
+
+        // Add to map with unique ID
+        productMap.set(uniqueId, {
+          id: price.product.id,
+          name: price.product.name,
+          price: price.price,
+          image: price.imageUrl || null,
+          category: price.product.category || "Sem categoria",
+          priceId: price.id,
+          uniqueId: uniqueId,
+        });
+      });
+
+      setCategories(Array.from(uniqueCategories));
+      setProducts(Array.from(productMap.values()));
+    }
+  }, [pricesData]);
 
   const { data: favoriteMarkets, refetch: refetchFavorites } =
     useGetFavoriteMarkets();
@@ -109,65 +173,21 @@ export default function MarketDetailScreen() {
     }
   };
 
-  const marketInfo = {
-    address: "Av. Principal, 123 - Centro",
-    hours: "08:00 - 22:00",
-    phone: "(15) 3333-4444",
+  // Calculate market info from API data
+  const getMarketInfo = () => {
+    return {
+      address: marketData?.address || "Endereço não disponível",
+      hours: "08:00 - 22:00", // This could come from API in the future
+      phone: "(15) 3333-4444", // This could come from API in the future
+      city: marketData?.city || params.city || "Cidade não disponível",
+      state: marketData?.state || "Estado não disponível",
+    };
   };
 
-  const categories = [
-    "Todos",
-    "Laticínios",
-    "Padaria",
-    "Carnes",
-    "Bebidas",
-    "Limpeza",
-  ];
-
-  const products: ProductItem[] = [
-    {
-      id: 1,
-      name: "Leite Integral 1L",
-      price: "R$ 4,99",
-      image: null,
-      category: "Laticínios",
-    },
-    {
-      id: 2,
-      name: "Pão Francês 1kg",
-      price: "R$ 8,90",
-      image: null,
-      category: "Padaria",
-    },
-    {
-      id: 3,
-      name: "Queijo Mussarela 500g",
-      price: "R$ 19,90",
-      image: null,
-      category: "Laticínios",
-    },
-    {
-      id: 4,
-      name: "Carne Moída 500g",
-      price: "R$ 21,50",
-      image: null,
-      category: "Carnes",
-    },
-    {
-      id: 5,
-      name: "Refrigerante 2L",
-      price: "R$ 9,49",
-      image: null,
-      category: "Bebidas",
-    },
-    {
-      id: 6,
-      name: "Detergente 500ml",
-      price: "R$ 3,50",
-      image: null,
-      category: "Limpeza",
-    },
-  ];
+  // Function to format price
+  const formatPrice = (price: number) => {
+    return `R$ ${price.toFixed(2).replace(".", ",")}`;
+  };
 
   const filteredProducts =
     activeCategory === "Todos"
@@ -176,12 +196,13 @@ export default function MarketDetailScreen() {
 
   const navigateToProductDetail = (product: ProductItem) => {
     navigation.navigate("product-details", {
-      id: product.id,
+      id: parseInt(product.id),
       name: product.name,
-      price: product.price,
-      image: product.image,
+      price: formatPrice(product.price),
+      image: product.image ? { uri: product.image } : null,
       marketId: params.id,
-      marketName: params.name,
+      marketName: marketData?.name || params.name,
+      priceId: product.priceId,
     });
   };
 
@@ -192,17 +213,21 @@ export default function MarketDetailScreen() {
     >
       <View style={styles.productImageContainer}>
         {item.image ? (
-          <Image source={item.image} style={styles.productImage} />
+          <Image source={{ uri: item.image }} style={styles.productImage} />
         ) : (
           <View style={styles.productPlaceholder} />
         )}
       </View>
       <View style={styles.productInfo}>
         <Text style={styles.productName}>{item.name}</Text>
-        <Text style={styles.productPrice}>{item.price}</Text>
+        <Text style={styles.productPrice}>{formatPrice(item.price)}</Text>
       </View>
     </TouchableOpacity>
   );
+
+  const marketInfo = getMarketInfo();
+
+  const isLoading = isLoadingMarket || isLoadingPrices;
 
   return (
     <SafeAreaView style={styles.container}>
@@ -213,8 +238,10 @@ export default function MarketDetailScreen() {
           onPress={() => navigation.goBack()}
         />
         <View style={styles.headerTitleContainer}>
-          <Text style={styles.headerTitle}>{params.name}</Text>
-          <Text style={styles.headerSubtitle}>{params.city}</Text>
+          <Text style={styles.headerTitle}>
+            {marketData?.name || params.name}
+          </Text>
+          <Text style={styles.headerSubtitle}>{marketInfo.city}</Text>
         </View>
         <IconButton
           icon={isFavorite ? "star" : "star-outline"}
@@ -223,63 +250,80 @@ export default function MarketDetailScreen() {
         />
       </View>
 
-      <ScrollView style={styles.scrollView}>
-        <View style={styles.infoSection}>
-          <View style={styles.ratingContainer}>
-            <Text style={styles.rating}>{params.rating}</Text>
-            <IconButton icon="star" size={16} style={styles.starIcon} />
-            <Text style={styles.distance}>{params.distance}</Text>
+      {isLoading ? (
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color="#007BFF" />
+          <Text style={styles.loadingText}>Carregando informações...</Text>
+        </View>
+      ) : (
+        <ScrollView style={styles.scrollView}>
+          <View style={styles.infoSection}>
+            <View style={styles.ratingContainer}>
+              <Text style={styles.rating}>{params.rating || 0}</Text>
+              <IconButton icon="star" size={16} style={styles.starIcon} />
+              <Text style={styles.distance}>
+                {params.distance || "Distância não disponível"}
+              </Text>
+            </View>
+
+            <View style={styles.detailsContainer}>
+              <View style={styles.detailItem}>
+                <IconButton icon="map-marker" size={20} />
+                <Text style={styles.detailText}>{marketInfo.address}</Text>
+              </View>
+              <View style={styles.detailItem}>
+                <IconButton icon="clock" size={20} />
+                <Text style={styles.detailText}>{marketInfo.hours}</Text>
+              </View>
+              <View style={styles.detailItem}>
+                <IconButton icon="phone" size={20} />
+                <Text style={styles.detailText}>{marketInfo.phone}</Text>
+              </View>
+            </View>
           </View>
 
-          <View style={styles.detailsContainer}>
-            <View style={styles.detailItem}>
-              <IconButton icon="map-marker" size={20} />
-              <Text style={styles.detailText}>{marketInfo.address}</Text>
-            </View>
-            <View style={styles.detailItem}>
-              <IconButton icon="clock" size={20} />
-              <Text style={styles.detailText}>{marketInfo.hours}</Text>
-            </View>
-            <View style={styles.detailItem}>
-              <IconButton icon="phone" size={20} />
-              <Text style={styles.detailText}>{marketInfo.phone}</Text>
-            </View>
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Produtos Disponíveis</Text>
+
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              style={styles.categoriesContainer}
+            >
+              {categories.map((category) => (
+                <Chip
+                  key={category}
+                  selected={activeCategory === category}
+                  onPress={() => setActiveCategory(category)}
+                  style={[
+                    styles.categoryChip,
+                    activeCategory === category && styles.activeCategoryChip,
+                  ]}
+                >
+                  {category}
+                </Chip>
+              ))}
+            </ScrollView>
+
+            {filteredProducts.length > 0 ? (
+              <FlatList
+                data={filteredProducts}
+                renderItem={renderProduct}
+                keyExtractor={(item) => item.uniqueId}
+                numColumns={2}
+                scrollEnabled={false}
+                contentContainerStyle={styles.productsGrid}
+              />
+            ) : (
+              <View style={styles.noProductsContainer}>
+                <Text style={styles.noProductsText}>
+                  Nenhum produto encontrado para esta categoria.
+                </Text>
+              </View>
+            )}
           </View>
-        </View>
-
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Produtos Disponíveis</Text>
-
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            style={styles.categoriesContainer}
-          >
-            {categories.map((category) => (
-              <Chip
-                key={category}
-                selected={activeCategory === category}
-                onPress={() => setActiveCategory(category)}
-                style={[
-                  styles.categoryChip,
-                  activeCategory === category && styles.activeCategoryChip,
-                ]}
-              >
-                {category}
-              </Chip>
-            ))}
-          </ScrollView>
-
-          <FlatList
-            data={filteredProducts}
-            renderItem={renderProduct}
-            keyExtractor={(item) => item.id.toString()}
-            numColumns={2}
-            scrollEnabled={false}
-            contentContainerStyle={styles.productsGrid}
-          />
-        </View>
-      </ScrollView>
+        </ScrollView>
+      )}
     </SafeAreaView>
   );
 }

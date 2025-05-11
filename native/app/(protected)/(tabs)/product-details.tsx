@@ -89,18 +89,34 @@ export default function ProductDetailScreen() {
       );
       setProductPrices(sortedPrices);
 
+      // If we have a specific priceId, use that price
+      if (params.priceId) {
+        const specificPrice = sortedPrices.find(
+          (price) => price.id === params.priceId
+        );
+        if (specificPrice) {
+          setMarketPrice(specificPrice);
+          return;
+        }
+      }
+
       // If we have a specific marketId, find that price
       if (params.marketId) {
         const specificMarketPrice = sortedPrices.find(
           (price) => price.market.id === params.marketId?.toString()
         );
-        setMarketPrice(specificMarketPrice || null);
-      } else if (sortedPrices.length > 0) {
-        // Otherwise use the first (lowest) price
+        if (specificMarketPrice) {
+          setMarketPrice(specificMarketPrice);
+          return;
+        }
+      }
+
+      // Otherwise use the first (lowest) price
+      if (sortedPrices.length > 0) {
         setMarketPrice(sortedPrices[0]);
       }
     }
-  }, [pricesData, params.marketId]);
+  }, [pricesData, params.marketId, params.priceId]);
 
   const { data: favoriteProducts, refetch: refetchFavorites } =
     useGetFavoriteProducts();

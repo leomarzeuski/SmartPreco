@@ -128,4 +128,25 @@ export const styles = StyleSheet.create({
     fontWeight: "bold",
     color: appColors.primary,
   },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 20,
+  },
+  loadingText: {
+    fontSize: 16,
+    color: "#666",
+    marginTop: 12,
+  },
+  noProductsContainer: {
+    padding: 20,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  noProductsText: {
+    fontSize: 16,
+    color: "#666",
+    textAlign: "center",
+  },
 }); 
