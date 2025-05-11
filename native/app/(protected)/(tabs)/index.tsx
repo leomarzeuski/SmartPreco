@@ -26,7 +26,6 @@ import {
   useFavoriteProduct,
   useUnfavoriteProduct,
 } from "@/api/favorite-product/favorite-product";
-import type { UseMutationOptions } from "@tanstack/react-query";
 import { useQueryClient } from "@tanstack/react-query";
 
 export type ItemType = {
@@ -67,7 +66,6 @@ export default function HomeScreen() {
   const { data: favoriteMarketsData, refetch: refetchFavoriteMarkets } =
     useGetFavoriteMarkets();
 
-  // Força uma nova busca quando a tela recebe foco
   useFocusEffect(
     useCallback(() => {
       console.log("Tela recebeu foco, buscando dados atualizados...");
