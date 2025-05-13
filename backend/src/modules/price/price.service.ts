@@ -76,4 +76,8 @@ export class PriceService {
     await this.priceRepository.updatePriceById(priceId, { moderated });
   }
 
+  public async findLowestPriceByProductId(productId: string): Promise<number> {
+    return this.priceRepository.findLowestModeratedPriceByProductId(productId);
+  }
+
 }

@@ -60,6 +60,13 @@ export class ProductDto extends IntersectionType(
     example: "Alimentos",
   })
   public category: string;
+
+  @ApiProperty({
+    description: "Lowest available moderated price for the product",
+    example: 15.99,
+    required: false,
+  })
+  public lowestPrice?: number;
 }
 
 // == Repository DTOs ==

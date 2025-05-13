@@ -1,3 +1,4 @@
+import { PriceService } from '@modules/price/price.service';
 import { ProductCreateDto, ProductDto, ProductReadDto, ProductsDto, ProductTimestampDto, ProductUpdateDto } from '@modules/product/product.dto';
 import { ProductRepository } from '@modules/product/product.repository';
 import { Injectable } from '@nestjs/common';
@@ -6,7 +7,10 @@ import { DtoMapper } from '@shared/utils/dto-mapper';
 @Injectable()
 export class ProductService {
 
-  public constructor(private readonly productRepository: ProductRepository) {}
+  public constructor(
+    private readonly productRepository: ProductRepository,
+    private readonly priceService: PriceService,
+  ) {}
 
   public async createProduct(params: ProductCreateDto): Promise<ProductDto> {
     const product = await this.productRepository.createProduct(params);
@@ -21,7 +25,7 @@ export class ProductService {
     const limit = params.limit ?? 20;
 
     return {
-      records: DtoMapper.mapMany(records, this.toDto),
+      records: await Promise.all(DtoMapper.mapMany(records, this.toDto)),
       count: records.length,
       total,
       nextOffset: (offset + limit) < total ? offset + limit : null,
@@ -47,9 +51,20 @@ export class ProductService {
     await this.productRepository.deleteProductById(productId);
   }
 
-  private toDto(product: ProductTimestampDto): ProductDto {
+  private async toDto(product: ProductTimestampDto): Promise<ProductDto> {
     const { id, name, description, category, image_url, updated_at } = product;
-    return { id, name, description, category, imageUrl: image_url, updatedAt: updated_at };
+
+    const lowestPrice = await this.priceService.findLowestPriceByProductId(id);
+
+    return {
+      id,
+      name,
+      description,
+      category,
+      imageUrl: image_url,
+      updatedAt: updated_at,
+      lowestPrice,
+    };
   }
 
 }

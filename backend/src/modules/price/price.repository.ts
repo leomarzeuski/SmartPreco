@@ -128,4 +128,21 @@ export class PriceRepository {
     return (data ?? []).map((item) => item.price);
   }
 
+  public async findLowestModeratedPriceByProductId(productId: string): Promise<number> {
+    const { data, error } = await this.supabase
+      .from(this.tableName)
+      .select('price')
+      .eq('moderated', true)
+      .eq('product_id', productId)
+      .order('price', { ascending: true })
+      .limit(1)
+      .single();
+
+    if (error && error.code !== 'PGRST116') {
+      throw new AppException(ErrorEnum.NOT_FOUND, error.message, this.tableName);
+    }
+
+    return data?.price ?? null;
+  }
+
 }
