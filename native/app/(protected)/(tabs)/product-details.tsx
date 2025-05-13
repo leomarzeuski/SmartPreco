@@ -74,7 +74,6 @@ export default function ProductDetailScreen() {
   const [reportModalVisible, setReportModalVisible] = useState(false);
   const [reportSubmitted, setReportSubmitted] = useState(false);
   const queryClient = useQueryClient();
-  console.log({ params });
   const { data: pricesData, isLoading: isLoadingPrices } = useReadPrices(
     { productId: params.id.toString() },
     {
@@ -83,8 +82,6 @@ export default function ProductDetailScreen() {
       },
     }
   );
-
-  console.log({ pricesData });
 
   const [productPrices, setProductPrices] = useState<PriceDto[]>([]);
   const [marketPrice, setMarketPrice] = useState<PriceDto | null>(null);
