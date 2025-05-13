@@ -1,6 +1,4 @@
-import Constants from "expo-constants";
-
-const {OPENAI_API_KEY} = Constants.expoConfig?.extra || {};
+const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 const API_URL = "https://api.openai.com/v1/chat/completions";
 
 export async function sendMessageToChatGPT(message: string): Promise<string> {

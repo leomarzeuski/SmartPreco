@@ -1,10 +1,11 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import {
   View,
   Text,
   FlatList,
   ActivityIndicator,
   ToastAndroid,
+  RefreshControl,
 } from "react-native";
 import { Searchbar } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -18,6 +19,7 @@ import { useReadProducts } from "@/api/product/product";
 import { useReadMarkets } from "@/api/market/market";
 import { useGetFavoriteMarkets } from "@/api/favorite-market/favorite-market";
 import { useGetFavoriteProducts } from "@/api/favorite-product/favorite-product";
+import { useReadPrices } from "@/api/price/price";
 import {
   useFavoriteMarket,
   useUnfavoriteMarket,
@@ -35,10 +37,12 @@ export type ItemType = {
   image: null;
   type: "product" | "market";
   category?: string;
+  description?: string;
   state?: string;
   city?: string;
   address?: string;
   isFavorite?: boolean;
+  priceId?: string;
 };
 
 export default function HomeScreen() {
@@ -48,23 +52,36 @@ export default function HomeScreen() {
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [localProducts, setLocalProducts] = useState<ItemType[]>([]);
   const [localMarkets, setLocalMarkets] = useState<ItemType[]>([]);
+  const [refreshing, setRefreshing] = useState(false);
 
   const queryClient = useQueryClient();
+  const productPriceMapRef = useRef(
+    new Map<string, { price: number; priceId: string; imageUrl?: string }>()
+  );
 
   const {
     data: productsData,
     isLoading: isLoadingProducts,
     refetch: refetchProducts,
   } = useReadProducts();
+
   const {
     data: marketsData,
     isLoading: isLoadingMarkets,
     refetch: refetchMarkets,
   } = useReadMarkets();
+
   const { data: favoriteProductsData, refetch: refetchFavoriteProducts } =
     useGetFavoriteProducts();
+
   const { data: favoriteMarketsData, refetch: refetchFavoriteMarkets } =
     useGetFavoriteMarkets();
+
+  const {
+    data: pricesData,
+    isLoading: isLoadingPrices,
+    refetch: refetchPrices,
+  } = useReadPrices();
 
   useFocusEffect(
     useCallback(() => {
@@ -72,13 +89,35 @@ export default function HomeScreen() {
       refetchMarkets();
       refetchFavoriteProducts();
       refetchFavoriteMarkets();
+      refetchPrices();
     }, [
       refetchProducts,
       refetchMarkets,
       refetchFavoriteProducts,
       refetchFavoriteMarkets,
+      refetchPrices,
     ])
   );
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+
+    Promise.all([
+      refetchProducts(),
+      refetchMarkets(),
+      refetchFavoriteProducts(),
+      refetchFavoriteMarkets(),
+      refetchPrices(),
+    ]).finally(() => {
+      setRefreshing(false);
+    });
+  }, [
+    refetchProducts,
+    refetchMarkets,
+    refetchFavoriteProducts,
+    refetchFavoriteMarkets,
+    refetchPrices,
+  ]);
 
   const { mutate: favoriteMarket } = useFavoriteMarket({
     mutation: {
@@ -160,29 +199,71 @@ export default function HomeScreen() {
     },
   });
 
-  const isLoading = isLoadingProducts || isLoadingMarkets;
+  const isLoading = isLoadingProducts || isLoadingMarkets || isLoadingPrices;
+
+  const formatPrice = useCallback((price: number) => {
+    return `R$ ${price.toFixed(2).replace(".", ",")}`;
+  }, []);
+
+  const getPriceHistoryForProduct = useCallback((productId: string) => {
+    const params = { productId };
+    return useReadPrices(params);
+  }, []);
 
   useEffect(() => {
-    if (productsData?.products) {
-      const products = productsData.products.map((product) => ({
+    if (pricesData?.prices && pricesData.prices.length > 0) {
+      productPriceMapRef.current.clear();
+
+      pricesData.prices.forEach((price) => {
+        const productId = price.product.id;
+        if (
+          !productPriceMapRef.current.has(productId) ||
+          price.price < productPriceMapRef.current.get(productId)!.price
+        ) {
+          productPriceMapRef.current.set(productId, {
+            price: price.price,
+            priceId: price.id,
+            imageUrl: price.imageUrl,
+          });
+        }
+      });
+    }
+  }, [pricesData]);
+
+  useEffect(() => {
+    if (!productsData) return;
+
+    const productsList = (productsData as any).records || [];
+
+    const products = productsList.map((product: any) => {
+      const priceInfo = productPriceMapRef.current.get(product.id);
+
+      return {
         id: product.id,
         name: product.name,
-        price: "R$ 0,00",
+        price: priceInfo
+          ? formatPrice(priceInfo.price)
+          : "Preço não disponível",
         category: product.category,
-        image: null,
+        description: product.description,
+        image: priceInfo?.imageUrl || null,
         type: "product" as const,
+        priceId: priceInfo?.priceId,
         isFavorite:
           favoriteProductsData?.some(
             (fp: { id: string }) => fp.id === product.id
           ) || false,
-      }));
-      setLocalProducts(products);
-    }
-  }, [productsData, favoriteProductsData]);
+      };
+    });
+
+    setLocalProducts(products);
+  }, [productsData, favoriteProductsData, formatPrice]);
 
   useEffect(() => {
-    if (marketsData?.markets) {
-      const markets = marketsData.markets.map((market) => ({
+    if (marketsData) {
+      const marketsList = (marketsData as any).records || [];
+
+      const markets = marketsList.map((market: any) => ({
         id: market.id,
         name: market.name,
         state: market.state,
@@ -205,47 +286,52 @@ export default function HomeScreen() {
     ...localProducts.filter((product) => product.isFavorite),
   ].slice(0, 5);
 
-  const handleToggleFavorite = (item: ItemType) => {
-    const isMarket = item.type === "market";
-    const isFavorited = item.isFavorite;
+  const handleToggleFavorite = useCallback(
+    (item: ItemType) => {
+      const isMarket = item.type === "market";
+      const isFavorited = item.isFavorite;
 
-    if (isMarket && isFavorited) {
-      unfavoriteMarket({ marketId: item.id });
-    } else if (isMarket && !isFavorited) {
-      favoriteMarket({ marketId: item.id });
-    } else if (!isMarket && isFavorited) {
-      unfavoriteProduct({ productId: item.id });
-    } else {
-      favoriteProduct({ productId: item.id });
-    }
-  };
+      if (isMarket && isFavorited) {
+        unfavoriteMarket({ marketId: item.id });
+      } else if (isMarket && !isFavorited) {
+        favoriteMarket({ marketId: item.id });
+      } else if (!isMarket && isFavorited) {
+        unfavoriteProduct({ productId: item.id });
+      } else {
+        favoriteProduct({ productId: item.id });
+      }
+    },
+    [favoriteMarket, unfavoriteMarket, favoriteProduct, unfavoriteProduct]
+  );
 
-  const handleSearch = (query: string) => {
-    setSearchQuery(query);
+  const handleSearch = useCallback(
+    (query: string) => {
+      setSearchQuery(query);
 
-    if (query.trim() === "") {
-      setIsSearching(false);
-      setSearchResults([]);
-      return;
-    }
+      if (query.trim() === "") {
+        setIsSearching(false);
+        setSearchResults([]);
+        return;
+      }
 
-    setIsSearching(true);
+      setIsSearching(true);
 
-    const filteredProducts = localProducts.filter((product) =>
-      product.name.toLowerCase().includes(query.toLowerCase())
-    );
+      const filteredProducts = localProducts.filter((product) =>
+        product.name.toLowerCase().includes(query.toLowerCase())
+      );
 
-    const filteredMarkets = localMarkets.filter((market) =>
-      market.name.toLowerCase().includes(query.toLowerCase())
-    );
+      const filteredMarkets = localMarkets.filter((market) =>
+        market.name.toLowerCase().includes(query.toLowerCase())
+      );
 
-    const combinedResults = [...filteredProducts, ...filteredMarkets];
-    setSearchResults(combinedResults);
-  };
+      const combinedResults = [...filteredProducts, ...filteredMarkets];
+      setSearchResults(combinedResults);
+    },
+    [localProducts, localMarkets]
+  );
 
   const handleLoadMore = () => {
     if (isLoadingMore) return;
-
     setIsLoadingMore(true);
 
     setTimeout(() => {
@@ -253,25 +339,28 @@ export default function HomeScreen() {
     }, 1000);
   };
 
-  const renderListHeader = () => (
-    <View>
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Favoritos</Text>
-        <FavoritesRow
-          favorites={favorites}
-          onToggleFavorite={handleToggleFavorite}
-        />
-      </View>
+  const renderListHeader = useCallback(
+    () => (
+      <View>
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Favoritos</Text>
+          <FavoritesRow
+            favorites={favorites}
+            onToggleFavorite={handleToggleFavorite}
+          />
+        </View>
 
-      <View style={styles.divider} />
+        <View style={styles.divider} />
 
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Produtos recentes</Text>
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Produtos recentes</Text>
+        </View>
       </View>
-    </View>
+    ),
+    [favorites, handleToggleFavorite]
   );
 
-  if (isLoading) {
+  if (isLoading && !localProducts.length && !localMarkets.length) {
     return (
       <SafeAreaView
         style={[
@@ -280,6 +369,7 @@ export default function HomeScreen() {
         ]}
       >
         <ActivityIndicator size="large" color="#0000ff" />
+        <Text style={{ marginTop: 10 }}>Carregando dados...</Text>
       </SafeAreaView>
     );
   }
@@ -316,6 +406,13 @@ export default function HomeScreen() {
           keyExtractor={(item) => item.id}
           ListHeaderComponent={renderListHeader}
           contentContainerStyle={styles.productList}
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={onRefresh}
+              colors={["#0000ff"]}
+            />
+          }
           onEndReached={handleLoadMore}
           onEndReachedThreshold={0.5}
         />
