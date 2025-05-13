@@ -42,8 +42,8 @@ export class PriceRepository {
       imageUrl: data.image_url,
       userId: data.user_id,
       moderated: data.moderated,
-      createdAt: data.created_at,
-      updatedAt: data.updated_at,
+      created_at: data.created_at,
+      updated_at: data.updated_at,
     };
   }
 
