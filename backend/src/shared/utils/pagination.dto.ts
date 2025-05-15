@@ -12,8 +12,8 @@ export class PaginationReadDto {
   @IsOptional()
   @IsNumber()
   @Min(1)
-  @ApiPropertyOptional({ description: 'Limit for pagination', example: 10, default: 20 })
-  public limit?: number = 20;
+  @ApiPropertyOptional({ description: 'Limit for pagination', example: 10, default: 100 })
+  public limit?: number = 100;
 
   @IsOptional()
   @IsString()
