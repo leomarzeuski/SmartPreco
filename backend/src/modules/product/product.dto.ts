@@ -2,7 +2,7 @@ import { UploadImageDto, UploadImageRepositoryDto } from '@modules/upload/upload
 import { ApiProperty, IntersectionType, OmitType, PartialType, PickType } from '@nestjs/swagger';
 import { PaginationReadDto, PaginationResponseDto } from '@shared/utils/pagination.dto';
 import { TimestampDto, TimestampRepositoryDto } from '@shared/utils/timestamp.dto';
-import { IsArray, IsNotEmpty, IsString, IsUUID } from 'class-validator';
+import { ArrayMinSize, ArrayNotEmpty, IsArray, IsNotEmpty, IsString, IsUUID } from 'class-validator';
 
 // == ID DTOs ==
 
@@ -109,9 +109,32 @@ export class ProductReadDto extends PaginationReadDto {
   public orderBy?: string;
 }
 
-export class ProductCreateDto extends OmitType(ProductDto, [ 'id', 'updatedAt' ] as const) {}
+export class ProductCreateDto extends OmitType(ProductDto, [ 'id', 'updatedAt', 'lowestPrice' ] as const) {}
 
 export class ProductUpdateDto extends PartialType(ProductCreateDto) {}
+
+export class ProductsMergeDto {
+
+  @IsUUID()
+  @ApiProperty({
+    description: "ID of the product that will be kept (target)",
+    example: "a3c9b5c7-2b89-4df3-8d4a-3bc9e6a7b123",
+  })
+  public targetProductId: string;
+
+  @IsArray()
+  @ArrayNotEmpty()
+  @ArrayMinSize(1)
+  @ApiProperty({
+    description: "List of duplicate product IDs to merge into the target",
+    example: [
+      "d5f8e5b7-3c9a-4fcb-8e7b-1a9de7bcb77c",
+      "e6f2c8b1-7c8e-42a1-938b-bb7d5ed2e4e7",
+    ],
+  })
+  public productIds: string[];
+
+}
 
 // == Pagination DTOs ==
 

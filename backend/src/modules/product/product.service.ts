@@ -1,7 +1,8 @@
+import { FavoriteProductService } from '@modules/favorite/favorite-product/favorite-product.service';
 import { PriceService } from '@modules/price/price.service';
-import { ProductCreateDto, ProductDto, ProductReadDto, ProductsDto, ProductTimestampDto, ProductUpdateDto } from '@modules/product/product.dto';
+import { ProductCreateDto, ProductDto, ProductReadDto, ProductsDto, ProductsMergeDto, ProductTimestampDto, ProductUpdateDto } from '@modules/product/product.dto';
 import { ProductRepository } from '@modules/product/product.repository';
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, forwardRef, Inject, Injectable, NotFoundException } from '@nestjs/common';
 
 @Injectable()
 export class ProductService {
@@ -9,6 +10,9 @@ export class ProductService {
   public constructor(
     private readonly productRepository: ProductRepository,
     private readonly priceService: PriceService,
+
+    @Inject(forwardRef(() => FavoriteProductService))
+    private readonly favoriteProductService: FavoriteProductService,
   ) {}
 
   public async createProduct(params: ProductCreateDto): Promise<ProductDto> {
@@ -48,6 +52,36 @@ export class ProductService {
 
   public async deleteProductById(productId: string): Promise<void> {
     await this.productRepository.deleteProductById(productId);
+  }
+
+  public async mergeProducts(params: ProductsMergeDto): Promise<void> {
+    const { targetProductId, productIds } = params;
+
+    if (productIds.includes(targetProductId)) {
+      throw new BadRequestException('Target product cannot be included in the list of products to merge.');
+    }
+
+    const targetExists = await this.productRepository.existsProductById(targetProductId);
+
+    if (!targetExists) {
+      throw new NotFoundException(`Target product ${targetProductId} does not exist.`);
+    }
+
+    // Confirma se todos os productIds existem
+    const productsExist = await this.productRepository.existAllProductsByIds(productIds);
+
+    if (!productsExist) {
+      throw new NotFoundException('Some products to merge do not exist.');
+    }
+
+    // Atualizar references em price
+    await this.priceService.updateProductIds(productIds, targetProductId);
+
+    // Atualizar references em favorite_product
+    await this.favoriteProductService.updateProductIds(productIds, targetProductId);
+
+    // Deletar produtos antigos
+    await this.productRepository.deleteProductsByIds(productIds);
   }
 
   private async toDto(product: ProductTimestampDto): Promise<ProductDto> {

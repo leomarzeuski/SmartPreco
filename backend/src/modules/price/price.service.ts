@@ -80,4 +80,8 @@ export class PriceService {
     return this.priceRepository.findLowestModeratedPriceByProductId(productId);
   }
 
+  public async updateProductIds(oldProductIds: string[], newProductId: string): Promise<void> {
+    await this.priceRepository.updateProductIds(oldProductIds, newProductId);
+  }
+
 }

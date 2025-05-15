@@ -99,4 +99,36 @@ export class ProductRepository {
       }
     }
 
+    public async existsProductById(productId: string): Promise<boolean> {
+      const { data } = await this.supabase
+        .from(this.tableName)
+        .select('id')
+        .eq('id', productId)
+        .maybeSingle();
+
+      return !!data;
+    }
+
+    public async existAllProductsByIds(productIds: string[]): Promise<boolean> {
+      const { data } = await this.supabase
+        .from(this.tableName)
+        .select('id')
+        .in('id', productIds);
+
+      if (!data) return false;
+
+      return data.length === productIds.length;
+    }
+
+    public async deleteProductsByIds(productIds: string[]): Promise<void> {
+      const { error } = await this.supabase
+        .from(this.tableName)
+        .delete()
+        .in('id', productIds);
+
+      if (error) {
+        throw new AppException(ErrorEnum.DELETE, error.message, this.tableName);
+      }
+    }
+
 }

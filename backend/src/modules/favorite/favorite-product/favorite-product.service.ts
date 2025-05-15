@@ -42,4 +42,8 @@ export class FavoriteProductService extends FavoriteBaseService<ProductDto> {
     return favorites.map((fav) => fav.user_id);
   }
 
+  public async updateProductIds(oldProductIds: string[], newProductId: string): Promise<void> {
+    await this.favoriteProductRepository.updateProductIds(oldProductIds, newProductId);
+  }
+
 }

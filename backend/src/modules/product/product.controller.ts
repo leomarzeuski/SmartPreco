@@ -1,7 +1,8 @@
-import { ProductCreateDto, ProductDto, ProductIdDto, ProductReadDto, ProductsDto, ProductUpdateDto } from '@modules/product/product.dto';
+import { ProductCreateDto, ProductDto, ProductIdDto, ProductReadDto, ProductsDto, ProductsMergeDto, ProductUpdateDto } from '@modules/product/product.dto';
 import { ProductService } from '@modules/product/product.service';
 import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post, Query } from '@nestjs/common';
 import { ApiCreatedResponse, ApiNoContentResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { UseAdmin } from '@shared/guards/use-admin.decorator';
 import { UseUser } from '@shared/guards/use-user.decorator';
 @Controller('products')
 @ApiTags('Product')
@@ -43,6 +44,17 @@ export class ProductController {
     const { productId } = param;
 
     return this.productService.readProductById(productId);
+  }
+
+  @Patch('merge')
+  @ApiOkResponse({ description: 'Products merged successfully' })
+  @ApiOperation({
+    operationId: "Merge Products",
+    summary: "Merge duplicate products into a target product",
+  })
+  @UseAdmin()
+  public mergeProducts(@Body() body: ProductsMergeDto): Promise<void> {
+    return this.productService.mergeProducts(body);
   }
 
   @Patch(':productId')

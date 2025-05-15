@@ -145,4 +145,15 @@ export class PriceRepository {
     return data?.price ?? null;
   }
 
+  public async updateProductIds(oldProductIds: string[], newProductId: string): Promise<void> {
+    const { error } = await this.supabase
+      .from(this.tableName)
+      .update({ product_id: newProductId })
+      .in('product_id', oldProductIds);
+
+    if (error) {
+      throw new AppException(ErrorEnum.UPDATE, error.message, this.tableName);
+    }
+  }
+
 }

@@ -30,7 +30,6 @@ module.exports = {
     "object-curly-spacing": [ "warn", "always" ],
     "array-bracket-spacing": [ "warn", "always" ],
     "brace-style": [ "warn", "1tbs" ],
-    "camelcase": [ "warn", { properties: "always" } ],
     "eqeqeq": [ "warn", "always" ],
     "no-console": "warn",
     "no-debugger": "warn",

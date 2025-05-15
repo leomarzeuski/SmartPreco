@@ -1,3 +1,4 @@
+import { FavoriteModule } from '@modules/favorite/favorite.module';
 import { PriceModule } from '@modules/price/price.module';
 import { ProductController } from '@modules/product/product.controller';
 import { ProductRepository } from '@modules/product/product.repository';
@@ -7,6 +8,7 @@ import { Module, forwardRef } from '@nestjs/common';
 @Module({
   imports: [
     forwardRef(() => PriceModule),
+    forwardRef(() => FavoriteModule),
   ],
   controllers: [ ProductController ],
   providers: [ ProductService, ProductRepository ],
