@@ -8,11 +8,19 @@
 
 export type ReadProductsParams = {
 /**
- * Search term to filter the results
+ * Number of products to skip for pagination
+ */
+offset?: number;
+/**
+ * Maximum number of products to return
+ */
+limit?: number;
+/**
+ * Field to order the products by
+ */
+orderBy?: string;
+/**
+ * Search term to filter products by name or description
  */
 search?: string;
-/**
- * Product's category
- */
-category?: string;
 };

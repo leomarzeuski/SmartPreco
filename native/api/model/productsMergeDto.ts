@@ -6,9 +6,9 @@
  * OpenAPI spec version: 1.0
  */
 
-export interface ReportCreateDto {
-  /** Unique identifier for the price entry */
-  priceId: string;
-  /** Reason for reporting a price */
-  reason: string;
+export interface ProductsMergeDto {
+  /** ID of the product that will be kept (target) */
+  targetProductId: string;
+  /** List of duplicate product IDs to merge into the target */
+  productIds: string[];
 }

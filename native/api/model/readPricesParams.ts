@@ -8,11 +8,27 @@
 
 export type ReadPricesParams = {
 /**
- * Product's unique identifier
+ * Offset for pagination
+ */
+offset?: number;
+/**
+ * Limit for pagination
+ */
+limit?: number;
+/**
+ * Field to order by
+ */
+orderBy?: string;
+/**
+ * Search term to filter results
+ */
+search?: string;
+/**
+ * Optional product ID to filter prices
  */
 productId?: string;
 /**
- * Market's unique identifier
+ * Optional market ID to filter prices
  */
 marketId?: string;
 };

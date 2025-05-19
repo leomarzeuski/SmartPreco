@@ -8,5 +8,15 @@
 import type { ProductDto } from './productDto';
 
 export interface ProductsDto {
-  products: ProductDto[];
+  /** List of products returned in the current page */
+  records: ProductDto[];
+  /** Number of records in this page */
+  count: number;
+  /** Total number of records across all pages */
+  total: number;
+  /**
+   * Next offset for fetching the next page, null if no more records
+   * @nullable
+   */
+  nextOffset?: number | null;
 }

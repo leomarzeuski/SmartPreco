@@ -7,14 +7,18 @@
  */
 
 export interface MarketDto {
-  /** Market's unique identifier */
+  /** Update timestamp */
+  updatedAt: string;
+  /** Product's image URL */
+  imageUrl?: string;
+  /** Unique identifier of the market */
   id: string;
-  /** Market's name */
+  /** Name of the market */
   name: string;
-  /** Market's address */
+  /** Street address of the market */
   address: string;
-  /** Market's city */
+  /** City where the market is located */
   city: string;
-  /** Market's state */
+  /** State where the market is located */
   state: string;
 }

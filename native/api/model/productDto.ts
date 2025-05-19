@@ -7,12 +7,18 @@
  */
 
 export interface ProductDto {
-  /** Product's unique identifier */
+  /** Update timestamp */
+  updatedAt: string;
+  /** Product's image URL */
+  imageUrl?: string;
+  /** Unique identifier of the product */
   id: string;
-  /** Product's name */
+  /** Name of the product */
   name: string;
-  /** Product's description */
+  /** Detailed description of the product */
   description: string;
-  /** Product's category */
+  /** Category to which the product belongs */
   category: string;
+  /** Lowest available moderated price for the product */
+  lowestPrice?: number;
 }

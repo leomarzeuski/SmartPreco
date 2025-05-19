@@ -8,5 +8,15 @@
 import type { PriceDto } from './priceDto';
 
 export interface PricesDto {
-  prices: PriceDto[];
+  /** List of price entries returned in the current page */
+  records: PriceDto[];
+  /** Number of records in this page */
+  count: number;
+  /** Total number of records across all pages */
+  total: number;
+  /**
+   * Next offset for fetching the next page, null if no more records
+   * @nullable
+   */
+  nextOffset?: number | null;
 }

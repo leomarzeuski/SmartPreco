@@ -8,5 +8,15 @@
 import type { MarketDto } from './marketDto';
 
 export interface MarketsDto {
-  markets: MarketDto[];
+  /** List of markets returned in the current page */
+  records: MarketDto[];
+  /** Number of records in this page */
+  count: number;
+  /** Total number of records across all pages */
+  total: number;
+  /**
+   * Next offset for fetching the next page, null if no more records
+   * @nullable
+   */
+  nextOffset?: number | null;
 }

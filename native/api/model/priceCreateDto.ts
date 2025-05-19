@@ -7,12 +7,12 @@
  */
 
 export interface PriceCreateDto {
-  /** Product's unique identifier */
+  /** Unique identifier for the product */
   productId: string;
-  /** Market's unique identifier */
+  /** Unique identifier for the market */
   marketId: string;
   /** Product's image URL */
   imageUrl: string;
-  /** Product's price */
+  /** Product price value */
   price: number;
 }

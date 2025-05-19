@@ -8,6 +8,8 @@
 import type { ReportUpdateDtoStatus } from './reportUpdateDtoStatus';
 
 export interface ReportUpdateDto {
+  /** Indicates whether the report has been resolved */
   resolved: boolean;
-  status: ReportUpdateDtoStatus;
+  /** Current status of the report */
+  status?: ReportUpdateDtoStatus;
 }

@@ -41,9 +41,6 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({
     setPendingCount((prevCount) => prevCount + 1);
     // Store the notification data
     setLastNotification(data);
-
-    // Any additional logic for handling notification data
-    console.log("Received notification data:", data);
   };
 
   return (

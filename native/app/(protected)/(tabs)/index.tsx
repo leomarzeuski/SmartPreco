@@ -29,6 +29,7 @@ import {
   useUnfavoriteProduct,
 } from "@/api/favorite-product/favorite-product";
 import { useQueryClient } from "@tanstack/react-query";
+import { PriceDto } from "@/api/model";
 
 export type ItemType = {
   id: string;
@@ -206,10 +207,10 @@ export default function HomeScreen() {
   }, []);
 
   useEffect(() => {
-    if (pricesData?.prices && pricesData.prices.length > 0) {
+    if (pricesData?.records && pricesData.records.length > 0) {
       productPriceMapRef.current.clear();
 
-      pricesData.prices.forEach((price) => {
+      pricesData.records.forEach((price: PriceDto) => {
         const productId = price.product.id;
         if (
           !productPriceMapRef.current.has(productId) ||

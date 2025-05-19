@@ -20,7 +20,7 @@ import type {
 } from '.././model';
 
 
-export const getGetFavoriteProductsResponseMock = (): ProductDto[] => (Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({id: faker.string.alpha(20), name: faker.string.alpha(20), description: faker.string.alpha(20), category: faker.string.alpha(20)})))
+export const getGetFavoriteProductsResponseMock = (): ProductDto[] => (Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`, imageUrl: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), id: faker.string.alpha(20), name: faker.string.alpha(20), description: faker.string.alpha(20), category: faker.string.alpha(20), lowestPrice: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined])})))
 
 
 export const getGetFavoriteProductsMockHandler = (overrideResponse?: ProductDto[] | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<ProductDto[]> | ProductDto[])) => {

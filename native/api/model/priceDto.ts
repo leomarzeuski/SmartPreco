@@ -13,11 +13,13 @@ export interface PriceDto {
   imageUrl: string;
   /** User unique identifier */
   userId: string;
-  /** Price's unique identifier */
+  /** Update timestamp */
+  updatedAt: string;
+  /** Unique identifier of the price entry */
   id: string;
-  /** Product's price */
+  /** Product price value */
   price: number;
-  /** Whether the price is currently moderated (approved for public view) */
+  /** Indicates if the price was moderated (approved for public listing) */
   moderated: boolean;
   product: ProductDto;
   market: MarketDto;

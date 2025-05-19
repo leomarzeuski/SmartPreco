@@ -17,6 +17,7 @@ export * from './productCreateDto';
 export * from './productDto';
 export * from './productUpdateDto';
 export * from './productsDto';
+export * from './productsMergeDto';
 export * from './readMarketsParams';
 export * from './readPricesParams';
 export * from './readProductsParams';

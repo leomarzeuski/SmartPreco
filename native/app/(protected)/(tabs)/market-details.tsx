@@ -71,7 +71,6 @@ export default function MarketDetailScreen() {
   const queryClient = useQueryClient();
   const [refreshing, setRefreshing] = useState(false);
 
-  // Fetch market details
   const {
     data: marketData,
     isLoading: isLoadingMarket,
@@ -82,7 +81,6 @@ export default function MarketDetailScreen() {
     },
   });
 
-  // Fetch prices for this market
   const {
     data: pricesData,
     isLoading: isLoadingPrices,
@@ -99,11 +97,10 @@ export default function MarketDetailScreen() {
     }
   );
 
-  // Extract unique categories and product data from prices
   useEffect(() => {
     if (!pricesData) return;
 
-    const prices = pricesData.prices || (pricesData as any).records || [];
+    const prices = pricesData.records || [];
 
     if (prices.length === 0 && products.length > 0) {
       return;
@@ -186,18 +183,16 @@ export default function MarketDetailScreen() {
     }
   };
 
-  // Calculate market info from API data
   const getMarketInfo = () => {
     return {
       address: marketData?.address || "Endereço não disponível",
-      hours: "08:00 - 22:00", // This could come from API in the future
-      phone: "(15) 3333-4444", // This could come from API in the future
+      hours: "08:00 - 22:00",
+      phone: "(15) 3333-4444",
       city: marketData?.city || params.city || "Cidade não disponível",
       state: marketData?.state || "Estado não disponível",
     };
   };
 
-  // Function to format price
   const formatPrice = (price: number) => {
     return `R$ ${price.toFixed(2).replace(".", ",")}`;
   };

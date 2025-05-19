@@ -94,7 +94,7 @@ export default function ProductDetailScreen() {
   useEffect(() => {
     if (!pricesData) return;
 
-    const pricesArray = pricesData.prices || (pricesData as any).records || [];
+    const pricesArray = pricesData.records || [];
 
     if (!pricesArray.length) return;
 
@@ -193,9 +193,8 @@ export default function ProductDetailScreen() {
   const navigateToMarketDetail = useCallback(
     (marketId: string, marketName: string) => {
       if (!marketId) return;
-
       navigation.navigate("market-details", {
-        id: parseInt(marketId),
+        id: marketId as any,
         name: marketName,
         rating: 0,
         distance: "",

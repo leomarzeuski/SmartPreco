@@ -29,6 +29,7 @@ import type {
   ProductDto,
   ProductUpdateDto,
   ProductsDto,
+  ProductsMergeDto,
   ReadProductsParams
 } from '.././model';
 
@@ -400,6 +401,69 @@ export const useDeleteProduct = <TError = unknown,
       > => {
 
       const mutationOptions = getDeleteProductMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    /**
+ * @summary Merge duplicate products into a target product
+ */
+export const mergeProducts = (
+    productsMergeDto: ProductsMergeDto,
+ options?: SecondParameter<typeof axiosInstance>,) => {
+      
+      
+      return axiosInstance<void>(
+      {url: `/products/merge`, method: 'PATCH',
+      headers: {'Content-Type': 'application/json', },
+      data: productsMergeDto
+    },
+      options);
+    }
+  
+
+
+export const getMergeProductsMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof mergeProducts>>, TError,{data: ProductsMergeDto}, TContext>, request?: SecondParameter<typeof axiosInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof mergeProducts>>, TError,{data: ProductsMergeDto}, TContext> => {
+
+const mutationKey = ['mergeProducts'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof mergeProducts>>, {data: ProductsMergeDto}> = (props) => {
+          const {data} = props ?? {};
+
+          return  mergeProducts(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type MergeProductsMutationResult = NonNullable<Awaited<ReturnType<typeof mergeProducts>>>
+    export type MergeProductsMutationBody = ProductsMergeDto
+    export type MergeProductsMutationError = unknown
+
+    /**
+ * @summary Merge duplicate products into a target product
+ */
+export const useMergeProducts = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof mergeProducts>>, TError,{data: ProductsMergeDto}, TContext>, request?: SecondParameter<typeof axiosInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof mergeProducts>>,
+        TError,
+        {data: ProductsMergeDto},
+        TContext
+      > => {
+
+      const mutationOptions = getMergeProductsMutationOptions(options);
 
       return useMutation(mutationOptions , queryClient);
     }

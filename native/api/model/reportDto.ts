@@ -11,9 +11,16 @@ import type { ReportDtoStatus } from './reportDtoStatus';
 export interface ReportDto {
   /** User unique identifier */
   userId: string;
+  /** Update timestamp */
+  updatedAt: string;
+  /** Unique identifier of the report */
   id: string;
+  /** Reason for reporting a price */
   reason: string;
+  /** Indicates whether the report has been resolved */
   resolved: boolean;
+  /** Information about the price associated with the report */
   price: PriceDto;
-  status: ReportDtoStatus;
+  /** Current status of the report */
+  status?: ReportDtoStatus;
 }

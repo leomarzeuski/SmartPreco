@@ -7,12 +7,14 @@
  */
 
 export interface MarketCreateDto {
-  /** Market's name */
+  /** Product's image URL */
+  imageUrl?: string;
+  /** Name of the market */
   name: string;
-  /** Market's address */
+  /** Street address of the market */
   address: string;
-  /** Market's city */
+  /** City where the market is located */
   city: string;
-  /** Market's state */
+  /** State where the market is located */
   state: string;
 }

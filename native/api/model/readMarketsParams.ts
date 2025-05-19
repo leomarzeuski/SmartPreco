@@ -8,11 +8,19 @@
 
 export type ReadMarketsParams = {
 /**
- * Search term to filter the results
+ * Number of markets to skip for pagination
+ */
+offset?: number;
+/**
+ * Maximum number of markets to return
+ */
+limit?: number;
+/**
+ * Field to order the markets by
+ */
+orderBy?: string;
+/**
+ * Search term to filter markets by name or address
  */
 search?: string;
-/**
- * Market's city
- */
-city?: string;
 };

@@ -7,10 +7,12 @@
  */
 
 export interface ProductCreateDto {
-  /** Product's name */
+  /** Product's image URL */
+  imageUrl?: string;
+  /** Name of the product */
   name: string;
-  /** Product's description */
+  /** Detailed description of the product */
   description: string;
-  /** Product's category */
+  /** Category to which the product belongs */
   category: string;
 }

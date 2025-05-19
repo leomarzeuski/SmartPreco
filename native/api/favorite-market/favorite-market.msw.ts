@@ -20,7 +20,7 @@ import type {
 } from '.././model';
 
 
-export const getGetFavoriteMarketsResponseMock = (): MarketDto[] => (Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({id: faker.string.alpha(20), name: faker.string.alpha(20), address: faker.string.alpha(20), city: faker.string.alpha(20), state: faker.string.alpha(20)})))
+export const getGetFavoriteMarketsResponseMock = (): MarketDto[] => (Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`, imageUrl: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), id: faker.string.alpha(20), name: faker.string.alpha(20), address: faker.string.alpha(20), city: faker.string.alpha(20), state: faker.string.alpha(20)})))
 
 
 export const getGetFavoriteMarketsMockHandler = (overrideResponse?: MarketDto[] | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<MarketDto[]> | MarketDto[])) => {

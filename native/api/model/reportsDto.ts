@@ -8,5 +8,15 @@
 import type { ReportDto } from './reportDto';
 
 export interface ReportsDto {
-  reports: ReportDto[];
+  /** List of reports returned in the current page */
+  records: ReportDto[];
+  /** Number of records in this page */
+  count: number;
+  /** Total number of records across all pages */
+  total: number;
+  /**
+   * Next offset for fetching the next page, null if no more records
+   * @nullable
+   */
+  nextOffset?: number | null;
 }
