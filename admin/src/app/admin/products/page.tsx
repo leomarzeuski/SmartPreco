@@ -291,9 +291,7 @@ export default function ProductsPage() {
     }
   };
 
-  // Add a state to force re-renders when needed
-  const [, updateState] = useState({});
-  const forceUpdate = () => updateState({});
+// Removed unused forceUpdate function and associated state
 
   return (
     <>
