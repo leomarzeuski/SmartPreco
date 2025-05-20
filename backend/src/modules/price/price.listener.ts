@@ -49,8 +49,10 @@ export class PriceListener {
       for (const notificationStrategy of this.notificationStrategies) {
         await notificationStrategy.send({
           usersToNotify: result.usersToNotify,
-          title: 'Novo desconto!',
-          body: `O produto ${result.productName} está custando R$${result.newPrice.toFixed(2)}. Aproveite!`,
+          title: 'Novo desconto no app SmartPreço!',
+          body: `O produto ${result.productName} está custando ${
+            result.newPrice.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
+          }. Aproveite!`,
           data: {
             screen: 'product-details',
             productId,

@@ -2,6 +2,7 @@ import { FavoriteModule } from '@modules/favorite/favorite.module';
 import { NotificationModule } from '@modules/notification/notification.module';
 import { DiscordNotificationStrategy } from '@modules/notification/strategies/discord-notification.strategy';
 import { ExpoPushNotificationStrategy } from '@modules/notification/strategies/expo-push-notification.strategy';
+import { SendGridEmailNotificationStrategy } from '@modules/notification/strategies/send-grid-notification.strategy';
 import { PriceComparatorService } from '@modules/price/price-comparator/price-comparator.service';
 import { PriceController } from '@modules/price/price.controller';
 import { PriceListener } from '@modules/price/price.listener';
@@ -16,7 +17,8 @@ import { ClerkModule } from '@shared/clerk/clerk.module';
     ClerkModule,
     NotificationModule.register([
       ExpoPushNotificationStrategy,
-      DiscordNotificationStrategy
+      DiscordNotificationStrategy,
+      SendGridEmailNotificationStrategy,
     ]),
    ],
   controllers: [ PriceController ],
