@@ -14,8 +14,6 @@ export interface ProductCreateDto {
   description: string;
   /** Category to which the product belongs */
   category: string;
-  /** Lowest available moderated price for the product */
-  lowestPrice?: number;
 }
 
 export interface ProductDto {
@@ -49,6 +47,13 @@ export interface ProductsDto {
   nextOffset?: number | null;
 }
 
+export interface ProductsMergeDto {
+  /** ID of the product that will be kept (target) */
+  targetProductId: string;
+  /** List of duplicate product IDs to merge into the target */
+  productIds: string[];
+}
+
 export interface ProductUpdateDto {
   /** Product's image URL */
   imageUrl?: string;
@@ -58,8 +63,6 @@ export interface ProductUpdateDto {
   description?: string;
   /** Category to which the product belongs */
   category?: string;
-  /** Lowest available moderated price for the product */
-  lowestPrice?: number;
 }
 
 export interface PriceCreateDto {

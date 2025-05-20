@@ -2,7 +2,7 @@
   "common": {
     "buttons": {
       "save": "Salvar",
-      "cancel": "Cancelar",
+      "cancel": "Cancelar", 
       "delete": "Excluir",
       "edit": "Editar",
       "view": "Visualizar",
@@ -14,12 +14,12 @@
       "dashboard": "Painel",
       "products": "Produtos",
       "markets": "Mercados",
-      "reports": "Relatórios",
+      "reports": "Denúncias",
       "admin": "Admin"
     },
     "theme": {
       "light": "Claro",
-      "dark": "Escuro",
+      "dark": "Escuro", 
       "system": "Sistema"
     },
     "language": {
@@ -43,18 +43,18 @@
         "description": "Total de mercados no sistema"
       },
       "reports": {
-        "title": "Relatórios",
-        "description": "Total de relatórios"
+        "title": "Denúncias",
+        "description": "Total de denúncias"
       }
     },
     "reportsOverview": {
-      "title": "Visão Geral dos Relatórios",
+      "title": "Visão Geral das Denúncias",
       "resolvedReports": {
-        "title": "Relatórios Resolvidos",
+        "title": "Denúncias Resolvidas",
         "description": "taxa de resolução"
       },
       "pendingReports": {
-        "title": "Relatórios Pendentes",
+        "title": "Denúncias Pendentes",
         "description": "Aguardando revisão"
       },
       "approvalRate": {
@@ -76,9 +76,9 @@
         "link": "Ir para Mercados"
       },
       "reports": {
-        "title": "Revisar Relatórios",
-        "description": "Verificar e gerenciar relatórios pendentes",
-        "link": "Ir para Relatórios"
+        "title": "Revisar Denúncias",
+        "description": "Verificar e gerenciar denúncias pendentes",
+        "link": "Ir para Denúncias"
       }
     }
   },
@@ -88,7 +88,7 @@
     "table": {
       "image": "Imagem",
       "name": "Nome",
-      "category": "Categoria",
+      "category": "Categoria", 
       "description": "Descrição",
       "price": "Preço",
       "id": "ID",
@@ -113,7 +113,9 @@
     "actions": {
       "add": "Adicionar Produto",
       "edit": "Editar Produto",
-      "delete": "Excluir Produto"
+      "delete": "Excluir Produto",
+      "startMerge": "Iniciar Mesclagem",
+      "merge": "Mesclar Produtos"
     },
     "search": "Buscar produtos...",
     "filter": {
@@ -126,6 +128,23 @@
       "lowestPrice": "Menor Preço",
       "notAvailable": "N/D",
       "lastUpdated": "Última Atualização"
+    },
+    "merge": {
+      "title": "Mesclar Produtos",
+      "description": "Selecione um produto de destino. Os outros produtos selecionados serão mesclados nele.",
+      "selectTarget": "Selecione o Produto Destino",
+      "selectPlaceholder": "Escolha o produto destino",
+      "productsToMerge": "Produtos a serem mesclados",
+      "confirm": "Mesclar Produtos",
+      "success": "Produtos mesclados com sucesso",
+      "successDescription": "Os produtos selecionados foram mesclados no produto de destino",
+      "error": "Falha ao mesclar produtos",
+      "minimumRequired": "Selecione pelo menos 2 produtos para mesclar",
+      "confirmCancel": "Tem certeza que deseja sair do modo de mesclagem? Seus produtos selecionados serão removidos.",
+      "select": "Selecionar produto",
+      "unselect": "Desmarcar produto",
+      "selectedProducts": "Produtos selecionados",
+      "selectionMode": "Modo de seleção: {count} selecionados"
     },
     "foundSingular": "produto encontrado",
     "foundPlural": "produtos encontrados",
@@ -168,8 +187,8 @@
     }
   },
   "reports": {
-    "title": "Gerenciamento de Relatórios",
-    "description": "Revisar e gerenciar relatórios de preços enviados pelos usuários",
+    "title": "Gerenciamento de Denúncias",
+    "description": "Revisar e gerenciar denúncias de preços enviados pelos usuários",
     "table": {
       "product": "Produto",
       "market": "Mercado",
@@ -180,7 +199,7 @@
       "status": "Status",
       "date": "Data",
       "actions": "Ações",
-      "id": "ID do Relatório"
+      "id": "ID da Denúncia"
     },
     "status": {
       "approved": "Aprovado",
@@ -189,38 +208,41 @@
     },
     "filter": {
       "title": "Filtro",
-      "all": "Todos os Relatórios",
-      "resolved": "Apenas Resolvidos",
-      "unresolved": "Apenas Não Resolvidos"
+      "all": "Todas as Denúncias",
+      "resolved": "Apenas Resolvidas",
+      "unresolved": "Apenas Não Resolvidas"
     },
-    "search": "Buscar relatórios...",
+    "search": "Buscar denúncias...",
     "details": {
-      "title": "Detalhes do Relatório",
-      "description": "Informações detalhadas sobre o relatório selecionado.",
+      "title": "Detalhes da Denúncia",
+      "description": "Informações detalhadas sobre a denúncia selecionada.",
       "price": "Preço",
       "marketDetails": "Detalhes do Mercado",
       "imageDescription": "Imagem fornecida pelo usuário para verificação de preço",
       "approve": "Aprovar",
       "reject": "Rejeitar"
     },
-    "foundSingular": "relatório encontrado",
-    "foundPlural": "relatórios encontrados",
-    "noReportsFound": "Nenhum relatório encontrado."
+    "foundSingular": "denúncia encontrada",
+    "foundPlural": "denúncias encontradas",
+    "noReportsFound": "Nenhuma denúncia encontrada."
   },
   "notifications": {
     "success": {
       "created": "{entity} criado",
       "updated": "{entity} atualizado",
       "deleted": "{entity} excluído",
+      "merged": "{entity} mesclado",
       "created-description": "O item foi criado com sucesso.",
       "updated-description": "O item foi atualizado com sucesso.",
-      "deleted-description": "O item foi excluído com sucesso."
+      "deleted-description": "O item foi excluído com sucesso.",
+      "merged-description": "Os produtos selecionados foram mesclados com sucesso."
     },
     "error": {
       "generic": "Erro",
       "creation": "Falha ao criar {entity}. Por favor, tente novamente.",
       "update": "Falha ao atualizar {entity}. Por favor, tente novamente.",
-      "delete": "Falha ao excluir {entity}. Por favor, tente novamente."
+      "delete": "Falha ao excluir {entity}. Por favor, tente novamente.",
+      "merge": "Falha ao mesclar {entity}. Por favor, tente novamente."
     }
   }
 } 

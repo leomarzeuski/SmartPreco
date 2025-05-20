@@ -113,7 +113,9 @@
     "actions": {
       "add": "Add Product",
       "edit": "Edit Product",
-      "delete": "Delete Product"
+      "delete": "Delete Product",
+      "startMerge": "Start Merging",
+      "merge": "Merge Products"
     },
     "search": "Search products...",
     "filter": {
@@ -126,6 +128,23 @@
       "lowestPrice": "Lowest Price",
       "notAvailable": "N/A",
       "lastUpdated": "Last Updated"
+    },
+    "merge": {
+      "title": "Merge Products",
+      "description": "Select a target product. The other selected products will be merged into it.",
+      "selectTarget": "Select Target Product",
+      "selectPlaceholder": "Choose target product",
+      "productsToMerge": "Products to be merged",
+      "confirm": "Merge Products",
+      "success": "Products merged successfully",
+      "successDescription": "The selected products have been merged into the target product",
+      "error": "Failed to merge products",
+      "minimumRequired": "Select at least 2 products to merge",
+      "confirmCancel": "Are you sure you want to exit merge mode? Your selected products will be cleared.",
+      "select": "Select product",
+      "unselect": "Unselect product",
+      "selectedProducts": "Selected products",
+      "selectionMode": "Selection mode: {count} selected"
     },
     "foundSingular": "product found",
     "foundPlural": "products found",
@@ -212,15 +231,18 @@
       "created": "{entity} created",
       "updated": "{entity} updated",
       "deleted": "{entity} deleted",
+      "merged": "{entity} merged",
       "created-description": "The item has been created successfully.",
       "updated-description": "The item has been updated successfully.",
-      "deleted-description": "The item has been deleted successfully."
+      "deleted-description": "The item has been deleted successfully.",
+      "merged-description": "The selected products have been merged successfully."
     },
     "error": {
       "generic": "Error",
       "creation": "Failed to create {entity}. Please try again.",
       "update": "Failed to update {entity}. Please try again.",
-      "delete": "Failed to delete {entity}. Please try again."
+      "delete": "Failed to delete {entity}. Please try again.",
+      "merge": "Failed to merge {entity}. Please try again."
     }
   }
 } 

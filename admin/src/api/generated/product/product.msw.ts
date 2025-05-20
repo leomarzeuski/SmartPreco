@@ -196,10 +196,27 @@ export const getDeleteProductMockHandler = (
     return new HttpResponse(null, { status: 204 });
   });
 };
+
+export const getMergeProductsMockHandler = (
+  overrideResponse?:
+    | void
+    | ((
+        info: Parameters<Parameters<typeof http.patch>[1]>[0],
+      ) => Promise<void> | void),
+) => {
+  return http.patch("*/products/merge", async (info) => {
+    await delay(1000);
+    if (typeof overrideResponse === "function") {
+      await overrideResponse(info);
+    }
+    return new HttpResponse(null, { status: 200 });
+  });
+};
 export const getProductMock = () => [
   getCreateProductMockHandler(),
   getReadProductsMockHandler(),
   getReadProductMockHandler(),
   getUpdateProductMockHandler(),
   getDeleteProductMockHandler(),
+  getMergeProductsMockHandler(),
 ];
