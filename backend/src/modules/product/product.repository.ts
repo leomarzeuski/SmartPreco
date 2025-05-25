@@ -1,4 +1,4 @@
-  import { ProductCreateRepositoryDto, ProductReadDto, ProductsTimestampDto, ProductTimestampDto, ProductUpdateDto } from "@modules/product/product.dto";
+  import { ProductCreateRepositoryDto, ProductReadDto, ProductsTimestampDto, ProductTimestampDto, ProductUpdateDto, ProductUpdateRepositoryDto } from "@modules/product/product.dto";
 import { HttpStatus, Injectable } from "@nestjs/common";
 import { AppException, EntityEnum, ErrorEnum } from "@shared/errors";
 import { getSafeSearch } from "@shared/utils/get-safe-search";
@@ -74,7 +74,7 @@ export class ProductRepository {
 
     public async updateProductById(
       productId: string,
-      updateProductDto: ProductUpdateDto,
+      updateProductDto: ProductUpdateRepositoryDto,
     ): Promise<ProductTimestampDto> {
       const { data, error } = await this.supabase
         .from(this.tableName)

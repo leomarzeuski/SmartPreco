@@ -142,6 +142,11 @@ export class ProductCreateRepositoryDto extends IntersectionType(
   UploadImageRepositoryDto,
 ) {}
 
+export class ProductUpdateRepositoryDto extends IntersectionType(
+  PartialType(PickType(ProductCreateDto, [ 'name', 'description', 'category' ] as const)),
+  PartialType(UploadImageRepositoryDto),
+) {}
+
 // == Pagination DTOs ==
 
 export class ProductsDto extends PaginationResponseDto<ProductDto> {

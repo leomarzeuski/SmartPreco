@@ -1,4 +1,4 @@
-import { MarketCreateDto, MarketCreateRepositoryDto, MarketReadDto, MarketsTimestampDto, MarketTimestampDto, MarketUpdateDto } from "@modules/market/market.dto";
+import { MarketCreateRepositoryDto, MarketReadDto, MarketsTimestampDto, MarketTimestampDto, MarketUpdateDto, MarketUpdateRepositoryDto } from "@modules/market/market.dto";
 import { HttpStatus, Injectable } from "@nestjs/common";
 import { AppException, EntityEnum, ErrorEnum } from "@shared/errors";
 import { getSafeSearch } from "@shared/utils/get-safe-search";
@@ -67,7 +67,7 @@ export class MarketRepository {
     return data;
   }
 
-  public async updateMarketById(marketId: string, dto: MarketUpdateDto): Promise<MarketTimestampDto> {
+  public async updateMarketById(marketId: string, dto: MarketUpdateRepositoryDto): Promise<MarketTimestampDto> {
     const { data, error } = await this.supabase
       .from(this.tableName)
       .update(dto)

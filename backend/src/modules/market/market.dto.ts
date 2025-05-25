@@ -121,6 +121,11 @@ export class MarketCreateRepositoryDto extends IntersectionType(
   UploadImageRepositoryDto,
 ) {}
 
+export class MarketUpdateRepositoryDto extends IntersectionType(
+  PartialType(PickType(MarketCreateDto, [ 'name', 'address', 'city', 'state' ] as const)),
+  PartialType(UploadImageRepositoryDto),
+) {}
+
 // == Pagination DTOs ==
 
 export class MarketsDto extends PaginationResponseDto<MarketDto> {

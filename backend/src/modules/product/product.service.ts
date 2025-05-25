@@ -18,7 +18,7 @@ export class ProductService {
   public async createProduct(params: ProductCreateDto): Promise<ProductDto> {
     const { imageUrl, ...rest } = params;
 
-    const product = await this.productRepository.createProduct({ ...rest, image_url: params.imageUrl });
+    const product = await this.productRepository.createProduct({ ...rest, image_url: imageUrl });
 
     return this.toDto(product);
   }
@@ -47,7 +47,9 @@ export class ProductService {
     productId: string,
     updateProductDto: ProductUpdateDto,
   ): Promise<ProductDto> {
-    const product = await this.productRepository.updateProductById(productId, updateProductDto);
+    const { imageUrl, ...rest } = updateProductDto;
+
+    const product = await this.productRepository.updateProductById(productId, { ...rest, image_url: imageUrl });
 
     return this.toDto(product);
   }

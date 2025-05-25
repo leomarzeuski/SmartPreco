@@ -37,7 +37,9 @@ export class MarketService {
   }
 
   public async updateMarketById(marketId: string, dto: MarketUpdateDto): Promise<MarketDto> {
-    const market = await this.marketRepository.updateMarketById(marketId, dto);
+    const { imageUrl, ...rest } = dto;
+
+    const market = await this.marketRepository.updateMarketById(marketId, { ...rest, image_url: imageUrl });
 
     return DtoMapper.mapOne(market, this.toDto);
   }
