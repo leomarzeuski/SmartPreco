@@ -53,7 +53,7 @@ export function ProductDetails({ product, onClose, onEdit, onDelete }: ProductDe
             <div>{product.category}</div>
             
             <div className="font-semibold">{t("products.details.lowestPrice")}:</div>
-            <div>{product.lowestPrice ? `$${product.lowestPrice.toFixed(2)}` : t("products.details.notAvailable")}</div>
+            <div>{product.lowestPrice ? `R$${product.lowestPrice.toFixed(2)}` : t("products.details.notAvailable")}</div>
             
             <div className="font-semibold">{t("products.table.id")}:</div>
             <div className="break-all">{product.id}</div>

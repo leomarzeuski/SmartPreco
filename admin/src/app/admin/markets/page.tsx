@@ -1,53 +1,53 @@
 "use client";
 
 import {
-    ChevronDown,
-    Copy,
-    Edit,
-    Eye,
-    Filter,
-    Plus,
-    Search,
-    Trash
+  ChevronDown,
+  Copy,
+  Edit,
+  Eye,
+  Filter,
+  Plus,
+  Search,
+  Trash
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { toast } from "sonner";
 
 import {
-    useCreateMarket,
-    useDeleteMarket,
-    useReadMarkets,
-    useUpdateMarket,
-    type MarketCreateDto,
-    type MarketDto,
-    type MarketUpdateDto
+  useCreateMarket,
+  useDeleteMarket,
+  useReadMarkets,
+  useUpdateMarket,
+  type MarketCreateDto,
+  type MarketDto,
+  type MarketUpdateDto
 } from "@/api";
 
 import { MarketDetails } from "@/components/markets/market-details";
 import { MarketForm } from "@/components/markets/market-form";
 import { Button } from "@/components/ui/button";
 import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle,
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
 } from "@/components/ui/card";
 import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuTrigger,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
 } from "@/components/ui/table";
 
 export default function MarketsPage() {
@@ -128,7 +128,8 @@ export default function MarketsPage() {
 
     if (stateFilter === "all") return matchesSearch;
     return matchesSearch && market.state === stateFilter;
-  });
+  })
+  .sort((b, a) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime());
 
   const handleCreateMarket = (marketData: MarketCreateDto) => {
     createMarketMutation.mutate({

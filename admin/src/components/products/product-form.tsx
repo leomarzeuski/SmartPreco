@@ -33,7 +33,6 @@ export function ProductForm({ product, onSubmit, onCancel, isSubmitting }: Produ
     description: product?.description ?? "",
     category: product?.category ?? "",
     imageUrl: product?.imageUrl ?? "",
-    lowestPrice: product?.lowestPrice?.toString() ?? "",
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -47,7 +46,6 @@ export function ProductForm({ product, onSubmit, onCancel, isSubmitting }: Produ
     // Format data before submission
     const submissionData = {
       ...formData,
-      lowestPrice: formData.lowestPrice ? parseFloat(formData.lowestPrice) : undefined,
     };
     
     onSubmit(submissionData);
@@ -128,21 +126,6 @@ export function ProductForm({ product, onSubmit, onCancel, isSubmitting }: Produ
               </div>
             )}
           </div>
-          
-          <div className="grid gap-2">
-            <Label htmlFor="lowestPrice">{t("products.details.lowestPrice")}</Label>
-            <Input
-              id="lowestPrice"
-              name="lowestPrice"
-              type="number"
-              step="0.01"
-              min="0"
-              value={formData.lowestPrice}
-              onChange={handleChange}
-              placeholder={t("products.form.optional")}
-            />
-          </div>
-          
           <DialogFooter>
             <Button type="button" variant="outline" onClick={onCancel}>
               {t("common.buttons.cancel")}

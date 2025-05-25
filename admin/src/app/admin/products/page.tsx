@@ -159,15 +159,17 @@ export default function ProductsPage() {
   // Extract unique categories for the filter
   const categories = [...new Set(products.map(product => product.category))];
 
-  const filteredProducts = products.filter((product) => {
-    const matchesSearch =
-      product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      product.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      product.category.toLowerCase().includes(searchQuery.toLowerCase());
+  const filteredProducts = products
+    .filter((product) => {
+      const matchesSearch =
+        product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        product.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        product.category.toLowerCase().includes(searchQuery.toLowerCase());
 
-    if (categoryFilter === "all") return matchesSearch;
-    return matchesSearch && product.category === categoryFilter;
-  });
+      if (categoryFilter === "all") return matchesSearch;
+      return matchesSearch && product.category === categoryFilter;
+    })
+    .sort((b, a) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime());
 
   const handleCreateProduct = (productData: ProductCreateDto) => {
     createProductMutation.mutate({
@@ -224,9 +226,6 @@ export default function ProductsPage() {
         setTargetProductId(product.id);
       }
     }
-    
-    // Force re-render for UI updates
-    forceUpdate();
   };
 
   const handleMergeProducts = () => {
@@ -458,7 +457,7 @@ export default function ProductsPage() {
                           <TableCell>{product.category}</TableCell>
                           <TableCell>
                             {product.lowestPrice 
-                              ? `$${product.lowestPrice.toFixed(2)}` 
+                              ? `R$${product.lowestPrice.toFixed(2)}` 
                               : 'N/A'}
                           </TableCell>
                           <TableCell>
