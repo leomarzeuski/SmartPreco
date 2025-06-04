@@ -126,6 +126,22 @@ export default function ProductDetailScreen() {
     setMarketPrice(selectedPrice);
   }, [productPrices, params.marketId, params.priceId]);
 
+  const formatPrice = useCallback((price: number) => {
+    return `R$ ${price.toFixed(2).replace(".", ",")}`;
+  }, []);
+
+  const handleApiError = useCallback((action: string) => {
+    return (error: unknown) => {
+      console.error(`Erro ao ${action}:`, error);
+      const errorMessage =
+        error instanceof AxiosError && error.response?.data?.message
+          ? error.response.data.message
+          : `Não foi possível ${action} o produto. Tente novamente.`;
+
+      Alert.alert("Erro", errorMessage);
+    };
+  }, []);
+
   const { data: favoriteProducts, refetch: refetchFavorites } =
     useGetFavoriteProducts();
 
@@ -161,22 +177,6 @@ export default function ProductDetailScreen() {
     },
   });
 
-  const formatPrice = useCallback((price: number) => {
-    return `R$ ${price.toFixed(2).replace(".", ",")}`;
-  }, []);
-
-  function handleApiError(action: string) {
-    return (error: unknown) => {
-      console.error(`Erro ao ${action}:`, error);
-      const errorMessage =
-        error instanceof AxiosError && error.response?.data?.message
-          ? error.response.data.message
-          : `Não foi possível ${action} o produto. Tente novamente.`;
-
-      Alert.alert("Erro", errorMessage);
-    };
-  }
-
   const invalidateRelatedQueries = useCallback(() => {
     queryClient.invalidateQueries({ queryKey: ["favoriteProducts"] });
     queryClient.invalidateQueries({ queryKey: ["products"] });
@@ -203,22 +203,6 @@ export default function ProductDetailScreen() {
     [navigation]
   );
 
-  const navigateToPriceComparison = useCallback(() => {
-    if (productPrices.length <= 1) {
-      ToastAndroid.show(
-        "Não há outros preços para comparar",
-        ToastAndroid.SHORT
-      );
-      return;
-    }
-
-    navigation.navigate("price-comparison", {
-      productId: params.id,
-      productName: params.name,
-      prices: productPrices,
-    });
-  }, [navigation, params.id, params.name, productPrices]);
-
   const createReportMutation = useCreateReport();
 
   const handleReport = useCallback(
@@ -234,7 +218,6 @@ export default function ProductDetailScreen() {
       const reportData = {
         priceId: marketPrice.id,
         reason: reason,
-        details: details || undefined,
       };
 
       try {
@@ -284,7 +267,6 @@ export default function ProductDetailScreen() {
         <View style={styles.imageContainer}>
           <ProductImage params={params} marketPrice={marketPrice} />
         </View>
-
         <ProductInfoSection
           marketPrice={marketPrice}
           params={params}

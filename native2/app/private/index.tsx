@@ -41,6 +41,7 @@ export type ItemType = {
   city?: string;
   address?: string;
   isFavorite?: boolean;
+  moderated?: boolean;
 };
 
 export default function HomeScreen() {
@@ -200,6 +201,7 @@ export default function HomeScreen() {
       category: product.category,
       description: product.description,
       imageUrl: product.imageUrl || null,
+      moderated: product.moderated || !product.lowestPrice,
       type: "product" as const,
       isFavorite:
         favoriteProductsData?.some(

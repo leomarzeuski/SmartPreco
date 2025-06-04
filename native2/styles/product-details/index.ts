@@ -90,10 +90,31 @@ export const styles = StyleSheet.create({
   marketInfo: {
     flex: 1,
   },
+  marketNameContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginBottom: 4,
+  },
   marketName: {
     fontSize: 16,
     fontWeight: "500",
-    marginBottom: 4,
+    flex: 1,
+  },
+  unmoderatedBadge: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#fef2f2",
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 6,
+    marginLeft: 8,
+  },
+  unmoderatedText: {
+    fontSize: 12,
+    color: "#e74c3c",
+    fontWeight: "500",
+    marginLeft: 4,
   },
   marketDetail: {
     fontSize: 14,
@@ -108,6 +129,10 @@ export const styles = StyleSheet.create({
     fontWeight: "bold",
     color: appColors.primary,
     marginRight: 8,
+  },
+  unmoderatedPrice: {
+    color: "#e74c3c",
+    textDecorationLine: "line-through",
   },
   marketArrow: {
     margin: 0,

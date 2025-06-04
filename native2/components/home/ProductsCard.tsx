@@ -5,6 +5,7 @@ import { router } from "expo-router";
 import { styles } from "@/styles/home/ProductsCard";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { ItemType } from "@/app/private";
+import { useReadPrices } from "@/api/price/price";
 
 type ProductCardProps = {
   product: ItemType;
@@ -15,6 +16,20 @@ export const ProductCard = ({
   product,
   onToggleFavorite,
 }: ProductCardProps) => {
+  const { data: productPricesData } = useReadPrices(
+    { productId: product.id },
+    {
+      query: {
+        enabled: product.type === "product",
+      },
+    }
+  );
+
+  const hasUnmoderatedPrices =
+    product.moderated ||
+    productPricesData?.records?.some((price) => !price.moderated) ||
+    false;
+
   const navigateToProductDetails = () => {
     router.push({
       pathname: "/private/product-details",
@@ -25,6 +40,7 @@ export const ProductCard = ({
         category: product.category,
         description: product.description,
         imageUrl: product.imageUrl,
+        moderated: hasUnmoderatedPrices as any,
       },
     });
   };
@@ -36,6 +52,12 @@ export const ProductCard = ({
           {product.type === "market" ? "M" : "P"}
         </Text>
       </View>
+
+      {hasUnmoderatedPrices && (
+        <View style={styles.warningBadge}>
+          <MaterialCommunityIcons name="alert-circle" size={16} color="#fff" />
+        </View>
+      )}
 
       <View style={styles.productContent}>
         <View style={styles.productImageContainer}>

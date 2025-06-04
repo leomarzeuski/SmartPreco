@@ -27,6 +27,18 @@ export const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: "bold",
   },
+  warningBadge: {
+    position: "absolute",
+    top: 0,
+    right: 30,
+    backgroundColor: "#e74c3c",
+    width: 20,
+    height: 20,
+    borderBottomLeftRadius: 8,
+    justifyContent: "center",
+    alignItems: "center",
+    zIndex: 10,
+  },
   productContent: {
     flexDirection: "row",
     padding: 12,

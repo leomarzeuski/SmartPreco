@@ -40,10 +40,8 @@ const ReportModal = ({
   const [details, setDetails] = useState("");
   const [internalSubmitted, setInternalSubmitted] = useState(false);
 
-  // Usar o estado interno ou o props de fora
   const submitted = isSubmitted || internalSubmitted;
 
-  // Resetar o estado interno quando o modal é fechado
   useEffect(() => {
     if (!visible) {
       setInternalSubmitted(false);

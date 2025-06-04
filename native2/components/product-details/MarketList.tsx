@@ -1,6 +1,7 @@
 import React from "react";
 import { View, Text, TouchableOpacity } from "react-native";
 import { IconButton } from "react-native-paper";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { PriceDto } from "@/api/model";
 import { styles } from "@/styles/product-details";
 
@@ -34,11 +35,30 @@ export const MarketList = ({
           }
         >
           <View style={styles.marketInfo}>
-            <Text style={styles.marketName}>{price.market.name}</Text>
+            <View style={styles.marketNameContainer}>
+              <Text style={styles.marketName}>{price.market.name}</Text>
+              {!price.moderated && (
+                <View style={styles.unmoderatedBadge}>
+                  <MaterialCommunityIcons
+                    name="alert-circle"
+                    size={16}
+                    color="#e74c3c"
+                  />
+                  <Text style={styles.unmoderatedText}>Não moderado</Text>
+                </View>
+              )}
+            </View>
             <Text style={styles.marketDetail}>~ 2.5 km • 4.5 ★</Text>
           </View>
           <View style={styles.marketPriceContainer}>
-            <Text style={styles.marketPrice}>{formatPrice(price.price)}</Text>
+            <Text
+              style={[
+                styles.marketPrice,
+                !price.moderated && styles.unmoderatedPrice,
+              ]}
+            >
+              {formatPrice(price.price)}
+            </Text>
             <IconButton
               icon="chevron-right"
               size={20}
