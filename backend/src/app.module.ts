@@ -1,3 +1,4 @@
+import { BenefitModule } from "@modules/benefit/benefit.module";
 import { FavoriteModule } from "@modules/favorite/favorite.module";
 import { MarketModule } from "@modules/market/market.module";
 import { NotificationModule } from "@modules/notification/notification.module";
@@ -8,10 +9,10 @@ import { UploadModule } from "@modules/upload/upload.module";
 import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
 import { EventEmitterModule } from "@nestjs/event-emitter";
+import { ServeStaticModule } from "@nestjs/serve-static";
 import { ClerkModule } from "@shared/clerk/clerk.module";
 import { SharedModule } from "@shared/shared.module";
 import { SupabaseModule } from "@shared/supabase/supabase.module";
-import { ServeStaticModule } from "@nestjs/serve-static";
 import { join } from "path";
 
 @Module({
@@ -24,6 +25,7 @@ import { join } from "path";
     SupabaseModule.forRoot(),
     EventEmitterModule.forRoot(),
     SharedModule,
+    BenefitModule,
     ProductModule,
     MarketModule,
     PriceModule,
