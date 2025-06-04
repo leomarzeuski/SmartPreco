@@ -102,12 +102,6 @@ export default function MarketDetailScreen() {
 
     const prices = pricesData.records || [];
 
-    console.log("=== MARKET DETAILS DEBUG ===");
-    console.log("Market ID:", params.id);
-    console.log("Prices Data:", pricesData);
-    console.log("Prices Array:", prices);
-    console.log("Number of prices:", prices.length);
-
     if (prices.length === 0 && products.length > 0) {
       return;
     }
@@ -117,15 +111,6 @@ export default function MarketDetailScreen() {
       const productMap = new Map<string, ProductItem>();
 
       prices.forEach((price: PriceDto) => {
-        console.log("Processing price:", {
-          priceId: price.id,
-          productId: price.product.id,
-          productName: price.product.name,
-          priceValue: price.price,
-          moderated: price.moderated,
-          category: price.product.category,
-        });
-
         if (price.product.category) {
           uniqueCategories.add(price.product.category);
         }
@@ -145,11 +130,7 @@ export default function MarketDetailScreen() {
 
       setCategories(Array.from(uniqueCategories));
       setProducts(Array.from(productMap.values()));
-
-      console.log("Final categories:", Array.from(uniqueCategories));
-      console.log("Final products:", Array.from(productMap.values()));
     }
-    console.log("=== END DEBUG ===");
   }, [pricesData, params.id]);
 
   const { data: favoriteMarkets, refetch: refetchFavorites } =
@@ -215,8 +196,6 @@ export default function MarketDetailScreen() {
   const formatPrice = (price: number) => {
     return `R$ ${price.toFixed(2).replace(".", ",")}`;
   };
-
-  console.log({ products });
 
   const filteredProducts =
     activeCategory === "Todos"
