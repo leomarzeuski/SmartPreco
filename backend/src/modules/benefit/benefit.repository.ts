@@ -385,7 +385,8 @@ export class BenefitRepository {
   }
 
   public async updateUserBenefitStatus(
-    userBenefitId: string,
+    userId: string,
+    benefitId: string,
     status: UserBenefitStatusEnum,
     code?: string
   ): Promise<UserBenefitTimestampDto> {
@@ -406,7 +407,8 @@ export class BenefitRepository {
     const { data, error } = await this.supabase
       .from(this.userBenefitsTableName)
       .update(updateData)
-      .eq("id", userBenefitId)
+      .eq("user_id", userId)
+      .eq("benefit_id", benefitId)
       .select()
       .single();
 
@@ -452,5 +454,46 @@ export class BenefitRepository {
     }
 
     return data;
+  }
+
+  public async findEligibleUserIds(marketId: string, since: Date): Promise<string[]> {
+    const { data, error } = await this.supabase
+      .from("prices")
+      .select("user_id", { count: "exact", head: false })
+      .eq("market_id", marketId)
+      .eq("moderated", true)
+      .gte("created_at", since.toISOString());
+
+    if (error) {
+      throw new AppException(
+        ErrorEnum.NOT_FOUND,
+        error.message,
+        EntityEnum.PRICES
+      );
+    }
+
+    const userIdSet = new Set<string>();
+    (data ?? []).forEach(row => userIdSet.add(row.user_id));
+    return Array.from(userIdSet);
+  }
+
+  public async findUserBenefitUserIdsForBenefit(benefitId: string, userIds: string[]): Promise<string[]> {
+    if (userIds.length === 0) return [];
+
+    const { data, error } = await this.supabase
+      .from(this.userBenefitsTableName)
+      .select("user_id")
+      .eq("benefit_id", benefitId)
+      .in("user_id", userIds);
+
+    if (error) {
+      throw new AppException(
+        ErrorEnum.NOT_FOUND,
+        error.message,
+        this.userBenefitsTableName
+      );
+    }
+
+    return (data ?? []).map(row => row.user_id);
   }
 }

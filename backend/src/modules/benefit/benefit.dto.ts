@@ -16,8 +16,8 @@ import {
 } from "@shared/utils/timestamp.dto";
 import {
   IsArray,
-  IsDateString,
   IsEnum,
+  IsISO8601,
   IsNotEmpty,
   IsOptional,
   IsString,
@@ -72,7 +72,7 @@ export class UserBenefitIdDto {
 // == Main DTOs ==
 
 export class BenefitDto extends IntersectionType(
-  PickType(TimestampDto, ["updatedAt"] as const)
+  PickType(TimestampDto, [ "updatedAt" ] as const)
 ) {
   @IsUUID()
   @ApiProperty({
@@ -113,17 +113,17 @@ export class BenefitDto extends IntersectionType(
   })
   public description: string;
 
-  @IsDateString()
+  @IsISO8601()
   @ApiProperty({
     description: "Date when the benefit becomes valid",
-    example: "2024-01-01T00:00:00.000Z",
+    example: "2024-01-01",
   })
   public validFrom: string;
 
-  @IsDateString()
+  @IsISO8601()
   @ApiProperty({
     description: "Date when the benefit expires",
-    example: "2024-01-31T23:59:59.000Z",
+    example: "2024-01-31",
   })
   public validTo: string;
 
@@ -264,7 +264,7 @@ export class BenefitAssignDto {
   @IsUUID("4", { each: true })
   @ApiProperty({
     description: "List of user IDs to assign the benefit to",
-    example: ["3d5d1d6d-3d5d-1d6d-3d5d-1d6d3d5d1d6d"],
+    example: [ "3d5d1d6d-3d5d-1d6d-3d5d-1d6d3d5d1d6d" ],
     isArray: true,
   })
   public userIds: string[];
@@ -272,10 +272,7 @@ export class BenefitAssignDto {
 
 export class UserBenefitClaimDto extends UserIdDto {}
 
-export class UserBenefitConsumeDto extends IntersectionType(
-  UserIdDto,
-  PickType(UserBenefitDto, ["code"] as const)
-) {}
+export class UserBenefitConsumeDto extends PickType(UserBenefitDto, [ "code" ] as const) {}
 
 // == Repository DTOs ==
 
@@ -316,7 +313,7 @@ export class BenefitTimestampDto extends IntersectionType(
 }
 
 export class BenefitCreateRepositoryDto extends IntersectionType(
-  PickType(BenefitCreateDto, ["name", "description", "type"] as const)
+  PickType(BenefitCreateDto, [ "name", "description", "type" ] as const)
 ) {
   @IsUUID()
   @ApiProperty({
@@ -400,7 +397,7 @@ export class BenefitsDto extends PaginationResponseDto<BenefitDto> {
   @IsArray()
   @ApiProperty({
     description: "List of benefits returned in the current page",
-    type: [BenefitDto],
+    type: [ BenefitDto ],
   })
   public records: BenefitDto[];
 }
@@ -413,7 +410,7 @@ export class BenefitsTimestampDto extends PickType(PaginationResponseDto, [
     description:
       "List of benefits with timestamp fields formatted for the repository layer",
     isArray: true,
-    type: [BenefitTimestampDto],
+    type: [ BenefitTimestampDto ],
   })
   public records: BenefitTimestampDto[];
 }
@@ -422,7 +419,7 @@ export class UserBenefitsDto extends PaginationResponseDto<UserBenefitDto> {
   @IsArray()
   @ApiProperty({
     description: "List of user benefits returned in the current page",
-    type: [UserBenefitDto],
+    type: [ UserBenefitDto ],
   })
   public records: UserBenefitDto[];
 }
@@ -435,7 +432,7 @@ export class UserBenefitsTimestampDto extends PickType(PaginationResponseDto, [
     description:
       "List of user benefits with timestamp fields formatted for the repository layer",
     isArray: true,
-    type: [UserBenefitTimestampDto],
+    type: [ UserBenefitTimestampDto ],
   })
   public records: UserBenefitTimestampDto[];
 }

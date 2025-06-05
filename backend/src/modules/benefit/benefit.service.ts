@@ -1,5 +1,4 @@
 import {
-  BenefitAssignDto,
   BenefitClaimResponseDto,
   BenefitConsumeResponseDto,
   BenefitCreateDto,
@@ -46,9 +45,10 @@ export class BenefitService {
       image_url: params.imageUrl,
     };
 
-    const benefit = await this.benefitRepository.createBenefit(
-      repositoryParams
-    );
+    const benefit = await this.benefitRepository.createBenefit(repositoryParams);
+
+    await this.assignBenefitToEligibleUsers(benefit.id);
+
     return this.benefitToDto(benefit);
   }
 
@@ -88,34 +88,56 @@ export class BenefitService {
     await this.benefitRepository.deleteBenefitById(benefitId);
   }
 
-  public async assignBenefit(
-    benefitId: string,
-    assignDto: BenefitAssignDto
-  ): Promise<void> {
-    // Verify benefit exists
-    const benefitExists = await this.benefitRepository.existsBenefitById(
-      benefitId
-    );
-    if (!benefitExists) {
+  public async assignBenefitToEligibleUsers(benefitId: string): Promise<void> {
+    // 1. Verifica se o benefício existe
+    const benefit = await this.benefitRepository.readBenefitById(benefitId);
+
+    if (!benefit) {
       throw new NotFoundException(`Benefit ${benefitId} not found`);
     }
 
+    // 2. Busca usuários elegíveis (price moderado nos últimos 7 dias para esse market_id)
+    const since = new Date();
+    since.setDate(since.getDate() - 7);
+
+    const eligibleUserIds: string[] = await this.benefitRepository.findEligibleUserIds(
+      benefit.market_id,
+      since
+    );
+
+    if (!eligibleUserIds.length) {
+      return; // Ninguém elegível
+    }
+
+    // 3. Busca user_benefit já existentes para não duplicar
+    const alreadyAssigned: string[] = await this.benefitRepository.findUserBenefitUserIdsForBenefit(
+      benefitId,
+      eligibleUserIds
+    );
+
+    // Filtra apenas quem ainda não tem o benefício
+    const usersToAssign = eligibleUserIds.filter(
+      (userId) => !alreadyAssigned.includes(userId)
+    );
+
+    if (!usersToAssign.length) {
+      return; // Todos já têm
+    }
+
+    // 4. Cria os user_benefit no status ASSIGNED
     const now = new Date();
-    const userBenefitsToCreate = assignDto.userIds.map((userId) => ({
+    const userBenefitsToCreate = usersToAssign.map((userId) => ({
       user_id: userId,
       benefit_id: benefitId,
       status: UserBenefitStatusEnum.ASSIGNED,
       assigned_at: now,
     }));
 
-    // Create user-benefit relationships
     await this.benefitRepository.bulkCreateUserBenefits(userBenefitsToCreate);
 
-    // TODO: Send SMS notifications to users
-    // await this.sendSmsNotifications(assignDto.userIds, benefitId);
-    console.log(
-      `Benefit ${benefitId} assigned to ${assignDto.userIds.length} users`
-    );
+    //TODO: Enviar notificações Push/Email para os usuários
+
+    return;
   }
 
   // === User-benefits operations ===
@@ -159,12 +181,7 @@ export class BenefitService {
   public async claimBenefit(
     benefitId: string
   ): Promise<BenefitClaimResponseDto> {
-    const user = this.contextService.get(ContextEnum.USER);
-    const userId = user?.id;
-
-    if (!userId) {
-      throw new ForbiddenException("User not found in context");
-    }
+    const { id: userId } = this.contextService.get(ContextEnum.USER);
 
     // Find assigned benefit for this user
     const userBenefit =
@@ -185,14 +202,12 @@ export class BenefitService {
       );
     }
 
+    const benefit = await this.benefitRepository.readBenefitById(userBenefit.benefit_id);
+
     // Check if benefit is still valid
     const now = new Date();
-    const validFrom = new Date(
-      userBenefit.benefits?.valid_from || userBenefit.valid_from
-    );
-    const validTo = new Date(
-      userBenefit.benefits?.valid_to || userBenefit.valid_to
-    );
+    const validFrom = new Date(benefit?.valid_from);
+    const validTo = new Date(benefit?.valid_to);
 
     if (now < validFrom || now > validTo) {
       throw new BadRequestException("Benefit is not currently valid");
@@ -204,7 +219,8 @@ export class BenefitService {
     // Update status to claimed
     const updatedUserBenefit =
       await this.benefitRepository.updateUserBenefitStatus(
-        userBenefit.id,
+        userId,
+        benefitId,
         UserBenefitStatusEnum.CLAIMED,
         code
       );
@@ -218,7 +234,7 @@ export class BenefitService {
   public async consumeBenefit(
     consumeDto: UserBenefitConsumeDto
   ): Promise<BenefitConsumeResponseDto> {
-    const { userId, code } = consumeDto;
+    const { code } = consumeDto;
 
     // Find user benefit by code
     const userBenefit = await this.benefitRepository.findUserBenefitByCode(
@@ -229,21 +245,19 @@ export class BenefitService {
       throw new NotFoundException("Invalid benefit code");
     }
 
-    if (userBenefit.user_id !== userId) {
-      throw new BadRequestException(
-        "Benefit code does not belong to the specified user"
-      );
-    }
-
     if (userBenefit.status !== UserBenefitStatusEnum.CLAIMED) {
       throw new BadRequestException(
         "Benefit must be claimed before it can be consumed"
       );
     }
 
+    const benefit = await this.benefitRepository.readBenefitById(
+      userBenefit.benefit_id
+    );
+
     // Check if benefit is still valid
     const now = new Date();
-    const validTo = new Date(userBenefit.benefits?.valid_to || "");
+    const validTo = new Date(benefit?.valid_to || "");
 
     if (now > validTo) {
       throw new BadRequestException("Benefit has expired");
@@ -252,7 +266,8 @@ export class BenefitService {
     // Update status to consumed
     const updatedUserBenefit =
       await this.benefitRepository.updateUserBenefitStatus(
-        userBenefit.id,
+        userBenefit.user_id,
+        benefit.id,
         UserBenefitStatusEnum.CONSUMED
       );
 
@@ -291,11 +306,6 @@ export class BenefitService {
       claimedAt: userBenefit.claimed_at,
       consumedAt: userBenefit.consumed_at,
     };
-
-    // Add benefit details if available (from join)
-    if (userBenefit.benefits) {
-      dto.benefit = this.benefitToDto(userBenefit.benefits);
-    }
 
     return dto;
   }

@@ -1,5 +1,4 @@
 import {
-  BenefitAssignDto,
   BenefitClaimResponseDto,
   BenefitConsumeResponseDto,
   BenefitCreateDto,
@@ -83,11 +82,10 @@ export class BenefitController {
     const user = this.contextService.get(ContextEnum.USER);
     const isAdmin = user?.privateMetadata?.isAdmin;
 
+    // TODO: Migrate logic to service
     if (isAdmin) {
-      // Admin sees all benefits
       return this.benefitService.readBenefits(query);
     } else {
-      // Users see their own benefits (active and claimed only)
       const userBenefitQuery: UserBenefitReadDto = {
         ...query,
         activeAndClaimedOnly: true,
@@ -141,46 +139,6 @@ export class BenefitController {
   public deleteBenefitById(@Param() param: BenefitIdDto): Promise<void> {
     const { benefitId } = param;
     return this.benefitService.deleteBenefitById(benefitId);
-  }
-
-  // === Benefit assignment (Admin only) ===
-
-  @Post(":benefitId/assign")
-  @UseAdmin()
-  @ApiOkResponse({ description: "Benefit assigned successfully" })
-  @HttpCode(HttpStatus.OK)
-  @ApiOperation({
-    operationId: "Assign Benefit",
-    summary:
-      "Assigns a benefit to eligible users and sends SMS notifications (Admin only)",
-    description:
-      "Creates user-benefit relationships and sends SMS notifications based on rules.",
-  })
-  public assignBenefit(
-    @Param() param: BenefitIdDto,
-    @Body() body: BenefitAssignDto
-  ): Promise<void> {
-    const { benefitId } = param;
-    return this.benefitService.assignBenefit(benefitId, body);
-  }
-
-  // === User benefit operations ===
-
-  @Get("user/my-benefits")
-  @ApiOkResponse({
-    description: "User benefits retrieved successfully",
-    type: UserBenefitsDto,
-  })
-  @HttpCode(HttpStatus.OK)
-  @ApiOperation({
-    operationId: "Read My Benefits",
-    summary: "Retrieves current user's benefits",
-    description: "Returns benefits assigned to or claimed by the current user.",
-  })
-  public readMyBenefits(
-    @Query() query: UserBenefitReadDto
-  ): Promise<UserBenefitsDto> {
-    return this.benefitService.readUserBenefits(query);
   }
 
   @Post(":benefitId/claim")
