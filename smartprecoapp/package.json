@@ -46,7 +46,8 @@
     "react-native-webview": "13.13.5",
     "zod": "^3.25.51",
     "expo-notifications": "~0.31.3",
-    "expo-device": "~7.1.4"
+    "expo-device": "~7.1.4",
+    "expo-secure-store": "~14.2.3"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
