@@ -18,8 +18,8 @@ export default defineConfig({
     input: {
       target: "https://api.smartpreco.mindsnap.tech/api-json",
       filters: {
-        tags: ["Report", "Price", "Product", "Market"],
-        schemas: [/Report/, /^Price/, /^Product/, /^Market/],
+        tags: ["Report", "Price", "Product", "Market", "Benefit"],
+        schemas: [/Report/, /^Price/, /^Product/, /^Market/, /.*Benefit/],
       },
     },
   },

@@ -1,8 +1,8 @@
 {
-  "common": {
+    "common": {
     "buttons": {
       "save": "Salvar",
-      "cancel": "Cancelar", 
+      "cancel": "Cancelar",
       "delete": "Excluir",
       "edit": "Editar",
       "view": "Visualizar",
@@ -10,10 +10,19 @@
       "search": "Buscar",
       "copy": "Copiar"
     },
+    "validation": {
+      "required": "Este campo é obrigatório"
+    },
+    "messages": {
+      "foundSingular": "encontrado",
+      "foundPlural": "encontrados",
+      "noItemsFound": "Nenhum item encontrado."
+    },
     "navigation": {
       "dashboard": "Painel",
       "products": "Produtos",
       "markets": "Mercados",
+      "benefits": "Benefícios",
       "reports": "Denúncias",
       "admin": "Admin"
     },
@@ -42,9 +51,29 @@
         "title": "Mercados",
         "description": "Total de mercados no sistema"
       },
+      "benefits": {
+        "title": "Benefícios",
+        "description": "atualmente ativos"
+      },
       "reports": {
         "title": "Denúncias",
         "description": "Total de denúncias"
+      }
+    },
+    "benefitsOverview": {
+      "title": "Visão Geral dos Benefícios",
+      "activeBenefits": {
+        "title": "Benefícios Ativos",
+        "description": "do total de benefícios"
+      },
+      "expiredBenefits": {
+        "title": "Benefícios Expirados",
+        "description": "Não são mais válidos"
+      },
+      "mostPopular": {
+        "title": "Tipo Mais Popular",
+        "description": "benefícios deste tipo",
+        "noBenefits": "Nenhum benefício criado ainda"
       }
     },
     "reportsOverview": {
@@ -74,6 +103,11 @@
         "title": "Gerenciar Mercados",
         "description": "Adicionar, editar e remover mercados",
         "link": "Ir para Mercados"
+      },
+      "benefits": {
+        "title": "Gerenciar Benefícios",
+        "description": "Adicionar, editar e consumir benefícios",
+        "link": "Ir para Benefícios"
       },
       "reports": {
         "title": "Revisar Denúncias",
@@ -173,7 +207,10 @@
       "state": "Estado",
       "stateDescription": "Digite o estado onde o mercado está localizado",
       "imageUrl": "URL da Imagem",
-      "imageUrlDescription": "Digite uma URL para a imagem do mercado"
+      "imageUrlDescription": "Digite uma URL para a imagem do mercado",
+      "editDescription": "Atualize as informações do mercado no formulário abaixo.",
+      "addDescription": "Preencha os detalhes do mercado para criar um novo mercado.",
+      "imagePreview": "Pré-visualização do mercado"
     },
     "actions": {
       "add": "Adicionar Mercado",
@@ -184,6 +221,100 @@
     "filter": {
       "title": "Estado",
       "all": "Todos os Estados"
+    },
+    "messages": {
+      "foundSingular": "mercado encontrado",
+      "foundPlural": "mercados encontrados",
+      "noMarketsFound": "Nenhum mercado encontrado."
+    }
+  },
+  "benefits": {
+    "title": "Gerenciamento de Benefícios",
+    "description": "Gerenciar benefícios e promoções para clientes",
+    "table": {
+      "image": "Imagem",
+      "name": "Nome",
+      "type": "Tipo",
+      "market": "Mercado",
+      "status": "Status",
+      "validTo": "Válido Até",
+      "id": "ID",
+      "actions": "Ações"
+    },
+    "form": {
+      "name": "Nome do Benefício",
+      "namePlaceholder": "Digite o nome do benefício",
+      "market": "Mercado",
+      "marketPlaceholder": "Selecione um mercado",
+      "type": "Tipo de Benefício",
+      "typePlaceholder": "Selecione o tipo de benefício",
+      "description": "Descrição",
+      "descriptionPlaceholder": "Digite uma descrição do benefício",
+      "validFrom": "Válido De",
+      "validTo": "Válido Até",
+      "imageUrl": "URL da Imagem",
+      "imageUrlPlaceholder": "Digite uma URL para a imagem do benefício",
+      "editTitle": "Editar Benefício",
+      "addTitle": "Adicionar Novo Benefício",
+      "editDescription": "Atualize as informações do benefício no formulário abaixo.",
+      "addDescription": "Preencha os detalhes do benefício para criar um novo benefício.",
+      "optional": "Opcional",
+      "types": {
+        "voucher": "Voucher",
+        "gift": "Presente",
+        "discount": "Desconto",
+        "cashback": "Cashback",
+        "freebie": "Brinde"
+      }
+    },
+    "actions": {
+      "add": "Adicionar Benefício",
+      "edit": "Editar Benefício",
+      "delete": "Excluir Benefício",
+      "consume": "Consumir Benefício"
+    },
+    "search": "Buscar benefícios...",
+    "filter": {
+      "type": "Tipo",
+      "status": "Status",
+      "all": "Todos",
+      "active": "Ativo",
+      "inactive": "Inativo"
+    },
+    "details": {
+      "title": "Detalhes do Benefício",
+      "description": "Visualizar informações detalhadas sobre este benefício.",
+      "marketId": "ID do Mercado",
+      "benefitId": "ID do Benefício",
+      "validFrom": "Válido De",
+      "validTo": "Válido Até",
+      "lastUpdated": "Última Atualização",
+      "active": "Ativo",
+      "inactive": "Inativo"
+    },
+    "messages": {
+      "foundSingular": "benefício encontrado",
+      "foundPlural": "benefícios encontrados",
+      "noBenefitsFound": "Nenhum benefício encontrado.",
+      "imagePreview": "Pré-visualização do benefício"
+    },
+    "consume": {
+      "title": "Consumir Benefício",
+      "description": "Digite o código do benefício para validar e consumi-lo.",
+      "code": "Código do Benefício",
+      "codePlaceholder": "Digite o código de 8 caracteres",
+      "validate": "Validar Código",
+      "validating": "Validando...",
+      "tryAgain": "Tentar Novamente",
+      "validateAnother": "Validar Outro",
+      "consumedAt": "Consumido Em",
+      "success": {
+        "title": "Benefício Consumido com Sucesso"
+      },
+      "error": {
+        "title": "Falha na Validação",
+        "generic": "Código de benefício inválido. Verifique o código e tente novamente."
+      }
     }
   },
   "reports": {

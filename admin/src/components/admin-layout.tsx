@@ -8,7 +8,8 @@ import {
   AlertCircle,
   BarChart3,
   Package,
-  Store
+  Store,
+  Gift
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
@@ -35,6 +36,11 @@ const navigationKeys = [
     nameKey: "markets",
     href: "/admin/markets",
     icon: Store,
+  },
+  {
+    nameKey: "benefits",
+    href: "/admin/benefits",
+    icon: Gift,
   },
   {
     nameKey: "reports",

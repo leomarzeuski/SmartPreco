@@ -10,10 +10,19 @@
       "search": "Search",
       "copy": "Copy"
     },
+    "validation": {
+      "required": "This field is required"
+    },
+    "messages": {
+      "foundSingular": "found",
+      "foundPlural": "found",
+      "noItemsFound": "No items found."
+    },
     "navigation": {
       "dashboard": "Dashboard",
       "products": "Products",
       "markets": "Markets",
+      "benefits": "Benefits",
       "reports": "Reports",
       "admin": "Admin"
     },
@@ -42,9 +51,29 @@
         "title": "Markets",
         "description": "Total markets in system"
       },
+      "benefits": {
+        "title": "Benefits",
+        "description": "currently active"
+      },
       "reports": {
         "title": "Reports",
         "description": "Total reports"
+      }
+    },
+    "benefitsOverview": {
+      "title": "Benefits Overview",
+      "activeBenefits": {
+        "title": "Active Benefits",
+        "description": "of total benefits"
+      },
+      "expiredBenefits": {
+        "title": "Expired Benefits",
+        "description": "No longer valid"
+      },
+      "mostPopular": {
+        "title": "Most Popular Type",
+        "description": "benefits of this type",
+        "noBenefits": "No benefits created yet"
       }
     },
     "reportsOverview": {
@@ -74,6 +103,11 @@
         "title": "Manage Markets",
         "description": "Add, edit and remove markets",
         "link": "Go to Markets"
+      },
+      "benefits": {
+        "title": "Manage Benefits",
+        "description": "Add, edit and consume benefits",
+        "link": "Go to Benefits"
       },
       "reports": {
         "title": "Review Reports",
@@ -173,7 +207,10 @@
       "state": "State",
       "stateDescription": "Enter the state where the market is located",
       "imageUrl": "Image URL",
-      "imageUrlDescription": "Enter a URL for the market image"
+      "imageUrlDescription": "Enter a URL for the market image",
+      "editDescription": "Update the market information in the form below.",
+      "addDescription": "Fill in the market details to create a new market.",
+      "imagePreview": "Market preview"
     },
     "actions": {
       "add": "Add Market",
@@ -184,6 +221,100 @@
     "filter": {
       "title": "State",
       "all": "All States"
+    },
+    "messages": {
+      "foundSingular": "market found",
+      "foundPlural": "markets found",
+      "noMarketsFound": "No markets found."
+    }
+  },
+  "benefits": {
+    "title": "Benefits Management",
+    "description": "Manage customer benefits and promotions",
+    "table": {
+      "image": "Image",
+      "name": "Name",
+      "type": "Type",
+      "market": "Market",
+      "status": "Status",
+      "validTo": "Valid Until",
+      "id": "ID",
+      "actions": "Actions"
+    },
+    "form": {
+      "name": "Benefit Name",
+      "namePlaceholder": "Enter the name of the benefit",
+      "market": "Market",
+      "marketPlaceholder": "Select a market",
+      "type": "Benefit Type",
+      "typePlaceholder": "Select benefit type",
+      "description": "Description",
+      "descriptionPlaceholder": "Enter a description of the benefit",
+      "validFrom": "Valid From",
+      "validTo": "Valid Until",
+      "imageUrl": "Image URL",
+      "imageUrlPlaceholder": "Enter a URL for the benefit image",
+      "editTitle": "Edit Benefit",
+      "addTitle": "Add New Benefit",
+      "editDescription": "Update the benefit information in the form below.",
+      "addDescription": "Fill in the benefit details to create a new benefit.",
+      "optional": "Optional",
+      "types": {
+        "voucher": "Voucher",
+        "gift": "Gift",
+        "discount": "Discount",
+        "cashback": "Cashback",
+        "freebie": "Freebie"
+      }
+    },
+    "actions": {
+      "add": "Add Benefit",
+      "edit": "Edit Benefit",
+      "delete": "Delete Benefit",
+      "consume": "Consume Benefit"
+    },
+    "search": "Search benefits...",
+    "filter": {
+      "type": "Type",
+      "status": "Status",
+      "all": "All",
+      "active": "Active",
+      "inactive": "Inactive"
+    },
+    "details": {
+      "title": "Benefit Details",
+      "description": "View detailed information about this benefit.",
+      "marketId": "Market ID",
+      "benefitId": "Benefit ID",
+      "validFrom": "Valid From",
+      "validTo": "Valid Until",
+      "lastUpdated": "Last Updated",
+      "active": "Active",
+      "inactive": "Inactive"
+    },
+    "messages": {
+      "foundSingular": "benefit found",
+      "foundPlural": "benefits found",
+      "noBenefitsFound": "No benefits found.",
+      "imagePreview": "Benefit preview"
+    },
+    "consume": {
+      "title": "Consume Benefit",
+      "description": "Enter the benefit code to validate and consume it.",
+      "code": "Benefit Code",
+      "codePlaceholder": "Enter 8-character code",
+      "validate": "Validate Code",
+      "validating": "Validating...",
+      "tryAgain": "Try Again",
+      "validateAnother": "Validate Another",
+      "consumedAt": "Consumed At",
+      "success": {
+        "title": "Benefit Consumed Successfully"
+      },
+      "error": {
+        "title": "Validation Failed",
+        "generic": "Invalid benefit code. Please check the code and try again."
+      }
     }
   },
   "reports": {

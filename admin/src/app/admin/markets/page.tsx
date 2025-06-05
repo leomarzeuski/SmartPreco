@@ -54,6 +54,7 @@ export default function MarketsPage() {
   const t = useTranslations("markets");
   const notificationT = useTranslations("notifications");
   const buttonT = useTranslations("common.buttons");
+  const clipboardT = useTranslations("common.clipboard");
 
   const [searchQuery, setSearchQuery] = useState("");
   const [stateFilter, setStateFilter] = useState<string>("all");
@@ -160,7 +161,7 @@ export default function MarketsPage() {
 
   const handleCopyToClipboard = (text: string) => {
     void navigator.clipboard.writeText(text);
-    toast.success("Copied to clipboard");
+    toast.success(clipboardT("copied"));
   };
 
   return (
@@ -218,7 +219,7 @@ export default function MarketsPage() {
             <CardTitle>{t("title")}</CardTitle>
             <CardDescription>
               {filteredMarkets.length}{" "}
-              {filteredMarkets.length === 1 ? "market" : "markets"} found
+              {filteredMarkets.length === 1 ? t("messages.foundSingular") : t("messages.foundPlural")}
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -246,7 +247,7 @@ export default function MarketsPage() {
                         colSpan={7}
                         className="py-8 text-center text-muted-foreground"
                       >
-                        No markets found.
+                        {t("messages.noMarketsFound")}
                       </TableCell>
                     </TableRow>
                   ) : (

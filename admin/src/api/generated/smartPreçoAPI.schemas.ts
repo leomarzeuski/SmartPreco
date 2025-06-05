@@ -5,6 +5,63 @@
  * SmartPreço API é uma API RESTful que fornece informações sobre mercados, produtos e seus preços.
  * OpenAPI spec version: 1.0
  */
+export interface MarketCreateDto {
+  /** Product's image URL */
+  imageUrl?: string;
+  /** Name of the market */
+  name: string;
+  /** Street address of the market */
+  address: string;
+  /** City where the market is located */
+  city: string;
+  /** State where the market is located */
+  state: string;
+}
+
+export interface MarketDto {
+  /** Update timestamp */
+  updatedAt: string;
+  /** Product's image URL */
+  imageUrl?: string;
+  /** Unique identifier of the market */
+  id: string;
+  /** Name of the market */
+  name: string;
+  /** Street address of the market */
+  address: string;
+  /** City where the market is located */
+  city: string;
+  /** State where the market is located */
+  state: string;
+}
+
+export interface MarketsDto {
+  /** List of markets returned in the current page */
+  records: MarketDto[];
+  /** Number of records in this page */
+  count: number;
+  /** Total number of records across all pages */
+  total: number;
+  /**
+   * Next offset for fetching the next page, null if no more records
+   * @nullable
+   */
+  nextOffset?: number | null;
+}
+
+export interface MarketUpdateDto {
+  /** Product's image URL */
+  imageUrl?: string;
+  /** Name of the market */
+  name?: string;
+  /** Street address of the market */
+  address?: string;
+  /** City where the market is located */
+  city?: string;
+  /** State where the market is located */
+  state?: string;
+}
+
 export interface ProductCreateDto {
   /** Product's image URL */
   imageUrl?: string;
@@ -76,23 +133,6 @@ export interface PriceCreateDto {
   price: number;
 }
 
-export interface MarketDto {
-  /** Update timestamp */
-  updatedAt: string;
-  /** Product's image URL */
-  imageUrl?: string;
-  /** Unique identifier of the market */
-  id: string;
-  /** Name of the market */
-  name: string;
-  /** Street address of the market */
-  address: string;
-  /** City where the market is located */
-  city: string;
-  /** State where the market is located */
-  state: string;
-}
-
 export interface PriceDto {
   /** Product's image URL */
   imageUrl: string;
@@ -122,46 +162,6 @@ export interface PricesDto {
    * @nullable
    */
   nextOffset?: number | null;
-}
-
-export interface MarketCreateDto {
-  /** Product's image URL */
-  imageUrl?: string;
-  /** Name of the market */
-  name: string;
-  /** Street address of the market */
-  address: string;
-  /** City where the market is located */
-  city: string;
-  /** State where the market is located */
-  state: string;
-}
-
-export interface MarketsDto {
-  /** List of markets returned in the current page */
-  records: MarketDto[];
-  /** Number of records in this page */
-  count: number;
-  /** Total number of records across all pages */
-  total: number;
-  /**
-   * Next offset for fetching the next page, null if no more records
-   * @nullable
-   */
-  nextOffset?: number | null;
-}
-
-export interface MarketUpdateDto {
-  /** Product's image URL */
-  imageUrl?: string;
-  /** Name of the market */
-  name?: string;
-  /** Street address of the market */
-  address?: string;
-  /** City where the market is located */
-  city?: string;
-  /** State where the market is located */
-  state?: string;
 }
 
 export interface ReportCreateDto {
@@ -233,6 +233,161 @@ export interface ReportUpdateDto {
   status?: ReportUpdateDtoStatus;
 }
 
+/**
+ * Type of benefit
+ */
+export type BenefitCreateDtoType =
+  (typeof BenefitCreateDtoType)[keyof typeof BenefitCreateDtoType];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const BenefitCreateDtoType = {
+  VOUCHER: "VOUCHER",
+  GIFT: "GIFT",
+  DISCOUNT: "DISCOUNT",
+  CASHBACK: "CASHBACK",
+  FREEBIE: "FREEBIE",
+} as const;
+
+export interface BenefitCreateDto {
+  /** Market identifier this benefit belongs to */
+  marketId: string;
+  /** Type of benefit */
+  type: BenefitCreateDtoType;
+  /** Name of the benefit */
+  name: string;
+  /** Detailed description of the benefit */
+  description: string;
+  /** Date when the benefit becomes valid */
+  validFrom: string;
+  /** Date when the benefit expires */
+  validTo: string;
+  /** URL of the benefit image */
+  imageUrl?: string;
+}
+
+/**
+ * Type of benefit
+ */
+export type BenefitDtoType =
+  (typeof BenefitDtoType)[keyof typeof BenefitDtoType];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const BenefitDtoType = {
+  VOUCHER: "VOUCHER",
+  GIFT: "GIFT",
+  DISCOUNT: "DISCOUNT",
+  CASHBACK: "CASHBACK",
+  FREEBIE: "FREEBIE",
+} as const;
+
+export interface BenefitDto {
+  /** Update timestamp */
+  updatedAt: string;
+  /** Unique identifier of the benefit */
+  id: string;
+  /** Market identifier this benefit belongs to */
+  marketId: string;
+  /** Type of benefit */
+  type: BenefitDtoType;
+  /** Name of the benefit */
+  name: string;
+  /** Detailed description of the benefit */
+  description: string;
+  /** Date when the benefit becomes valid */
+  validFrom: string;
+  /** Date when the benefit expires */
+  validTo: string;
+  /** URL of the benefit image */
+  imageUrl?: string;
+}
+
+export interface BenefitsDto {
+  /** List of benefits returned in the current page */
+  records: BenefitDto[];
+  /** Number of records in this page */
+  count: number;
+  /** Total number of records across all pages */
+  total: number;
+  /**
+   * Next offset for fetching the next page, null if no more records
+   * @nullable
+   */
+  nextOffset?: number | null;
+}
+
+/**
+ * Type of benefit
+ */
+export type BenefitUpdateDtoType =
+  (typeof BenefitUpdateDtoType)[keyof typeof BenefitUpdateDtoType];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const BenefitUpdateDtoType = {
+  VOUCHER: "VOUCHER",
+  GIFT: "GIFT",
+  DISCOUNT: "DISCOUNT",
+  CASHBACK: "CASHBACK",
+  FREEBIE: "FREEBIE",
+} as const;
+
+export interface BenefitUpdateDto {
+  /** Market identifier this benefit belongs to */
+  marketId?: string;
+  /** Type of benefit */
+  type?: BenefitUpdateDtoType;
+  /** Name of the benefit */
+  name?: string;
+  /** Detailed description of the benefit */
+  description?: string;
+  /** Date when the benefit becomes valid */
+  validFrom?: string;
+  /** Date when the benefit expires */
+  validTo?: string;
+  /** URL of the benefit image */
+  imageUrl?: string;
+}
+
+export interface BenefitClaimResponseDto {
+  /** Validation code for the claimed benefit */
+  code: string;
+  /** Date when the benefit was claimed */
+  claimedAt: string;
+}
+
+export interface UserBenefitConsumeDto {
+  /** Validation code for claiming/consuming the benefit */
+  code?: string;
+}
+
+export interface BenefitConsumeResponseDto {
+  data(data: any): unknown;
+  /** Confirmation message */
+  message: string;
+  /** Date when the benefit was consumed */
+  consumedAt: string;
+  /** Details of the consumed benefit */
+  benefit: BenefitDto;
+}
+
+export type ReadMarketsParams = {
+  /**
+   * Number of markets to skip for pagination
+   */
+  offset?: number;
+  /**
+   * Maximum number of markets to return
+   */
+  limit?: number;
+  /**
+   * Field to order the markets by
+   */
+  orderBy?: string;
+  /**
+   * Search term to filter markets by name or address
+   */
+  search?: string;
+};
+
 export type ReadProductsParams = {
   /**
    * Number of products to skip for pagination
@@ -279,21 +434,45 @@ export type ReadPricesParams = {
   marketId?: string;
 };
 
-export type ReadMarketsParams = {
+export type ReadBenefitsParams = {
   /**
-   * Number of markets to skip for pagination
+   * Offset for pagination
    */
   offset?: number;
   /**
-   * Maximum number of markets to return
+   * Limit for pagination
    */
   limit?: number;
   /**
-   * Field to order the markets by
+   * Field to order by
    */
   orderBy?: string;
   /**
-   * Search term to filter markets by name or address
+   * Search term to filter benefits by name or description
    */
   search?: string;
+  /**
+   * Filter by benefit type
+   */
+  type?: ReadBenefitsType;
+  /**
+   * Filter by market ID
+   */
+  marketId?: string;
+  /**
+   * Only show active benefits (within valid date range)
+   */
+  activeOnly?: boolean;
 };
+
+export type ReadBenefitsType =
+  (typeof ReadBenefitsType)[keyof typeof ReadBenefitsType];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const ReadBenefitsType = {
+  VOUCHER: "VOUCHER",
+  GIFT: "GIFT",
+  DISCOUNT: "DISCOUNT",
+  CASHBACK: "CASHBACK",
+  FREEBIE: "FREEBIE",
+} as const;

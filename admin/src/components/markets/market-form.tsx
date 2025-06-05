@@ -51,15 +51,15 @@ export function MarketForm({ market, onSubmit, onCancel, isSubmitting }: MarketF
 
   return (
     <Dialog open onOpenChange={onCancel}>
-      <DialogContent className="sm:max-w-[550px]">
+      <DialogContent className="sm:max-w-[550px] bg-white">
         <DialogHeader>
           <DialogTitle>
             {isEdit ? t("actions.edit") : t("actions.add")}
           </DialogTitle>
           <DialogDescription>
             {isEdit 
-              ? "Update the market information in the form below."
-              : "Fill in the market details to create a new market."}
+              ? t("form.editDescription")
+              : t("form.addDescription")}
           </DialogDescription>
         </DialogHeader>
         
@@ -126,7 +126,7 @@ export function MarketForm({ market, onSubmit, onCancel, isSubmitting }: MarketF
               <div className="mt-2 flex justify-center">
                 <img
                   src={formData.imageUrl}
-                  alt="Market preview"
+                  alt={t("form.imagePreview")}
                   className="h-24 w-24 rounded-md object-cover"
                   onError={(e) => {
                     (e.target as HTMLImageElement).src = "https://placehold.co/100x100?text=Invalid+URL";

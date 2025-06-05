@@ -29,6 +29,8 @@ export function ReportDetails({ report, onClose, onApprove, onReject }: ReportDe
   const t = useTranslations();
   
   if (!report) return null
+  
+  console.log(report)
 
   return (
     <Dialog open={!!report} onOpenChange={(open) => !open && onClose()}>

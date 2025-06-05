@@ -76,7 +76,7 @@ export default function ReportsPage() {
     if (statusFilter === "unresolved") return matchesSearch && !report.resolved;
 
     return matchesSearch;
-  });
+  }).sort((b, a) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime());
 
   const handleApproveReport = (report: ReportDto) => {
     updateReportMutation.mutate({
