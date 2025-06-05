@@ -531,6 +531,19 @@ export const styles = StyleSheet.create({
     borderColor: "#E0E0E0",
     position: "relative",
     paddingRight: 80,
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  selectedMarketImage: {
+    width: 50,
+    height: 50,
+    borderRadius: 8,
+    marginRight: 12,
+    backgroundColor: "#F5F5F5",
+  },
+  selectedMarketInfo: {
+    flex: 1,
+    marginRight: 10,
   },
   selectedMarketName: {
     fontSize: 16,
@@ -587,6 +600,19 @@ export const styles = StyleSheet.create({
     borderColor: "#E0E0E0",
     position: "relative",
     paddingRight: 80,
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  selectedProductImage: {
+    width: 50,
+    height: 50,
+    borderRadius: 8,
+    marginRight: 12,
+    backgroundColor: "#F5F5F5",
+  },
+  selectedProductInfo: {
+    flex: 1,
+    marginRight: 10,
   },
   selectedProductName: {
     fontSize: 16,
@@ -644,6 +670,36 @@ export const styles = StyleSheet.create({
   summaryValue: {
     fontSize: 14,
     color: "#333",
+    flex: 1,
+  },
+  summaryProductSection: {
+    flexDirection: "row",
+    alignItems: "flex-start",
+    marginBottom: 16,
+  },
+  summaryProductImage: {
+    width: 60,
+    height: 60,
+    borderRadius: 8,
+    marginRight: 12,
+    backgroundColor: "#F5F5F5",
+  },
+  summaryProductInfo: {
+    flex: 1,
+  },
+  summaryMarketSection: {
+    flexDirection: "row",
+    alignItems: "flex-start",
+    marginBottom: 16,
+  },
+  summaryMarketImage: {
+    width: 60,
+    height: 60,
+    borderRadius: 8,
+    marginRight: 12,
+    backgroundColor: "#F5F5F5",
+  },
+  summaryMarketInfo: {
     flex: 1,
   },
   // Action buttons for ProductSelectionStep

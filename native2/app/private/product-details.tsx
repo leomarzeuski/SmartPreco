@@ -209,7 +209,21 @@ export default function ProductDetailScreen() {
     [navigation]
   );
 
-  const createReportMutation = useCreateReport();
+  const createReportMutation = useCreateReport({
+    mutation: {
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ["prices"] });
+        queryClient.invalidateQueries({ queryKey: ["products"] });
+        queryClient.invalidateQueries({ queryKey: ["reports"] });
+
+        refetchPrices();
+
+        setReportSubmitted(true);
+        ToastAndroid.show("Denúncia enviada com sucesso", ToastAndroid.SHORT);
+      },
+      onError: handleApiError("denunciar"),
+    },
+  });
 
   const handleReport = useCallback(
     async (reason: ReportReason, details: string) => {
@@ -223,15 +237,13 @@ export default function ProductDetailScreen() {
 
       const reportData = {
         priceId: marketPrice.id,
-        reason: reason,
+        reason: `reason: ${reason}, details: ${details}`,
       };
 
       try {
         await createReportMutation.mutateAsync({
           data: reportData,
         });
-        setReportSubmitted(true);
-        ToastAndroid.show("Denúncia enviada com sucesso", ToastAndroid.SHORT);
       } catch (error) {
         handleApiError("denunciar")(error);
       }

@@ -47,44 +47,68 @@ const PriceDetailsStep: React.FC<PriceDetailsStepProps> = ({
       <View style={styles.summaryContainer}>
         <Text style={styles.summaryTitle}>Resumo do Cadastro</Text>
 
-        <View style={styles.summarySection}>
-          <Text style={styles.summaryLabel}>Produto:</Text>
-          <Text style={styles.summaryValue}>{productInfo?.name || "N/A"}</Text>
-        </View>
+        <View style={styles.summaryProductSection}>
+          {(productInfo?.imageUrl || productInfo?.image_url) && (
+            <Image
+              source={{ uri: productInfo.imageUrl || productInfo.image_url }}
+              style={styles.summaryProductImage}
+            />
+          )}
+          <View style={styles.summaryProductInfo}>
+            <View style={styles.summarySection}>
+              <Text style={styles.summaryLabel}>Produto:</Text>
+              <Text style={styles.summaryValue}>
+                {productInfo?.name || "N/A"}
+              </Text>
+            </View>
 
-        <View style={styles.summarySection}>
-          <Text style={styles.summaryLabel}>Descrição:</Text>
-          <Text style={styles.summaryValue}>
-            {productInfo?.description || "N/A"}
-          </Text>
-        </View>
+            <View style={styles.summarySection}>
+              <Text style={styles.summaryLabel}>Descrição:</Text>
+              <Text style={styles.summaryValue}>
+                {productInfo?.description || "N/A"}
+              </Text>
+            </View>
 
-        <View style={styles.summarySection}>
-          <Text style={styles.summaryLabel}>Categoria:</Text>
-          <Text style={styles.summaryValue}>
-            {productInfo?.category || "N/A"}
-          </Text>
+            <View style={styles.summarySection}>
+              <Text style={styles.summaryLabel}>Categoria:</Text>
+              <Text style={styles.summaryValue}>
+                {productInfo?.category || "N/A"}
+              </Text>
+            </View>
+          </View>
         </View>
 
         <View style={styles.divider} />
 
-        <View style={styles.summarySection}>
-          <Text style={styles.summaryLabel}>Mercado:</Text>
-          <Text style={styles.summaryValue}>{marketInfo?.name || "N/A"}</Text>
-        </View>
+        <View style={styles.summaryMarketSection}>
+          {marketInfo?.imageUrl && (
+            <Image
+              source={{ uri: marketInfo.imageUrl }}
+              style={styles.summaryMarketImage}
+            />
+          )}
+          <View style={styles.summaryMarketInfo}>
+            <View style={styles.summarySection}>
+              <Text style={styles.summaryLabel}>Mercado:</Text>
+              <Text style={styles.summaryValue}>
+                {marketInfo?.name || "N/A"}
+              </Text>
+            </View>
 
-        <View style={styles.summarySection}>
-          <Text style={styles.summaryLabel}>Endereço:</Text>
-          <Text style={styles.summaryValue}>
-            {marketInfo?.address || "N/A"}
-          </Text>
-        </View>
+            <View style={styles.summarySection}>
+              <Text style={styles.summaryLabel}>Endereço:</Text>
+              <Text style={styles.summaryValue}>
+                {marketInfo?.address || "N/A"}
+              </Text>
+            </View>
 
-        <View style={styles.summarySection}>
-          <Text style={styles.summaryLabel}>Localização:</Text>
-          <Text style={styles.summaryValue}>
-            {marketInfo ? `${marketInfo.city}, ${marketInfo.state}` : "N/A"}
-          </Text>
+            <View style={styles.summarySection}>
+              <Text style={styles.summaryLabel}>Localização:</Text>
+              <Text style={styles.summaryValue}>
+                {marketInfo ? `${marketInfo.city}, ${marketInfo.state}` : "N/A"}
+              </Text>
+            </View>
+          </View>
         </View>
       </View>
 

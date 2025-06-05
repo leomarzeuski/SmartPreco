@@ -396,8 +396,15 @@ export default function AddProductScreen() {
     setCategory(product.category);
     setProductSearchQuery("");
     setIsCreatingNewProduct(false);
-    setImage(null);
-    setImageUrl(null);
+
+    if (product.imageUrl || product.image_url) {
+      const productImageUrl = product.imageUrl || product.image_url;
+      setImage(null);
+      setImageUrl(productImageUrl || null);
+    } else {
+      setImage(null);
+      setImageUrl(null);
+    }
     nextStep();
   };
 
@@ -554,6 +561,7 @@ export default function AddProductScreen() {
             setCategory={setCategory}
             isCreatingNewProduct={isCreatingNewProduct}
             image={image}
+            imageUrl={imageUrl}
             showImageOptions={() => showImageOptions("product")}
             errors={errors}
             focusedField={focusedField}

@@ -8,13 +8,9 @@ import { ItemType } from "@/app/private";
 
 type FavoritesRowProps = {
   favorites: ItemType[];
-  onToggleFavorite: (item: ItemType) => void;
 };
 
-export const FavoritesRow = ({
-  favorites,
-  onToggleFavorite,
-}: FavoritesRowProps) => {
+export const FavoritesRow = ({ favorites }: FavoritesRowProps) => {
   const navigateToDetails = (item: ItemType) => {
     if (item.type === "product") {
       router.push({
@@ -23,6 +19,7 @@ export const FavoritesRow = ({
           id: item.id,
           name: item.name,
           price: item.price,
+          imageUrl: item.imageUrl,
         },
       });
     } else {

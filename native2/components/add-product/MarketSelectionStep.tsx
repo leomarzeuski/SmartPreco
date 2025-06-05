@@ -74,8 +74,16 @@ const SelectedProduct = ({
   <View style={styles.selectedProductContainer}>
     <Text style={styles.selectedProductTitle}>Produto Selecionado</Text>
     <View style={styles.selectedProduct}>
-      <Text style={styles.selectedProductName}>{product.name}</Text>
-      <Text style={styles.selectedProductCategory}>{product.category}</Text>
+      {(product.imageUrl || product.image_url) && (
+        <Image
+          source={{ uri: product.imageUrl || product.image_url }}
+          style={styles.selectedProductImage}
+        />
+      )}
+      <View style={styles.selectedProductInfo}>
+        <Text style={styles.selectedProductName}>{product.name}</Text>
+        <Text style={styles.selectedProductCategory}>{product.category}</Text>
+      </View>
       <TouchableOpacity
         style={styles.changeProductButton}
         onPress={onChangeProduct}
@@ -245,11 +253,19 @@ const SelectedMarket = ({
   <View style={styles.selectedMarketContainer}>
     <Text style={styles.selectedMarketTitle}>Mercado Selecionado</Text>
     <View style={styles.selectedMarket}>
-      <Text style={styles.selectedMarketName}>{market.name}</Text>
-      <Text style={styles.selectedMarketAddress}>{market.address}</Text>
-      <Text style={styles.selectedMarketLocation}>
-        {market.city}, {market.state}
-      </Text>
+      {market.imageUrl && (
+        <Image
+          source={{ uri: market.imageUrl }}
+          style={styles.selectedMarketImage}
+        />
+      )}
+      <View style={styles.selectedMarketInfo}>
+        <Text style={styles.selectedMarketName}>{market.name}</Text>
+        <Text style={styles.selectedMarketAddress}>{market.address}</Text>
+        <Text style={styles.selectedMarketLocation}>
+          {market.city}, {market.state}
+        </Text>
+      </View>
       <TouchableOpacity
         style={styles.changeMarketButton}
         onPress={onChangeMarket}

@@ -1,14 +1,6 @@
 import React from "react";
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  Image,
-  TextInput,
-  Alert,
-} from "react-native";
+import { View, Text, TouchableOpacity, Image, TextInput } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { appColors } from "@/constants/theme";
 import { styles } from "@/styles/add-product";
 
 interface ProductDetailsStepProps {
@@ -20,6 +12,7 @@ interface ProductDetailsStepProps {
   setCategory: (category: string) => void;
   isCreatingNewProduct: boolean;
   image: string | null;
+  imageUrl?: string | null;
   showImageOptions: () => void;
   errors: {
     name?: string;
@@ -40,6 +33,7 @@ const ProductDetailsStep: React.FC<ProductDetailsStepProps> = ({
   setCategory,
   isCreatingNewProduct,
   image,
+  imageUrl,
   showImageOptions,
   errors,
   focusedField,
@@ -63,8 +57,11 @@ const ProductDetailsStep: React.FC<ProductDetailsStepProps> = ({
           onPress={isCreatingNewProduct ? showImageOptions : undefined}
           activeOpacity={isCreatingNewProduct ? 0.8 : 1}
         >
-          {image ? (
-            <Image source={{ uri: image }} style={styles.image} />
+          {image || imageUrl ? (
+            <Image
+              source={{ uri: image || imageUrl || "" }}
+              style={styles.image}
+            />
           ) : (
             <View style={styles.imagePlaceholder}>
               <MaterialCommunityIcons
@@ -81,7 +78,7 @@ const ProductDetailsStep: React.FC<ProductDetailsStepProps> = ({
             </View>
           )}
         </TouchableOpacity>
-        {image && isCreatingNewProduct && (
+        {(image || imageUrl) && isCreatingNewProduct && (
           <Text style={styles.imageInfo}>
             Toque na imagem para alterar a foto
           </Text>

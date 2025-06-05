@@ -50,7 +50,7 @@ type ProductItem = {
 type RootStackParamList = {
   "market-details": MarketDetailParams;
   "product-details": {
-    id: number;
+    id: string;
     name: string;
     price: string;
     imageUrl: any;
@@ -203,15 +203,17 @@ export default function MarketDetailScreen() {
       : products.filter((product) => product.category === activeCategory);
 
   const navigateToProductDetail = (product: ProductItem) => {
-    navigation.navigate("product-details", {
-      id: parseInt(product.id),
+    const navigationParams = {
+      id: product.id,
       name: product.name,
       price: formatPrice(product.price),
-      imageUrl: product.imageUrl ? { uri: product.imageUrl } : null,
+      imageUrl: product.imageUrl || null,
       marketId: params.id,
       marketName: marketData?.name || params.name,
       priceId: product.priceId,
-    });
+      category: product.category,
+    };
+    navigation.navigate("product-details", navigationParams);
   };
 
   const renderProduct = ({ item }: { item: ProductItem }) => (
