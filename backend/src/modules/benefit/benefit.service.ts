@@ -241,9 +241,6 @@ export class BenefitService {
       code
     );
 
-    console.log("User benefit found:", userBenefit);
-
-
     if (!userBenefit) {
       throw new NotFoundException("Invalid benefit code");
     }
