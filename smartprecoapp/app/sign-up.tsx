@@ -112,7 +112,7 @@ export default function SignUpScreen() {
       if (signUpAttempt.status === "complete") {
         await setActive({ session: signUpAttempt.createdSessionId });
         Alert.alert("Sucesso!", "Sua conta foi criada com sucesso!");
-        router.replace("/(tabs)");
+        router.replace("/private");
       } else {
         Alert.alert(
           "Erro",

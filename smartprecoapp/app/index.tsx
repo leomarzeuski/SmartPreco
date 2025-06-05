@@ -18,5 +18,5 @@ export default function Home() {
     );
   }
 
-  return <Redirect href={isSignedIn ? "/(tabs)" : "/sign-in"} />;
+  return <Redirect href={isSignedIn ? "/private" : "/sign-in"} />;
 }

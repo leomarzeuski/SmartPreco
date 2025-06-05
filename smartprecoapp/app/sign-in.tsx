@@ -56,7 +56,7 @@ export default function LoginScreen() {
       });
 
       await setActive({ session: result.createdSessionId });
-      router.replace("/(tabs)");
+      router.replace("/private");
     } catch (err) {
       Alert.alert("Erro", "Verifique suas credenciais e tente novamente.");
       console.error("Erro no login:", err);

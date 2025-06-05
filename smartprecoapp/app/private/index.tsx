@@ -17,15 +17,15 @@ import { FavoritesRow } from "@/components/home/FavoritesRow";
 import { ProductCard } from "@/components/home/ProductsCard";
 import { useReadProducts } from "@/api/product/product";
 import { useReadMarkets } from "@/api/market/market";
+import { useGetFavoriteMarkets } from "@/api/favorite-market/favorite-market";
+import { useGetFavoriteProducts } from "@/api/favorite-product/favorite-product";
 import {
   useFavoriteMarket,
   useUnfavoriteMarket,
-  useGetFavoriteMarkets,
 } from "@/api/favorite-market/favorite-market";
 import {
   useFavoriteProduct,
   useUnfavoriteProduct,
-  useGetFavoriteProducts,
 } from "@/api/favorite-product/favorite-product";
 import { useQueryClient } from "@tanstack/react-query";
 

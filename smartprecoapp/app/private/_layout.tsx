@@ -64,6 +64,7 @@ export default function TabLayout() {
       />
       <Tabs.Screen name="product-details" options={{ href: null }} />
       <Tabs.Screen name="market-details" options={{ href: null }} />
+      <Tabs.Screen name="barcode-scanner" options={{ href: null }} />
     </Tabs>
   );
 }
