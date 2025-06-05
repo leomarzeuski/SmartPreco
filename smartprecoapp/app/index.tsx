@@ -1,14 +1,9 @@
 import { useAuth } from "@clerk/clerk-expo";
 import { Redirect } from "expo-router";
 import { View, ActivityIndicator } from "react-native";
-import { useEffect } from "react";
 
 export default function Home() {
   const { isSignedIn, isLoaded } = useAuth();
-
-  useEffect(() => {
-    console.log("Auth state:", { isSignedIn, isLoaded });
-  }, [isSignedIn, isLoaded]);
 
   if (!isLoaded) {
     return (
