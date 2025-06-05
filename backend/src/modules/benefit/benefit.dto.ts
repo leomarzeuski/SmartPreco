@@ -19,6 +19,7 @@ import {
   IsEnum,
   IsISO8601,
   IsNotEmpty,
+  IsObject,
   IsOptional,
   IsString,
   IsUUID,
@@ -466,4 +467,10 @@ export class BenefitConsumeResponseDto {
     example: "2024-01-01T15:30:00.000Z",
   })
   public consumedAt: Date;
+
+  @ApiProperty({
+    description: "Details of the consumed benefit",
+  })
+  @IsObject()
+  public benefit: BenefitDto;
 }

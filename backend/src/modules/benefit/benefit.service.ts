@@ -241,14 +241,19 @@ export class BenefitService {
       code
     );
 
+    console.log("User benefit found:", userBenefit);
+
+
     if (!userBenefit) {
       throw new NotFoundException("Invalid benefit code");
     }
 
+    if (userBenefit.status === UserBenefitStatusEnum.CONSUMED) {
+      throw new BadRequestException("Benefit has already been consumed");
+    }
+
     if (userBenefit.status !== UserBenefitStatusEnum.CLAIMED) {
-      throw new BadRequestException(
-        "Benefit must be claimed before it can be consumed"
-      );
+      throw new BadRequestException("Benefit must be claimed before it can be consumed");
     }
 
     const benefit = await this.benefitRepository.readBenefitById(
@@ -273,6 +278,7 @@ export class BenefitService {
 
     return {
       message: "Benefit consumed successfully",
+      benefit: this.benefitToDto(benefit),
       consumedAt: updatedUserBenefit.consumed_at!,
     };
   }
