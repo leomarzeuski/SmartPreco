@@ -31,7 +31,7 @@ const FilterButtons: React.FC<FilterButtonsProps> = ({
             filter === "all" && benefitsStyles.filterButtonTextActive,
           ]}
         >
-          Todos ({benefits.length})
+          {`Todos \n (${benefits.length})`}
         </Text>
       </TouchableOpacity>
 
@@ -48,7 +48,9 @@ const FilterButtons: React.FC<FilterButtonsProps> = ({
             filter === "available" && benefitsStyles.filterButtonTextActive,
           ]}
         >
-          Disponíveis ({benefits.filter((b) => b.status === "ASSIGNED").length})
+          {`Disponíveis \n (${
+            benefits.filter((b) => b.status === "ASSIGNED").length
+          })`}
         </Text>
       </TouchableOpacity>
 
@@ -65,7 +67,9 @@ const FilterButtons: React.FC<FilterButtonsProps> = ({
             filter === "claimed" && benefitsStyles.filterButtonTextActive,
           ]}
         >
-          Resgatados ({benefits.filter((b) => b.status === "CLAIMED").length})
+          {`Resgatados \n (${
+            benefits.filter((b) => b.status === "CLAIMED").length
+          })`}
         </Text>
       </TouchableOpacity>
 
@@ -82,7 +86,9 @@ const FilterButtons: React.FC<FilterButtonsProps> = ({
             filter === "consumed" && benefitsStyles.filterButtonTextActive,
           ]}
         >
-          Utilizados ({benefits.filter((b) => b.status === "CONSUMED").length})
+          {`Utilizados \n (${
+            benefits.filter((b) => b.status === "CONSUMED").length
+          })`}
         </Text>
       </TouchableOpacity>
     </View>

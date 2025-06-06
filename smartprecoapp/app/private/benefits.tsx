@@ -193,6 +193,7 @@ const BenefitsScreen = () => {
 
   return (
     <SafeAreaView style={benefitsStyles.container}>
+      <Header />
       <View style={benefitsStyles.header}>
         <Text style={benefitsStyles.headerTitle}>Meus Benefícios</Text>
         <Text style={benefitsStyles.headerSubtitle}>

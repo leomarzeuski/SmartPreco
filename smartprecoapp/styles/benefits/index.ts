@@ -16,7 +16,7 @@ export const benefitsStyles = StyleSheet.create({
   headerTitle: {
     fontSize: 24,
     fontWeight: "bold",
-    color: appColors.text,
+    color: appColors.primary,
     marginBottom: 4,
   },
   headerSubtitle: {
