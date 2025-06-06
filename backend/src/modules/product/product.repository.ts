@@ -55,7 +55,6 @@ export class ProductRepository {
       };
     }
 
-
     public async readProductById(productId: string): Promise<ProductTimestampDto> {
       const { data, error } = await this.supabase
         .from(this.tableName)
