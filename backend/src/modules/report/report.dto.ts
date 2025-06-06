@@ -1,6 +1,6 @@
 import { PriceDto, PriceIdDto, PriceRepositoryIdDto } from '@modules/price/price.dto';
 import { ReportStatusEnum } from '@modules/report/report.enum';
-import { ApiProperty, IntersectionType, OmitType, PartialType, PickType } from '@nestjs/swagger';
+import { ApiProperty, IntersectionType, PartialType, PickType } from '@nestjs/swagger';
 import { UserIdDto, UserIdRepositoryDto } from '@shared/user/user.dto';
 import { PaginationReadDto, PaginationResponseDto } from '@shared/utils/pagination.dto';
 import { TimestampDto, TimestampRepositoryDto } from '@shared/utils/timestamp.dto';
@@ -73,7 +73,7 @@ export class ReportDto extends IntersectionType(
 // == Repository DTOs ==
 
 export class ReportTimestampDto extends IntersectionType(
-  OmitType(ReportDto, [ 'updatedAt' ] as const),
+  ReportDto,
   TimestampRepositoryDto,
 ) {}
 
