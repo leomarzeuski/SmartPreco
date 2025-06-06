@@ -1,5 +1,6 @@
 import {
   ApiProperty,
+  getSchemaPath,
   IntersectionType,
   OmitType,
   PartialType,
@@ -479,4 +480,17 @@ export class BenefitConsumeResponseDto {
   })
   @IsObject()
   public benefit: BenefitDto;
+}
+
+export class BenefitsResponseDto {
+
+  @ApiProperty({
+    description: "Data containing benefits or user benefits",
+    oneOf: [
+      { $ref: getSchemaPath(BenefitsDto) },
+      { $ref: getSchemaPath(UserBenefitsDto) },
+    ]
+  })
+  public data: BenefitsDto | UserBenefitsDto;
+
 }

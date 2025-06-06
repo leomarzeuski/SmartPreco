@@ -6,10 +6,11 @@ import {
   BenefitIdDto,
   BenefitReadDto,
   BenefitsDto,
+  BenefitsResponseDto,
   BenefitUpdateDto,
   UserBenefitConsumeDto,
   UserBenefitReadDto,
-  UserBenefitsDto,
+  UserBenefitsDto
 } from "@modules/benefit/benefit.dto";
 import { BenefitService } from "@modules/benefit/benefit.service";
 import {
@@ -26,6 +27,7 @@ import {
 } from "@nestjs/common";
 import {
   ApiCreatedResponse,
+  ApiExtraModels,
   ApiNoContentResponse,
   ApiOkResponse,
   ApiOperation,
@@ -39,6 +41,10 @@ import { UseUser } from "@shared/guards/use-user.decorator";
 @Controller("benefits")
 @ApiTags("Benefit")
 @UseUser()
+@ApiExtraModels(
+  BenefitsDto,
+  UserBenefitsDto
+)
 export class BenefitController {
   public constructor(
     private readonly benefitService: BenefitService,
@@ -67,7 +73,7 @@ export class BenefitController {
   @Get()
   @ApiOkResponse({
     description: "Benefits retrieved successfully",
-    type: BenefitsDto,
+    type: BenefitsResponseDto,
   })
   @HttpCode(HttpStatus.OK)
   @ApiOperation({
@@ -76,22 +82,26 @@ export class BenefitController {
     description:
       "If admin: returns all benefits. If user: returns user's assigned/claimed benefits.",
   })
-  public readBenefits(
+  public async readBenefits(
     @Query() query: BenefitReadDto
-  ): Promise<BenefitsDto | UserBenefitsDto> {
+  ): Promise<BenefitsResponseDto> {
     const user = this.contextService.get(ContextEnum.USER);
     const isAdmin = user?.privateMetadata?.isAdmin;
 
+    let data: UserBenefitsDto | BenefitsDto;
+
     // TODO: Migrate logic to service
     if (isAdmin) {
-      return this.benefitService.readBenefits(query);
+      data = await this.benefitService.readBenefits(query);
     } else {
       const userBenefitQuery: UserBenefitReadDto = {
         ...query,
         activeAndClaimedOnly: true,
       };
-      return this.benefitService.readUserBenefits(userBenefitQuery);
+      data = await this.benefitService.readUserBenefits(userBenefitQuery);
     }
+
+    return { data };
   }
 
   @Get(":benefitId")
