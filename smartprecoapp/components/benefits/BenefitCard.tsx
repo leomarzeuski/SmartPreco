@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -6,9 +6,10 @@ import {
   Image,
   ActivityIndicator,
 } from "react-native";
-import type { UserBenefitDto } from "../../api/model";
+import type { UserBenefitDto, BenefitDto } from "../../api/model";
 import { benefitsStyles } from "../../styles/benefits";
 import { appColors } from "../../constants/theme";
+import { useReadBenefit } from "../../api/benefit/benefit";
 
 interface BenefitCardProps {
   item: UserBenefitDto;
@@ -23,8 +24,55 @@ const BenefitCard: React.FC<BenefitCardProps> = ({
   onCopyCode,
   isClaimingThis,
 }) => {
-  const benefit = item.benefit;
-  if (!benefit) return null;
+  const [benefit, setBenefit] = useState<BenefitDto | null>(
+    item.benefit || null
+  );
+  const [isLoadingBenefit, setIsLoadingBenefit] = useState(!item.benefit);
+
+  const { data: benefitData, isLoading: isFetchingBenefit } = useReadBenefit(
+    item.benefitId,
+    {
+      query: {
+        enabled: !item.benefit,
+      },
+    }
+  );
+
+  useEffect(() => {
+    if (benefitData) {
+      setBenefit(benefitData);
+      setIsLoadingBenefit(false);
+    }
+  }, [benefitData]);
+
+  if (isLoadingBenefit || isFetchingBenefit) {
+    return (
+      <View
+        style={[
+          benefitsStyles.benefitCard,
+          { justifyContent: "center", alignItems: "center", minHeight: 100 },
+        ]}
+      >
+        <ActivityIndicator color={appColors.primary} size="small" />
+        <Text style={{ marginTop: 8, color: appColors.text, fontSize: 14 }}>
+          Carregando benefício...
+        </Text>
+      </View>
+    );
+  }
+
+  if (!benefit) {
+    return (
+      <View style={[benefitsStyles.benefitCard, { opacity: 0.6 }]}>
+        <Text style={[benefitsStyles.benefitName, { color: appColors.error }]}>
+          Erro ao carregar benefício
+        </Text>
+        <Text style={benefitsStyles.benefitDescription}>
+          ID: {item.benefitId}
+        </Text>
+      </View>
+    );
+  }
 
   const canClaim = item.status === "ASSIGNED";
   const isClaimed = item.status === "CLAIMED";
@@ -213,7 +261,7 @@ const BenefitCard: React.FC<BenefitCardProps> = ({
               benefitsStyles.claimButton,
               isClaimingThis && benefitsStyles.disabledButton,
             ]}
-            onPress={() => onClaim(benefit.id, benefit.name)}
+            onPress={() => onClaim(item.benefitId, benefit.name)}
             disabled={isClaimingThis}
           >
             {isClaimingThis ? (
